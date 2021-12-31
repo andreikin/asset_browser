@@ -1,0 +1,7 @@
+# pip install -r requirements.txt
+# pip freeze > requirements.txt
+
+PyQt5==5.15.2
+PyQt5-sip==12.8.1
+shiboken2==5.15.2
+peewee~=3.14.8
