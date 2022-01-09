@@ -1,0 +1,16 @@
+<RCC>
+  <qresource prefix="icons">
+    <file>icons/logo.png</file>
+    <file>icons/folder.svg</file>
+    <file>icons/chevrons-left.svg</file>
+    <file>icons/chevrons-right.svg</file>
+    <file>icons/search.svg</file>
+    <file>icons/x-circle.svg</file>
+    <file>icons/settings.svg</file>
+    <file>icons/info.svg</file>
+    <file>icons/minus.svg</file>
+    <file>icons/x.svg</file>
+    <file>icons/square.svg</file>
+    <file>icons/file-plus.svg</file>
+  </qresource>
+</RCC>
