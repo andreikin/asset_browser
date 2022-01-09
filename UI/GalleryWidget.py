@@ -83,7 +83,7 @@ if __name__ == "__main__":
             self.vbox.addWidget(self.gallery)
             for x in range(135):
                 but = QPushButton()
-                but.setFixedHeight(randint(50, 150))
+                but.setFixedHeight(randint(100, 150))
                 self.gallery.add_widget(but)
             style_sheet = """
                        QPushButton {
