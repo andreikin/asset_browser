@@ -1,10 +1,7 @@
 import re
 import sys
-from random import randint
-
 from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton
 from UI.MainWindow import MainWindow
-from UI.AssetCreationDialog import AssetCreationDialog
 from Models import Models
 
 
@@ -17,7 +14,10 @@ class Controller(QMainWindow):
     def __init__(self, in_models, parent=None):
         super(QMainWindow, self).__init__(parent)
 
+        """ tags received from the interface"""
         self.current_tags = []
+
+        """ tags and assets received from the database based on the current tags """
         self.found_tags = []
         self.found_assets = []
 
@@ -31,29 +31,34 @@ class Controller(QMainWindow):
         self._observers = [self, self.ui]
 
         """ connect Ui to functions"""
-        self.ui.create_asset_button.clicked.connect(self.create_asset_dialog)
-        self.ui.search_button.clicked.connect(self.get_tags)
-        self.ui.clear_button.clicked.connect(self.ui.gallery.clear)
+        self.ui.add_asset_button.clicked.connect(self.create_asset)
+        self.ui.search_button.clicked.connect(self.get_current_tags)
+        self.ui.search_lineEdit.returnPressed.connect(self.get_current_tags)
 
-    def create_asset_dialog(self):
-        asset_data = AssetCreationDialog()
-        if asset_data.exec_():
-            asset_data = asset_data.get_asset_data()
-            self.Models.add_asset(**asset_data)
-        return asset_data
+        """ if we have old data we use it """
+        if self.ui.search_lineEdit.text():
+            self.get_current_tags()
 
-    def get_tags(self, tag=None):
-        if not tag:
-            self.current_tags = re.findall(r'[0-9A-z_]+', self.ui.search_lineEdit.text())
-        else:
-            self.current_tags = [tag]
+    def create_asset(self):
+        asset_data = self.ui.get_asset_data()
+        self.Models.add_asset(**asset_data)
+        # TODO: Add ui filling verification
+
+    def get_current_tags(self):
+        """
+        Getting tags from linEdit
+        """
+        self.current_tags = re.findall(r'[0-9A-z_]+', self.ui.search_lineEdit.text())
         self.notify_observers()
 
-    def search_asset(self):
-        self.found_assets = self.Models.find_asset_by_tag_list(self.current_tags)
-
     def current_state_changed(self):
-        self.search_asset()
+        """
+        When entering new tags, we find the corresponding tags and assets
+        """
+        self.found_assets = self.Models.find_assets_by_tag_list(self.current_tags)
+        if self.found_assets:
+            self.found_tags = self.Models.find_tags_by_asset_list(self.found_assets)
+
 
     def notify_observers(self):
         for x in self._observers:
