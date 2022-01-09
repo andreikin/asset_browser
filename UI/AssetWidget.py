@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from random import randint
 
-from PyQt5.QtWidgets import QWidget, QPushButton, QVBoxLayout, QFrame, QSizePolicy
+from PyQt5.QtWidgets import QWidget, QPushButton, QVBoxLayout, QFrame, QSizePolicy, QApplication
 
+from Models import Models
 
 
 class AssetWidget(QWidget):
@@ -25,41 +26,42 @@ class AssetWidget(QWidget):
         self.button_layout.setContentsMargins(0, 0, 0, 0)
         self.button_layout.setSpacing(0)
 
-        self.up_button = QPushButton(str(self.asset.id)+"_"+str(self.asset.name))
+
+        self.up_button = QPushButton("")
         self.button_layout.addWidget(self.up_button)
         self.up_button.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         self.up_button.setStyleSheet("QPushButton  { \n"
-                                     "font: 12pt 'Tahoma';\n"
-                                     "border-top-left-radius: 8px;\n"
-                                     "border-top-right-radius: 8px;\n"
+                                     "border-radius: 12px;\n"
+                                     "border-image: url("+asset.image+") 3 10 3 10;\n"
                                      "background-color: #343b47;\n"
-                                     "color:rgb(90, 90, 90);}\n"
-                                     "QPushButton:hover {\n"
-                                     "color:rgb(118, 118, 118);\n"
-                                     "background-color: #2c313c;}\n"
-                                     "QPushButton:pressed {\n"
-                                     "background-color: rgb(36, 36, 36); }\n")
+                                     "color:rgb(90, 90, 90);}\n" )
 
-        self.dw_button = QPushButton("Delite asset")
 
-        self.dw_button.clicked.connect(lambda: self.Models.delete_asset(asset.id))
+if __name__ == "__main__":
+    import sys
 
-        self.button_layout.addWidget(self.dw_button)
-        self.dw_button.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        self.dw_button.setFixedHeight(30)
-        self.dw_button.setStyleSheet("QPushButton  { \n"
-                                     "border-bottom-left-radius: 8px;\n"
-                                     "border-bottom-right-radius: 8px;\n"
-                                     "background-color: #2c313c;\n"
-                                     "color:rgb(90, 90, 90);}\n"
-                                     "QPushButton:hover {\n"
-                                     "color:rgb(118, 118, 118);\n"
-                                     "background-color: rgb(40,40, 40);}\n"
-                                     "QPushButton:pressed {\n"
-                                     "background-color: rgb(0, 0, 0); }\n")
+    class MyWindow(QWidget):
+        def __init__(self, parent=None):
+            QWidget.__init__(self, parent)
+            self.vbox = QVBoxLayout()
+            asset = Models.find_assets_by_tag_list(["Help",])[0]
+            # print(asset.image)
+            # asset.image = "D:/03_andrey/py_progects/asset_browser/images/im_12.PNG"
+            # asset.save()
+            # print(asset.image)
 
-    #def delite_widget(self):
+            self.gallery = AssetWidget(asset, Models)
+            self.vbox.addWidget(self.gallery)
 
+            self.setLayout(self.vbox)
+
+
+
+    app = QApplication(sys.argv)
+    window = MyWindow()
+    window.resize(500, 300)
+    window.show()
+    sys.exit(app.exec_())
 
 
 
