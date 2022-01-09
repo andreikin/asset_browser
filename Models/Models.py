@@ -30,41 +30,57 @@ Tag.create_table()
 
 
 def add_asset(**kwargs):
-    print('added ', kwargs)
     tags = kwargs.pop('tags')
     if not kwargs["name"] in tags:
         tags.append(kwargs["name"])
-    kwargs['tags'] = ' '.join(tags) # test
+    kwargs['tags'] = ' '.join(tags)  # test
     asset = Asset.create(**kwargs)
     for tag in tags:
         Tag.create(name=tag, asset_id=asset)
 
 
-def find_asset_by_tag_list(tag_list):
+def find_assets_by_tag_list(tag_list):
     out = []
-    for in_tag in tag_list:
-        for asset in Asset.select().where(Asset.name == in_tag):
-            if asset not in out:
-                out.append(asset)
-        for tag in Tag.select().where(Tag.name == in_tag):
-            asset = Asset.get(Asset.id == tag.asset_id)
+    """get all assets matching by name"""
+    quest_string = ['(Asset.name == "' + x + '")' for x in tag_list]
+    quest_string = " | ".join(quest_string)
+    quest = 'Asset.select().where(' + quest_string + ')'
+    assets = eval(quest)
+    if assets:
+        for asset in assets:
+            out.append(asset)
+        """get all assets matching by tag"""
+        tag_quest_string = ['(Tag.name == "' + x + '")' for x in tag_list]
+        tag_quest_string = " | ".join(tag_quest_string)
+        quest = 'Tag.select().where(' + tag_quest_string + ')'
+        assets_id = eval(quest)
+        for id in assets_id:
+            asset = Asset.get(Asset.id == id.asset_id)
             if asset not in out:
                 out.append(asset)
     return out
 
 
-def find_tag_by_asset(asset):
-    asset = Asset.get(Asset.name == asset)
+def find_tags_by_asset_list(asset_list):
     out = []
-    for tag in Tag.select().where(Tag.asset_id == asset):
-        out.append(tag)
+    tag_quest_string = ['(Tag.asset_id == "' + str(x.id) + '")' for x in asset_list]
+    tag_quest_string = " | ".join(tag_quest_string)
+    quest = 'Tag.select().where(' + tag_quest_string + ')'
+    tags = eval(quest)
+    for tag in tags:
+        if tag.name not in out:
+            out.append(tag.name)
     return out
 
 
 def delete_asset(asset_id):
     asset = Asset.get(Asset.id == asset_id)
-    for tag in find_tag_by_asset(asset.name):
+    for tag in Tag.select().where(Tag.asset_id == asset):
         tag.delete_instance()
     asset.delete_instance()
 
-
+if __name__ == '__main__':
+    pass
+    assets = find_assets_by_tag_list(["Maya2", "Help2"])
+    for asset in assets:
+        print(asset, asset.name)
