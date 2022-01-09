@@ -2,7 +2,7 @@
 import re
 import sys
 from random import randint, choice
-from PyQt5.QtWidgets import QApplication, QPushButton
+from PyQt5.QtWidgets import QApplication
 from Controller.Controller import Controller
 from Models import Models
 
@@ -15,23 +15,9 @@ def main():
 
     # create a controller and pass it a link to the model
     controller = Controller(models)
+    controller.ui.resize(1300, 800)
     controller.ui.show()
     app.exec()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 if __name__ == '__main__':
@@ -50,22 +36,23 @@ if __name__ == '__main__':
     last updated, so you can quickly navigate your results
     """
 
+    image_list = [(f'D:/03_andrey/py_progects/asset_browser/images/im_{n:02}.PNG') for n in range(31)]
+
     def asset_generator(inp_text):
         word_list = [x for x in re.findall(r'[\dA-z_]+', inp_text) if len(x) > 3]
         out_dict = dict()
         out_dict['name'] = choice(word_list)
         out_dict['path'] = 'D://' + choice(word_list) + "/" + choice(word_list)
-        out_dict['image'] = 'D://' + choice(word_list) + "/" + choice(word_list) + ".png"
+        out_dict['image'] = choice(image_list)
         out_dict['tags'] = [choice(word_list) for x in range(randint(1, 5))]
         out_dict['description'] = ' '.join([choice(word_list) for x in range(10)])
         out_dict['scenes'] = 'D://' + choice(word_list) + "/" + choice(word_list) + ".mb"
         return out_dict
 
-    # for _ in range (100):
+
+    # for i in range (200):
+    #     print (i)
     #     kwargs = asset_generator(inp_text)
     #     Models.add_asset(**kwargs)
 
-
-
     sys.exit(main())
-
