@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 from random import randint
 
-from PyQt5.QtWidgets import QWidget, QPushButton, QApplication, QVBoxLayout, QFrame, QSizePolicy
-from Models import Models
-from UI.GalleryWidget import GalleryWidget
+from PyQt5.QtWidgets import QWidget, QPushButton, QVBoxLayout, QFrame, QSizePolicy
+
 
 
 class AssetWidget(QWidget):
@@ -20,7 +19,6 @@ class AssetWidget(QWidget):
 
         self.base_frame = QFrame()
         self.base_frame.setFixedSize(width, height)
-        #self.base_frame.setFixedHeight(height)
         self.layout.addWidget(self.base_frame)
 
         self.button_layout = QVBoxLayout(self.base_frame)
@@ -31,14 +29,14 @@ class AssetWidget(QWidget):
         self.button_layout.addWidget(self.up_button)
         self.up_button.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         self.up_button.setStyleSheet("QPushButton  { \n"
-                                     "font: 16pt 'Tahoma';\n"
+                                     "font: 12pt 'Tahoma';\n"
                                      "border-top-left-radius: 8px;\n"
                                      "border-top-right-radius: 8px;\n"
-                                     "background-color: rgb(51, 51, 51);\n"
+                                     "background-color: #343b47;\n"
                                      "color:rgb(90, 90, 90);}\n"
                                      "QPushButton:hover {\n"
                                      "color:rgb(118, 118, 118);\n"
-                                     "background-color: rgb(80, 80, 80);}\n"
+                                     "background-color: #2c313c;}\n"
                                      "QPushButton:pressed {\n"
                                      "background-color: rgb(36, 36, 36); }\n")
 
@@ -52,7 +50,7 @@ class AssetWidget(QWidget):
         self.dw_button.setStyleSheet("QPushButton  { \n"
                                      "border-bottom-left-radius: 8px;\n"
                                      "border-bottom-right-radius: 8px;\n"
-                                     "background-color: rgb(36, 36, 36);\n"
+                                     "background-color: #2c313c;\n"
                                      "color:rgb(90, 90, 90);}\n"
                                      "QPushButton:hover {\n"
                                      "color:rgb(118, 118, 118);\n"
