@@ -7,7 +7,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 
 from Utilities.Logging import logger
-from settings import INFO_FOLDER, CONTENT_FOLDER, GALLERY_FOLDER, SFX, COLUMN_WIDTH
+from settings import INFO_FOLDER, CONTENT_FOLDER, GALLERY_FOLDER, SFX, ICON_WIDTH
 
 
 class Asset:
@@ -67,9 +67,9 @@ class Asset:
                     logger.error(message)
             if new_path:
                 try:
-                    icon = QPixmap(new_path).scaledToWidth(COLUMN_WIDTH, mode=Qt.SmoothTransformation)
+                    icon = QPixmap(new_path).scaledToWidth(ICON_WIDTH, mode=Qt.SmoothTransformation)
                     icon.save(icon_default_path)
-                    # shutil.copyfile(new_path, icon_default_path)
+
                     self.__icon = icon_default_path
                 except Exception as message:
                     logger.error(message)
