@@ -2,8 +2,12 @@
 import json
 import os
 import shutil
+
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QPixmap
+
 from Utilities.Logging import logger
-from settings import INFO_FOLDER, CONTENT_FOLDER, GALLERY_FOLDER, SFX
+from settings import INFO_FOLDER, CONTENT_FOLDER, GALLERY_FOLDER, SFX, COLUMN_WIDTH
 
 
 class Asset:
@@ -63,7 +67,9 @@ class Asset:
                     logger.error(message)
             if new_path:
                 try:
-                    shutil.copyfile(new_path, icon_default_path)
+                    icon = QPixmap(new_path).scaledToWidth(COLUMN_WIDTH, mode=Qt.SmoothTransformation)
+                    icon.save(icon_default_path)
+                    # shutil.copyfile(new_path, icon_default_path)
                     self.__icon = icon_default_path
                 except Exception as message:
                     logger.error(message)
@@ -74,7 +80,7 @@ class Asset:
         self.info_file(self.asset_json, self.asset_data())
         self.Controller.Models.edit_db_asset(**self.asset_data())
 
-        self.verification_and_copying_files(self.scenes,  self.content_folder)
+        self.verification_and_copying_files(self.scenes, self.content_folder)
         self.verification_and_copying_files(self.gallery, self.gallery_folder)
 
         self.Controller.refresh_ui()
@@ -98,7 +104,6 @@ class Asset:
                 os.remove(curent_file)
             except Exception as message:
                 logger.error(message)
-
 
     def create(self):
         if not self.Controller.Models.is_asset_in_db(self.name):
