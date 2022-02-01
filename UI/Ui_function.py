@@ -47,12 +47,14 @@ class UiFunction(QWidget):
     def add_scenes_btn(self):
         file_name = QFileDialog.getOpenFileName(self, 'Open file')[0]
         file_name = file_name.replace("\\", "/")
-        self.file_list_widget.add_file(file_name)
+        if file_name:
+            self.file_list_widget.add_file(file_name)
 
     def add_gallery_btn(self):
         file_name = QFileDialog.getOpenFileName(self, 'Open file')[0]
         file_name = file_name.replace("\\", "/")
-        self.gallery_list_widget.add_file(file_name)
+        if file_name:
+            self.gallery_list_widget.add_file(file_name)
 
     def clear_form(self):
         for form in [self.name_lineEdit, self.path_lineEdit, self.image_lineEdit, self.tag_lineEdit,
