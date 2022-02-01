@@ -1,7 +1,14 @@
 # -*- coding: utf-8 -*-
 from peewee import *
+from Utilities.Logging import logger
+from Utilities.Utilities import get_db_path
 
-data_base = SqliteDatabase('assets.db')
+"""
+The module Models.py defines the structure of the database and contains 
+functions for finding assets by tags and getting a tag cloud
+"""
+
+data_base = SqliteDatabase(None)
 
 
 class BaseModel(Model):
@@ -14,10 +21,10 @@ class BaseModel(Model):
 class Asset(BaseModel):
     name = CharField()
     path = CharField()
-    image = TextField()
-    description = TextField()
-    scenes = TextField()
-    tags = TextField()  # test:
+    icon = TextField()
+    # description = TextField()
+    # scenes = TextField()
+    # tags = TextField()  # test:
 
 
 class Tag(BaseModel):
@@ -25,39 +32,50 @@ class Tag(BaseModel):
     asset_id = ForeignKeyField(Asset)
 
 
-Asset.create_table()
-Tag.create_table()
+def initialize(db_path):
+    data_base.init(db_path)
+    data_base.create_tables([Asset, Tag])
 
 
-def add_asset(**kwargs):
+def add_asset_to_db(**kwargs):
     tags = kwargs.pop('tags')
-    if not kwargs["name"] in tags:
-        tags.append(kwargs["name"])
-    kwargs['tags'] = ' '.join(tags)  # test
-    asset = Asset.create(**kwargs)
-    for tag in tags:
-        Tag.create(name=tag, asset_id=asset)
+    try:
+        db_asset = Asset.create(**kwargs)
+        for tag in tags:
+            Tag.create(name=tag, asset_id=db_asset)
+        logger.debug("Asset added to database")
+        return db_asset.id
+    except Exception as message:
+        logger.error(message)
+        return False
 
 
 def find_assets_by_tag_list(tag_list):
     out = []
-    """get all assets matching by name"""
+    # get all assets matching by name
     quest_string = ['(Asset.name == "' + x + '")' for x in tag_list]
     quest_string = " | ".join(quest_string)
     quest = 'Asset.select().where(' + quest_string + ')'
-    assets = eval(quest)
-    if assets:
-        for asset in assets:
-            out.append(asset)
-        """get all assets matching by tag"""
-        tag_quest_string = ['(Tag.name == "' + x + '")' for x in tag_list]
-        tag_quest_string = " | ".join(tag_quest_string)
-        quest = 'Tag.select().where(' + tag_quest_string + ')'
+    try:
+        found_assets = eval(quest)
+        if found_assets:
+            for asset in found_assets:
+                out.append(asset)
+    except Exception as message:
+        logger.error(message)
+    # get all assets matching by tag
+    tag_quest_string = ['(Tag.name == "' + x + '")' for x in tag_list]
+    tag_quest_string = " | ".join(tag_quest_string)
+    quest = 'Tag.select().where(' + tag_quest_string + ')'
+    try:
         assets_id = eval(quest)
+        logger.debug("Set quest to db : " + quest)
         for id in assets_id:
             asset = Asset.get(Asset.id == id.asset_id)
             if asset not in out:
                 out.append(asset)
+    except Exception as message:
+        logger.error(message)
     return out
 
 
@@ -66,21 +84,60 @@ def find_tags_by_asset_list(asset_list):
     tag_quest_string = ['(Tag.asset_id == "' + str(x.id) + '")' for x in asset_list]
     tag_quest_string = " | ".join(tag_quest_string)
     quest = 'Tag.select().where(' + tag_quest_string + ')'
-    tags = eval(quest)
-    for tag in tags:
-        if tag.name not in out:
-            out.append(tag.name)
+    try:
+        tags = eval(quest)
+        for tag in tags:
+            if tag.name not in out:
+                out.append(tag.name)
+    except Exception as message:
+        logger.error(message)
     return out
 
 
+def find_asset_by_path(path):
+    logger.debug(path)
+    res = Asset.select().where(Asset.path == path)
+    return res
+
+
+def is_asset_in_db(name):
+    if Asset.select().where(Asset.name == name):
+        return True
+    else:
+        return False
+
+
 def delete_asset(asset_id):
-    asset = Asset.get(Asset.id == asset_id)
-    for tag in Tag.select().where(Tag.asset_id == asset):
+    try:
+        asset_obj = Asset.get(Asset.id == asset_id)
+        for tag in Tag.select().where(Tag.asset_id == asset_obj):
+            tag.delete_instance()
+        asset_obj.delete_instance()
+        return True
+    except Exception as message:
+        logger.error(message)
+        return False
+
+
+def edit_db_asset(**kwargs):
+    asset_obj = Asset.get(Asset.name == kwargs["name"])
+    for tag in Tag.select().where(Tag.asset_id == asset_obj):
         tag.delete_instance()
-    asset.delete_instance()
+    for tag in kwargs["tags"]:
+        Tag.create(name=tag, asset_id=asset_obj)
+    asset_obj.icon = kwargs["icon"]
+    asset_obj.save()
+
 
 if __name__ == '__main__':
-    pass
-    assets = find_assets_by_tag_list(["Maya2", "Help2"])
-    for asset in assets:
-        print(asset, asset.name)
+    db_path = get_db_path()
+    initialize(db_path)
+
+    db_data ={"name": "shotgan", "tags": ["gun2", "shoot", "weapon"], "path": "U:/AssetStorage/library/weapon/shotgan_ast", "icon": "D:/work/_pythonProjects/asset_manager/images/im_09.PNG",}
+
+    edit_db_asset(**db_data)
+    # pass
+    # print(is_asset_in_db("shotgan2"))
+
+    # for asset in assets:
+    #     print(asset, asset.name)

@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>358</width>
+    <height>170</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/*
+Dark: Dark: #16191d
+Assent1: #1f232a
+Assent2: #2c313c
+Assent3: #343b47
+Text1: #fff
+Text2:#838ea2
+ */
+
+
+#header_widget, #window_label, #pushButton{
+background-color: #1f232a;
+color: #838ea2;
+
+}
+
+
+#body_frame, #messeg_label{
+	border:none;
+	background-color:  #16191d;
+	backgroundr: none;
+	padding: 0;
+	margin: 0;
+	color: #fff;
+}
+
+#body_frame QPushButton{
+	border-radius: 10px;
+	background-color:#343b47;
+	height: 20px;
+	color: #838ea2;
+	text-align:left;
+	padding: 0px 20 px;
+}
+
+#body_frame QPushButton:hover{
+	color: #fff;
+}
+
+/*
+QLineEdit, QTextEdit {
+padding: 0 10px;
+background-color:#1f232a;
+border-radius: 10px;
+}
+#centralwidget{
+	background-color: #1f232a;
+}
+#left_panel{
+	background-color:#16191d;
+}
+#left_menu_subcontaner QPushButton{
+	text-align: left;
+	padding: 5px 10px;
+	border-top-left-radius: 10px;
+	border-bottom-left-radius: 10px;
+}
+ 
+
+#drop_frame {
+	background-color:#343b47;
+	border-top-right-radius: 10px;
+	border-bottom-right-radius: 10px;
+}
+#search_lineEdit, #add_asset_frame, #Settingf_frame, #info_frame, #tree_frame{
+	background-color:#16191d;
+	border-radius: 10px;
+}
+#add_asset_button{
+	background-color:#2c313c;
+	border-radius: 10px;
+}
+#status_label, #window_label, #help_text_label{
+color: #838ea2;
+}
+
+
+QScrollBar:vertical {
+ 	border: none;
+    width: 12px;
+    margin: 25px 0 25px 0;
+	border-radius: 0px;
+ }
+QScrollBar::handle:vertical {	
+	background: #343b47;
+	min-height: 30px;
+	border-radius: 6px;
+}
+QScrollBar::handle:vertical:hover{	
+	background-color:#2c313c;
+}
+QScrollBar::sub-line:vertical {
+	border: none;
+	background: #343b47;;
+	height: 25px;
+	border-radius: 6px;
+	subcontrol-position: top;
+	subcontrol-origin: margin;
+}
+QScrollBar::sub-line:vertical:hover{	
+	background-color:#2c313c;
+}
+QScrollBar::add-line:vertical {
+	border: none;
+	background-color: #343b47;
+	height: 25px;
+	border-radius: 6px;
+	subcontrol-position: bottom;
+	subcontrol-origin: margin;
+}
+QScrollBar::add-line:vertical:hover{	
+	background-color:#2c313c;
+}
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+	background:#16191d;
+}
+</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QWidget" name="header_widget" native="true">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>30</height>
+      </size>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QWidget" name="widget_2" native="true">
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <property name="spacing">
+          <number>10</number>
+         </property>
+         <property name="leftMargin">
+          <number>10</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="window_label">
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Database selection</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../resurses.qrc">
+             <normaloff>:/icons/icons/logo.png</normaloff>:/icons/icons/logo.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="body_frame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <property name="leftMargin">
+       <number>15</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="messeg_label">
+        <property name="text">
+         <string>The program cannot work 
+without a database connection. 
+You must select a database or  
+create new one.</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QFrame" name="frame_2">
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QPushButton" name="new_button">
+           <property name="text">
+            <string>New database</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../resurses.qrc">
+             <normaloff>:/icons/icons/database.svg</normaloff>:/icons/icons/database.svg</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="point_button">
+           <property name="text">
+            <string>Point database</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../resurses.qrc">
+             <normaloff>:/icons/icons/mouse-pointer.svg</normaloff>:/icons/icons/mouse-pointer.svg</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="cancel_button">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>20</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Cancel</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../resurses.qrc">
+             <normaloff>:/icons/icons/x-circle.svg</normaloff>:/icons/icons/x-circle.svg</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>16</width>
+             <height>16</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../resurses.qrc"/>
+ </resources>
+ <connections/>
+</ui>

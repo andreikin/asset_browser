@@ -1,0 +1,31 @@
+import logging
+import os
+import sys
+import tempfile
+from sys import path
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+
+to_file = False
+if to_file:
+    # Create a handler to record in file
+    file_path = os.path.join(tempfile.gettempdir(), 'asset_manager_logging.log')
+    if os.path.exists(file_path):
+        os.remove(file_path)
+    logger_handler = logging.FileHandler(file_path)
+else:
+    # Create a handler to print data
+    logger_handler = logging.StreamHandler()
+
+
+# Create a Formatter to format log messages
+logger_formatter = logging.Formatter("[%(asctime)s  %(levelname)s  %(filename) 17s.%(funcName)s() %(message)s")
+
+#logger_formatter = logging.Formatter("%(asctime)s | [%(levelname)s] | %(filename)s.%(funcName)18s(%(lineno)d) - %(message)s")
+
+# Add a Formatter to the handler
+logger_handler.setFormatter(logger_formatter)
+
+# Add a handler to Logger
+logger.addHandler(logger_handler)
