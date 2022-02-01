@@ -14,6 +14,8 @@ class GalleryWidget(QWidget):
         self.spacing = spacing
         self.vidget_list = []
 
+        self.setAcceptDrops(True)
+
         self.__layout = QHBoxLayout()
         self.__layout.setContentsMargins(0, 0, 0, 0)
         self.__layout.setSpacing(self.spacing)
@@ -27,23 +29,22 @@ class GalleryWidget(QWidget):
         self.__background_layout.setAlignment(Qt.AlignTop)
 
         self.__columns_layout_list = []
-        for i in range(int(1800 / (icons_width))):
+        for i in range(int(1800 / icons_width)):
             v_layout = QVBoxLayout()
-            v_layout.setAlignment(Qt.AlignLeft | Qt.AlignTop)
+            v_layout.setAlignment(Qt.AlignTop)
             v_layout.setContentsMargins(0, 0, 0, 0)
             v_layout.setSpacing(self.spacing)
             self.__background_layout.addLayout(v_layout)
             self.__columns_layout_list.append(v_layout)
 
         self.__scroll_area = QScrollArea()
-        self.__scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.__scroll_area.setWidgetResizable(True)
         self.__scroll_area.setWidget(self.__background)
         self.__layout.addWidget(self.__scroll_area)
+        self.__scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
-    def add_widget(self, image):
-        image.setMaximumWidth(self.icons_width)
-        self.vidget_list.append(image)
+    def add_widget(self, widget):
+        self.vidget_list.append(widget)
         self.refresh()
 
     def clear(self):
@@ -83,7 +84,7 @@ if __name__ == "__main__":
             self.vbox.addWidget(self.gallery)
             for x in range(135):
                 but = QPushButton()
-                but.setFixedHeight(randint(100, 150))
+                but.setFixedHeight(randint(50, 150))
                 self.gallery.add_widget(but)
             style_sheet = """
                        QPushButton {
@@ -92,7 +93,7 @@ if __name__ == "__main__":
                        """
             self.setStyleSheet(style_sheet)
 
-            #self.gallery.clear()
+
 
             self.setLayout(self.vbox)
 

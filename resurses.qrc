@@ -1,5 +1,14 @@
 <RCC>
   <qresource prefix="icons">
+    <file>icons/edit.svg</file>
+    <file>icons/camera-off.svg</file>
+    <file>icons/image.svg</file>
+    <file>icons/file.svg</file>
+    <file>icons/x-square.svg</file>
+    <file>icons/folder-plus.svg</file>
+    <file>icons/mouse-pointer.svg</file>
+    <file>icons/database.svg</file>
+    <file>icons/tree.png</file>
     <file>icons/logo.png</file>
     <file>icons/folder.svg</file>
     <file>icons/chevrons-left.svg</file>
@@ -12,5 +21,8 @@
     <file>icons/x.svg</file>
     <file>icons/square.svg</file>
     <file>icons/file-plus.svg</file>
+  </qresource>
+  <qresource prefix="blue">
+    <file>icons_blue/file-plus.svg</file>
   </qresource>
 </RCC>
