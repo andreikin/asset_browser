@@ -34,7 +34,9 @@ class DeleteItemButton(QWidget):
 
 
 class FileListWidget(QListView):
-
+    """
+    class creates a list of files with a button to delete each of them
+    """
     def __init__(self, files_list, parent=None):
         super(FileListWidget, self).__init__(parent=parent)
         self.setDragDropMode(QAbstractItemView.DragDrop)
@@ -55,16 +57,21 @@ class FileListWidget(QListView):
         self.set_height()
 
     def create_item(self, file_path):
-        file_name = os.path.basename(file_path)
-        label = file_name if len(file_name) < 30 else file_name[:29] + "..."
-        item = QStandardItem(label)
-        item.setData(file_path, role=Qt.ToolTipRole)
-        self.model.appendRow(item)
-        self.setIndexWidget(item.index(), DeleteItemButton(item, self))
+        if not self.is_file_in_widget(file_path):
+            file_name = os.path.basename(file_path)
+            label = file_name if len(file_name) < 30 else file_name[:29] + "..."
+            item = QStandardItem(label)
+            item.setData(file_path, role=Qt.ToolTipRole)
+            self.model.appendRow(item)
+            self.setIndexWidget(item.index(), DeleteItemButton(item, self))
+            self.set_height()
+            logger.debug("File added to ui " + file_path)
+
+    def is_file_in_widget(self, file):
+        return file in self.get_list()
 
     def add_file(self, file_path):
         self.create_item(file_path)
-        self.set_height()
 
     def add_files_list(self, files_list):
         for file_path in files_list:
@@ -78,6 +85,9 @@ class FileListWidget(QListView):
         return path_list
 
     def set_height(self):
+        """
+        sets the height of the widget according to the amount of content
+        """
         files_list = self.get_list()
         content_height = len(files_list) * self.item_height
         if self.min_height < content_height + 20:
@@ -93,9 +103,7 @@ class FileListWidget(QListView):
         mimedata = event.mimeData()
         if mimedata.hasUrls():
             for f in mimedata.urls():
-                print(f.path()[1:])
                 self.add_file(f.path()[1:])
-                logger.debug("File added to ui " + f.path()[1:])
 
     def dragEnterEvent(self, event):
         if event.source() is self:
