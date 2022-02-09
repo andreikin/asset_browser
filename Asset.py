@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import datetime
 import json
 import os
 import shutil
@@ -7,14 +8,14 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 
 from Utilities.Logging import logger
-from settings import INFO_FOLDER, CONTENT_FOLDER, GALLERY_FOLDER, SFX, ICON_WIDTH
+from Utilities.Utilities import get_library_path
+from settings import INFO_FOLDER, CONTENT_FOLDER, GALLERY_FOLDER, SFX, ICON_WIDTH, DELETED_ASSET_FOLDER
 
 
 class Asset:
 
     def __init__(self, in_controller, **kwargs):
         self.Controller = in_controller
-
         self.__icon = ""
         self.__path = None
 
@@ -48,7 +49,7 @@ class Asset:
         self.asset_json = self.asset_info_folder + "/data.txt"
         for each_path in [in_path, self.asset_info_folder, self.content_folder, self.gallery_folder]:
             if not os.path.exists(each_path):
-                os.mkdir(each_path)
+                os.makedirs(each_path)
 
     @property
     def icon(self):
@@ -117,22 +118,11 @@ class Asset:
             if self.tags:
                 self.Controller.ui.search_lineEdit.setText(self.tags[0])
             self.Controller.refresh_ui()
+            self.Controller.ui.status_message("Asset " + self.name + " created successfully!", )
             logger.debug("executed")
         else:
             logger.error(" path : " + self.path + "/" + self.name + SFX + " exists")
             self.Controller.ui.status_message("Asset with " + self.name + " name already exists!", state="ERROR")
-
-    # def copy_files(self):
-    #     for i, scene in enumerate(self.scenes):
-    #         file_name = os.path.basename(scene)
-    #         shutil.copyfile(scene, self.content_folder + "/" + file_name)
-    #         self.scenes[i] = self.content_folder + "/" + file_name
-    #
-    #     for i, scene in enumerate(self.gallery):
-    #         file_name = os.path.basename(scene)
-    #         shutil.copyfile(scene, self.gallery_folder + "/" + file_name)
-    #         self.gallery[i] = self.gallery_folder + "/" + file_name
-    #     logger.debug(" executed\n")
 
     @staticmethod
     def info_file(json_path, asset_data=None):  # if asset_data  create mode else read
@@ -164,8 +154,28 @@ class Asset:
         return asset_data
 
     def delete_asset(self):
-        # TODO: add exceptions in case of unsuccessful deletion
-        pass
+        process_result = self.Controller.Models.delete_asset(self.name)
+
+        if not process_result:
+            self.Controller.ui.status_message("information from the database was not deleted", state="ERROR")
+        else:
+            try:
+                del_folder = get_library_path()+"/"+DELETED_ASSET_FOLDER
+                if not os.path.exists(del_folder):
+                    os.mkdir(del_folder)
+                time = datetime.datetime.now().strftime("%d-%m-%Y_%H-%M")
+                os.rename(self.path, self.path + "_"+time)
+                shutil.move(self.path + "_"+time, del_folder)
+                logger.debug("Asset " + self.name + " deleted successfully")
+                self.Controller.refresh_ui()
+                self.Controller.ui.status_message("Asset " + self.name + " deleted successfully")
+            except Exception as message:
+                logger.error(message)
+                self.Controller.ui.status_message("An error occurred and the asset was not correctly deleted",
+                                                  state="ERROR")
+
+
+
 
     def asset_data(self):
 
