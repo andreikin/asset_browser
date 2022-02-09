@@ -5,6 +5,7 @@ import re
 import shutil
 import subprocess
 
+import PyQt5
 from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtCore import Qt, QSize, QRect, QEvent, QMimeData, QUrl
 from PyQt5.QtGui import QCursor, QDrag, QPixmap, QIcon
@@ -14,7 +15,11 @@ from PyQt5.QtWidgets import QWidget, QPushButton, QVBoxLayout, QFrame, QSizePoli
 from Asset import Asset
 from Models import Models
 from Utilities.Logging import logger
-from Utilities.Utilities import get_db_path
+from Utilities.Utilities import get_library_path, convert_path_to_local, set_font_size
+from settings import COLUMN_WIDTH, DROP_MENU_WIDTH, DATABASE_NAME
+
+BTN_WIDTH = 30  # The size of the buttons inside the widget
+ICON_SIZE = 22  # The size of the icon in it
 
 
 class AssetWidget(QWidget):
@@ -51,31 +56,31 @@ class AssetWidget(QWidget):
                                      "border-radius: 10px;"
                                      "padding: 0 10px;"
                                      "color: #fff;")
-        BTN_RAD = 30
-        ICON_SIZE = 22
-        self.edit_button = QPushButton("", parent=self.frame_shadow)
-        self.edit_button.clicked.connect(self.preparation_for_editing)
-        self.edit_button.setGeometry(self.width / 2 - BTN_RAD / 2, self.height - 35, BTN_RAD, BTN_RAD)
-        self.edit_button.setIcon(QIcon(":/icons/icons/edit.svg"))
-        self.edit_button.setIconSize(QtCore.QSize(ICON_SIZE, ICON_SIZE))
-        self.edit_button.setStyleSheet("background-color: #16191d;"
-                                       "border-radius: " + str(BTN_RAD / 2) + "px;")
-
-        self.del_button = QPushButton("", parent=self.frame_shadow)
-        self.del_button.clicked.connect(self.delete_asset)
-        self.del_button.setGeometry(self.width - BTN_RAD - 6, self.height - 35, BTN_RAD, BTN_RAD)
-        self.del_button.setIcon(QIcon(":/icons/icons/x-circle.svg"))
-        self.del_button.setIconSize(QtCore.QSize(ICON_SIZE, ICON_SIZE))
-        self.del_button.setStyleSheet("background-color: #16191d;"
-                                      "border-radius: " + str(BTN_RAD / 2) + "px;")
 
         self.open_button = QPushButton("", parent=self.frame_shadow)
         self.open_button.clicked.connect(self.open_directory)
-        self.open_button.setGeometry(6, self.height - 35, BTN_RAD, BTN_RAD)
+
+        self.open_button.setGeometry(self.places_buttons_by_x()[0], self.height - 35, BTN_WIDTH, BTN_WIDTH)
         self.open_button.setIcon(QIcon(":/icons/icons//folder.svg"))
         self.open_button.setIconSize(QtCore.QSize(ICON_SIZE, ICON_SIZE))
         self.open_button.setStyleSheet("background-color: #16191d;"
-                                       "border-radius: " + str(BTN_RAD / 2) + "px;")
+                                       "border-radius: " + str(BTN_WIDTH / 2) + "px;")
+
+        self.edit_button = QPushButton("", parent=self.frame_shadow)
+        self.edit_button.clicked.connect(self.preparation_for_editing)
+        self.edit_button.setGeometry(self.places_buttons_by_x()[1], self.height - 35, BTN_WIDTH, BTN_WIDTH)
+        self.edit_button.setIcon(QIcon(":/icons/icons/edit.svg"))
+        self.edit_button.setIconSize(QtCore.QSize(ICON_SIZE, ICON_SIZE))
+        self.edit_button.setStyleSheet("background-color: #16191d;"
+                                       "border-radius: " + str(BTN_WIDTH / 2) + "px;")
+
+        self.del_button = QPushButton("", parent=self.frame_shadow)
+        self.del_button.clicked.connect(self.delete_asset)
+        self.del_button.setGeometry(self.places_buttons_by_x()[2], self.height - 35, BTN_WIDTH, BTN_WIDTH)
+        self.del_button.setIcon(QIcon(":/icons/icons/x-circle.svg"))
+        self.del_button.setIconSize(QtCore.QSize(ICON_SIZE, ICON_SIZE))
+        self.del_button.setStyleSheet("background-color: #16191d;"
+                                      "border-radius: " + str(BTN_WIDTH / 2) + "px;")
 
         self.hidden_list = [self.ast_label, self.edit_button, self.del_button, self.open_button]
         if not self.db_asset.icon:
@@ -83,6 +88,10 @@ class AssetWidget(QWidget):
             self.frame_shadow.setIconSize(QtCore.QSize(25, 25))
             self.hidden_list.pop(0)  # liable not hiding
         self.outside_event()
+
+        # set font size
+        size = self.Controller.ui.font_spinBox.value()
+        set_font_size(self.ast_label, size)
 
         # connect Context Menu
         self.setContextMenuPolicy(Qt.CustomContextMenu)
@@ -92,19 +101,56 @@ class AssetWidget(QWidget):
         """
         starts the widget gallery view
         """
-        self.Controller.ui.drop_stackedWidget.setCurrentIndex(3)
-        if not self == self.current_asset:
-            if self.Controller.ui.drop_menu.width() == 0:
-                self.Controller.ui.expand_close_animation("expand")
-            self.Controller.ui.help_text_label.setText(" The current asset is " + self.db_asset.name)
-            logger.debug(self.db_asset.name)
-            AssetWidget.current_asset = self
-        else:
+
+        # If the selected asset is not loaded, it  loaded otherwise the menu is collapsed
+        if self == AssetWidget.current_asset and self.Controller.ui.drop_menu.width() != 0 and self.Controller.ui.drop_stackedWidget.currentIndex() == 3:
             self.Controller.ui.expand_close_animation("close")
             AssetWidget.current_asset = None
             logger.debug("None")
 
-    def height_calculation(self):
+        self.Controller.ui.drop_stackedWidget.setCurrentIndex(3)
+        if self.Controller.ui.drop_menu.width() == 0:
+            self.Controller.ui.expand_close_animation("expand")
+
+        self.Controller.ui.asset_overview_label.setText(" View asset " + self.db_asset.name)
+        asset_data = Asset.recognize_asset(self.db_asset.path)
+        self.Controller.ui.description_textEdit2.setPlainText(asset_data["description"])
+        if not asset_data["description"]:
+            self.Controller.ui.description_textEdit2.hide()
+        else:
+            self.Controller.ui.description_textEdit2.show()
+            lines_num = len(asset_data["description"]) / 40
+            self.Controller.ui.description_textEdit2.setFixedHeight(lines_num * 17 + 17)
+
+        for i in range(self.Controller.ui.gallery_VLayout.count()):
+            widget = self.Controller.ui.gallery_VLayout.itemAt(i).widget()
+            if type(widget) == PyQt5.QtWidgets.QFrame:
+                widget.deleteLater()
+
+        for image_path in asset_data["gallery"]:
+            self.frame_image = QFrame()
+            pix = QPixmap(image_path)
+            pix = pix.scaledToWidth(DROP_MENU_WIDTH - 45, mode=Qt.SmoothTransformation)
+            self.frame_image.setFixedSize(pix.width(), pix.height())
+            self.Controller.ui.gallery_VLayout.insertWidget(1, self.frame_image)
+            self.frame_image.setStyleSheet("border-radius: 6px;"
+                                           "background-color: #2c313c;"
+                                           "border-image: url(" + image_path + ") 3 10 3 10;}")
+
+        logger.debug(self.db_asset.name + "\n")
+        AssetWidget.current_asset = self
+
+    def places_buttons_by_x(self, offset=0.05):
+        """
+        places three buttons on the x-axis
+        """
+        dist = COLUMN_WIDTH * offset
+        widget_centre = COLUMN_WIDTH / 2
+        return [widget_centre - BTN_WIDTH - BTN_WIDTH / 2 - dist,
+                widget_centre - BTN_WIDTH / 2,
+                widget_centre + BTN_WIDTH / 2 + dist]
+
+    def height_calculation(self, ):
         pix = QPixmap(self.db_asset.icon)
         try:
             return pix.height() / (pix.width() / self.width)
@@ -171,19 +217,20 @@ class AssetWidget(QWidget):
         """
         self.Controller.ui.asset_menu_mode = "Edit"
         asset_data = Asset.recognize_asset(self.db_asset.path)
+
+        pattern = r"_ast$"
+        asset_data['name'] = re.sub(pattern, "", asset_data['name'])
+
         self.Controller.ui.name_lineEdit.setText(asset_data['name'])
         self.Controller.ui.tag_lineEdit.setText(" ".join(asset_data['tags']))
-        self.Controller.ui.path_lineEdit.setText(asset_data['path'])
+
+        self.Controller.ui.path_lineEdit.setText(convert_path_to_local(asset_data['path']))
         self.Controller.ui.image_lineEdit.setText(asset_data['icon'])
         self.Controller.ui.description_textEdit.setPlainText(asset_data['description'])
         self.Controller.ui.file_list_widget.clear()
         self.Controller.ui.file_list_widget.add_files_list(asset_data['scenes'])
         self.Controller.ui.gallery_list_widget.clear()
         self.Controller.ui.gallery_list_widget.add_files_list(asset_data['gallery'])
-
-        #self.Controller.ui.gallery_list_widget.files_list = asset_data['gallery']
-
-
         logger.debug("fill in the fields for editing\n")
 
     def delete_asset(self):
@@ -192,19 +239,8 @@ class AssetWidget(QWidget):
         dialog.setStyleSheet("""background-color: #16191d; color: #fff;""")
         dialog_result = dialog.exec()
         if dialog_result == 1024:
-            process_result = self.Controller.Models.delete_asset(self.db_asset)
-            if not process_result:
-                self.Controller.ui.status_message("information from the database was not deleted", state="ERROR")
-            else:
-                try:
-                    shutil.rmtree(self.db_asset.path)
-                    logger.debug("Asset " + self.db_asset.name + " deleted successfully")
-                    self.Controller.ui.status_message("Asset " + self.db_asset.name + " deleted successfully")
-                except Exception as message:
-                    logger.error(message)
-                    self.Controller.ui.status_message("An error occurred and the asset was not correctly deleted",
-                                                      state="ERROR")
-            self.Controller.refresh_ui()
+            asset_data = Asset.recognize_asset(self.db_asset.path)
+            Asset(self.Controller, **asset_data).delete_asset()
 
 
 if __name__ == "__main__":
@@ -215,7 +251,7 @@ if __name__ == "__main__":
         def __init__(self, parent=None):
             QWidget.__init__(self, parent)
             self.vbox = QVBoxLayout()
-            self.db_path = get_db_path()
+            self.db_path = get_library_path() + "/" + DATABASE_NAME
             Models.initialize(self.db_path)
             db_asset = Models.find_assets_by_tag_list(["orange", ])[0]
             self.asset = AssetWidget(db_asset, Models)
