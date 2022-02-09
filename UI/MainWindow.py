@@ -6,7 +6,7 @@ import tempfile
 
 from PyQt5 import QtGui, QtCore
 from PyQt5 import Qt
-from PyQt5.QtCore import  QSettings, QRegExp
+from PyQt5.QtCore import QSettings, QRegExp
 from PyQt5.QtGui import QIcon, QRegExpValidator
 from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QFileDialog, QWidget, QLabel, QSizeGrip
 
@@ -41,7 +41,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ):
         sizegrip = QSizeGrip(self)
         sizegrip.setStyleSheet("image: url(:/icons/icons//scale.png);")
         sizegrip.setFixedSize(30, 20)
-        self.footer_layout.addWidget(sizegrip, 0,  QtCore.Qt.AlignBottom | QtCore.Qt.AlignRight)
+        self.footer_layout.addWidget(sizegrip, 0, QtCore.Qt.AlignBottom | QtCore.Qt.AlignRight)
 
         # name verification
         self.name_lineEdit.setValidator(QRegExpValidator(QRegExp("^[A-z0-9]+$")))
@@ -93,7 +93,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ):
         self.font_spinBox.valueChanged.connect(self.set_font_size)
 
         self.asset_menu_mode = "Add"
-        self.maximize = False # application size state
+        self.maximize = False  # application size state
 
         # object for save settings
         self.settings = None
@@ -115,9 +115,6 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ):
             self.btn_maximize.setIconSize(QtCore.QSize(20, 20))
 
             self.maximize = True
-
-
-
 
     @property
     def asset_menu_mode(self):

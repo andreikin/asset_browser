@@ -82,7 +82,7 @@ class UiFunction(QWidget):
     def set_font_size(self):
         self.settings.setValue("font size", self.font_spinBox.value())
         headers_list = [self.window_label, self.status_label, self.asset_menu_label, self.lib_tree_label,
-                        self.settings_label, self.asset_overview_label]
+                        self.settings_label, self.asset_overview_label, self.tree_widget]
         for widget in self.Controller.application.allWidgets():
             try:
                 size = self.font_spinBox.value()

@@ -28,7 +28,8 @@ class BaseTreeWidget(QTreeWidget):
         self.setRootIsDecorated(False)
         self.setStyleSheet("QTreeView {\n"
                            "border-radius: 10px;}\n"
-                           "QTreeWidget::item{ height:20px;} ")
+                           "QTreeWidget::item{ height:20px;"
+                           "margin: 0px 0px 4px 0px;} ")
         logger.debug(" executed")
 
     def get_tree(self, parent=None, root=None):

@@ -42,7 +42,9 @@ def convert_path_to_local(path):
 
 
 def convert_path_to_global(path):
-
+    """
+    return global path to asset
+    """
     if not path[0] in ["/", "\\"]:
         path = "/"+path
     # remove "//"
