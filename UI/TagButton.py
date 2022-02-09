@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 from PyQt5.QtWidgets import QWidget, QPushButton, QVBoxLayout
 
+from Utilities.Utilities import set_font_size
+
 
 class TagButton(QWidget):
+
     def __init__(self, tag, in_controller, parent=None, ):
         QWidget.__init__(self, parent)
 
@@ -27,6 +30,10 @@ class TagButton(QWidget):
                                   "background-color: #2c313c;}\n"
                                   "QPushButton:pressed {\n"
                                   "background-color: rgb(36, 36, 36); }\n")
+
+        # set font size
+        size = self.Controller.ui.font_spinBox.value()
+        set_font_size(self.button, size)
 
         self.layout.addWidget(self.button)
 
