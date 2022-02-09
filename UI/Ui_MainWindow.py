@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'D:/work/_pythonProjects/asset_manager/UI/Ui_MainWindow.ui'
+# Form implementation generated from reading ui file 'D:/03_andrey/py_progects/asset_browser/UI/Ui_MainWindow.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.2
 #
@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1105, 882)
+        MainWindow.resize(1002, 782)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setMinimumSize(QtCore.QSize(0, 40))
         self.centralwidget.setStyleSheet("/*\n"
@@ -35,12 +35,27 @@ class Ui_MainWindow(object):
 "    color: #fff;\n"
 "}\n"
 "\n"
-"QLineEdit, QTextEdit, #tree_body, #galery_list_frame, #scens_list_frame  {\n"
-"padding: 0 10px;\n"
-"background-color:#1f232a;\n"
-"border-radius: 5px;\n"
+"#db_path_button:hover, #new_lib_button:hover, #add_asset_button:hover, #erase_button:hover {\n"
+"    border-left: 4px solid #343b47;\n"
 "}\n"
-" \n"
+"\n"
+"#expand_button:hover, #info_button:hover, #settings_button:hover, #tree_button:hover, #callaps_btn_a:hover, #callaps_btn_b:hover, #callaps_btn_c:hover, #callaps_btn_d:hover{\n"
+"    border-left: 4px solid #16191d;\n"
+"}\n"
+"\n"
+"QLineEdit, QTextEdit, #tree_body, #galery_list_frame, #scens_list_frame  {\n"
+"    padding: 0 10px;\n"
+"    background-color:#1f232a;\n"
+"    border-radius: 5px;\n"
+"}\n"
+"\n"
+"#font_spinBox{\n"
+"    border-radius: 5px;\n"
+"    padding-right: 15px;\n"
+"    background-color: #1f232a;\n"
+"    padding: 3px 3px;\n"
+"    width: 70px;\n"
+"}\n"
 "#centralwidget{\n"
 "    background-color: #1f232a;\n"
 "}\n"
@@ -56,7 +71,7 @@ class Ui_MainWindow(object):
 "#header_widget, #footer_widget{\n"
 "    background-color:#2c313c;\n"
 "}\n"
-"#drop_frame {\n"
+"#drop_frame, #description_textEdit2 {\n"
 "    background-color:#343b47;\n"
 "    border-top-right-radius: 10px;\n"
 "    border-bottom-right-radius: 10px;\n"
@@ -65,17 +80,9 @@ class Ui_MainWindow(object):
 "    background-color:#16191d;\n"
 "    border-radius: 10px;\n"
 "}\n"
-"#add_asset_button, #erase_button{\n"
-"    background-color:#2c313c;\n"
-"    border: none;\n"
-"    border-radius: 6px;\n"
-"    min-height: 30px;\n"
-"}\n"
 "#status_label, #window_label, #help_text_label{\n"
-"color: #838ea2;\n"
+"    color: #838ea2;\n"
 "}\n"
-"\n"
-"\n"
 "QScrollBar:vertical {\n"
 "     border: none;\n"
 "    width: 8px;\n"
@@ -125,10 +132,10 @@ class Ui_MainWindow(object):
 "\n"
 "")
         self.centralwidget.setObjectName("centralwidget")
-        self.verticalLayout_15 = QtWidgets.QVBoxLayout(self.centralwidget)
-        self.verticalLayout_15.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout_15.setSpacing(0)
-        self.verticalLayout_15.setObjectName("verticalLayout_15")
+        self.main_layout = QtWidgets.QVBoxLayout(self.centralwidget)
+        self.main_layout.setContentsMargins(0, 0, 0, 0)
+        self.main_layout.setSpacing(0)
+        self.main_layout.setObjectName("main_layout")
         self.header_widget = QtWidgets.QWidget(self.centralwidget)
         self.header_widget.setMaximumSize(QtCore.QSize(16777215, 27))
         self.header_widget.setObjectName("header_widget")
@@ -196,7 +203,7 @@ class Ui_MainWindow(object):
         self.btn_close.setObjectName("btn_close")
         self.horizontalLayout_5.addWidget(self.btn_close)
         self.horizontalLayout_2.addWidget(self.frame_7, 0, QtCore.Qt.AlignRight)
-        self.verticalLayout_15.addWidget(self.header_widget)
+        self.main_layout.addWidget(self.header_widget)
         self.line = QtWidgets.QFrame(self.centralwidget)
         self.line.setMinimumSize(QtCore.QSize(0, 1))
         self.line.setMaximumSize(QtCore.QSize(16777215, 1))
@@ -207,7 +214,7 @@ class Ui_MainWindow(object):
         self.line.setMidLineWidth(0)
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
         self.line.setObjectName("line")
-        self.verticalLayout_15.addWidget(self.line)
+        self.main_layout.addWidget(self.line)
         self.body_widget = QtWidgets.QWidget(self.centralwidget)
         self.body_widget.setObjectName("body_widget")
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.body_widget)
@@ -278,6 +285,7 @@ class Ui_MainWindow(object):
         self.drop_frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.drop_frame.setObjectName("drop_frame")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.drop_frame)
+        self.verticalLayout_5.setContentsMargins(15, -1, -1, -1)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
         self.drop_stackedWidget = QtWidgets.QStackedWidget(self.drop_frame)
         self.drop_stackedWidget.setObjectName("drop_stackedWidget")
@@ -311,11 +319,11 @@ class Ui_MainWindow(object):
         self.add_assetscrollArea.setWidgetResizable(True)
         self.add_assetscrollArea.setObjectName("add_assetscrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 323, 718))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 317, 618))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setContentsMargins(0, 6, 6, 0)
-        self.verticalLayout.setSpacing(0)
+        self.verticalLayout.setSpacing(5)
         self.verticalLayout.setObjectName("verticalLayout")
         self.name_frame = QtWidgets.QFrame(self.scrollAreaWidgetContents)
         self.name_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -325,7 +333,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_12.setContentsMargins(0, 5, 0, 10)
         self.horizontalLayout_12.setObjectName("horizontalLayout_12")
         self.name_label = QtWidgets.QLabel(self.name_frame)
-        self.name_label.setMinimumSize(QtCore.QSize(70, 0))
+        self.name_label.setMinimumSize(QtCore.QSize(80, 0))
         self.name_label.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.name_label.setObjectName("name_label")
         self.horizontalLayout_12.addWidget(self.name_label)
@@ -344,7 +352,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_10.setContentsMargins(0, 0, 0, 10)
         self.horizontalLayout_10.setObjectName("horizontalLayout_10")
         self.path_label = QtWidgets.QLabel(self.path_frame)
-        self.path_label.setMinimumSize(QtCore.QSize(70, 0))
+        self.path_label.setMinimumSize(QtCore.QSize(80, 0))
         self.path_label.setObjectName("path_label")
         self.horizontalLayout_10.addWidget(self.path_label)
         self.path_lineEdit = QtWidgets.QLineEdit(self.path_frame)
@@ -370,7 +378,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_9.setContentsMargins(0, 0, 0, 10)
         self.horizontalLayout_9.setObjectName("horizontalLayout_9")
         self.tag_label = QtWidgets.QLabel(self.tag_frame)
-        self.tag_label.setMinimumSize(QtCore.QSize(70, 0))
+        self.tag_label.setMinimumSize(QtCore.QSize(80, 0))
         self.tag_label.setObjectName("tag_label")
         self.horizontalLayout_9.addWidget(self.tag_label)
         self.tag_lineEdit = QtWidgets.QLineEdit(self.tag_frame)
@@ -388,7 +396,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_11.setContentsMargins(0, 0, 0, 10)
         self.horizontalLayout_11.setObjectName("horizontalLayout_11")
         self.image_label = QtWidgets.QLabel(self.images_frame)
-        self.image_label.setMinimumSize(QtCore.QSize(70, 0))
+        self.image_label.setMinimumSize(QtCore.QSize(80, 0))
         self.image_label.setObjectName("image_label")
         self.horizontalLayout_11.addWidget(self.image_label)
         self.image_lineEdit = QtWidgets.QLineEdit(self.images_frame)
@@ -422,6 +430,7 @@ class Ui_MainWindow(object):
         self.description_textEdit = QtWidgets.QTextEdit(self.description_frame)
         self.description_textEdit.setMinimumSize(QtCore.QSize(0, 80))
         self.description_textEdit.setMaximumSize(QtCore.QSize(16777215, 180))
+        self.description_textEdit.setAcceptRichText(False)
         self.description_textEdit.setPlaceholderText("")
         self.description_textEdit.setObjectName("description_textEdit")
         self.verticalLayout_6.addWidget(self.description_textEdit)
@@ -518,7 +527,7 @@ class Ui_MainWindow(object):
         self.erase_button.setObjectName("erase_button")
         self.horizontalLayout_16.addWidget(self.erase_button)
         self.add_asset_button = QtWidgets.QPushButton(self.add_asset_btn_contaner)
-        self.add_asset_button.setMinimumSize(QtCore.QSize(0, 30))
+        self.add_asset_button.setMinimumSize(QtCore.QSize(0, 0))
         self.add_asset_button.setIcon(icon4)
         self.add_asset_button.setIconSize(QtCore.QSize(24, 24))
         self.add_asset_button.setObjectName("add_asset_button")
@@ -537,10 +546,10 @@ class Ui_MainWindow(object):
         self.tree_title_frame.setObjectName("tree_title_frame")
         self.horizontalLayout_15 = QtWidgets.QHBoxLayout(self.tree_title_frame)
         self.horizontalLayout_15.setObjectName("horizontalLayout_15")
-        self.label_5 = QtWidgets.QLabel(self.tree_title_frame)
-        self.label_5.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_5.setObjectName("label_5")
-        self.horizontalLayout_15.addWidget(self.label_5)
+        self.lib_tree_label = QtWidgets.QLabel(self.tree_title_frame)
+        self.lib_tree_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.lib_tree_label.setObjectName("lib_tree_label")
+        self.horizontalLayout_15.addWidget(self.lib_tree_label)
         self.callaps_btn_d = QtWidgets.QPushButton(self.tree_title_frame)
         self.callaps_btn_d.setText("")
         self.callaps_btn_d.setIcon(icon8)
@@ -595,10 +604,10 @@ class Ui_MainWindow(object):
         self.Settingf_frame.setObjectName("Settingf_frame")
         self.horizontalLayout_7 = QtWidgets.QHBoxLayout(self.Settingf_frame)
         self.horizontalLayout_7.setObjectName("horizontalLayout_7")
-        self.label_3 = QtWidgets.QLabel(self.Settingf_frame)
-        self.label_3.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_3.setObjectName("label_3")
-        self.horizontalLayout_7.addWidget(self.label_3)
+        self.settings_label = QtWidgets.QLabel(self.Settingf_frame)
+        self.settings_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.settings_label.setObjectName("settings_label")
+        self.horizontalLayout_7.addWidget(self.settings_label)
         self.callaps_btn_b = QtWidgets.QPushButton(self.Settingf_frame)
         self.callaps_btn_b.setText("")
         self.callaps_btn_b.setIcon(icon8)
@@ -609,12 +618,12 @@ class Ui_MainWindow(object):
         self.Settingf_widget = QtWidgets.QWidget(self.page_3)
         self.Settingf_widget.setObjectName("Settingf_widget")
         self.verticalLayout_13 = QtWidgets.QVBoxLayout(self.Settingf_widget)
-        self.verticalLayout_13.setContentsMargins(0, 10, 0, 0)
-        self.verticalLayout_13.setSpacing(10)
+        self.verticalLayout_13.setContentsMargins(10, 9, 0, 0)
+        self.verticalLayout_13.setSpacing(9)
         self.verticalLayout_13.setObjectName("verticalLayout_13")
         self.db_path_label = QtWidgets.QLabel(self.Settingf_widget)
         self.db_path_label.setMinimumSize(QtCore.QSize(50, 0))
-        self.db_path_label.setMaximumSize(QtCore.QSize(50, 16777215))
+        self.db_path_label.setMaximumSize(QtCore.QSize(150, 16777215))
         self.db_path_label.setObjectName("db_path_label")
         self.verticalLayout_13.addWidget(self.db_path_label)
         self.db_path_frame = QtWidgets.QFrame(self.Settingf_widget)
@@ -624,19 +633,46 @@ class Ui_MainWindow(object):
         self.horizontalLayout_14 = QtWidgets.QHBoxLayout(self.db_path_frame)
         self.horizontalLayout_14.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_14.setObjectName("horizontalLayout_14")
-        self.db_path_lineEdit = QtWidgets.QLineEdit(self.db_path_frame)
+        self.verticalLayout_13.addWidget(self.db_path_frame)
+        self.widget_2 = QtWidgets.QWidget(self.Settingf_widget)
+        self.widget_2.setMinimumSize(QtCore.QSize(0, 0))
+        self.widget_2.setObjectName("widget_2")
+        self.horizontalLayout_18 = QtWidgets.QHBoxLayout(self.widget_2)
+        self.horizontalLayout_18.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_18.setSpacing(0)
+        self.horizontalLayout_18.setObjectName("horizontalLayout_18")
+        self.db_path_lineEdit = QtWidgets.QLineEdit(self.widget_2)
         self.db_path_lineEdit.setMinimumSize(QtCore.QSize(0, 25))
         self.db_path_lineEdit.setMaximumSize(QtCore.QSize(16777215, 25))
         self.db_path_lineEdit.setClearButtonEnabled(True)
         self.db_path_lineEdit.setObjectName("db_path_lineEdit")
-        self.horizontalLayout_14.addWidget(self.db_path_lineEdit)
-        self.db_path_button = QtWidgets.QPushButton(self.db_path_frame)
+        self.horizontalLayout_18.addWidget(self.db_path_lineEdit)
+        self.db_path_button = QtWidgets.QPushButton(self.widget_2)
+        self.db_path_button.setMinimumSize(QtCore.QSize(40, 0))
+        self.db_path_button.setMaximumSize(QtCore.QSize(30, 24))
         self.db_path_button.setText("")
         self.db_path_button.setIcon(icon9)
         self.db_path_button.setIconSize(QtCore.QSize(24, 24))
         self.db_path_button.setObjectName("db_path_button")
-        self.horizontalLayout_14.addWidget(self.db_path_button)
-        self.verticalLayout_13.addWidget(self.db_path_frame)
+        self.horizontalLayout_18.addWidget(self.db_path_button, 0, QtCore.Qt.AlignRight)
+        self.verticalLayout_13.addWidget(self.widget_2)
+        self.widget_3 = QtWidgets.QWidget(self.Settingf_widget)
+        self.widget_3.setMinimumSize(QtCore.QSize(0, 50))
+        self.widget_3.setObjectName("widget_3")
+        self.horizontalLayout_17 = QtWidgets.QHBoxLayout(self.widget_3)
+        self.horizontalLayout_17.setContentsMargins(0, -1, 40, -1)
+        self.horizontalLayout_17.setObjectName("horizontalLayout_17")
+        self.label = QtWidgets.QLabel(self.widget_3)
+        self.label.setMinimumSize(QtCore.QSize(150, 0))
+        self.label.setObjectName("label")
+        self.horizontalLayout_17.addWidget(self.label, 0, QtCore.Qt.AlignLeft)
+        self.font_spinBox = QtWidgets.QSpinBox(self.widget_3)
+        self.font_spinBox.setMaximumSize(QtCore.QSize(60, 16777215))
+        self.font_spinBox.setMinimum(8)
+        self.font_spinBox.setMaximum(11)
+        self.font_spinBox.setObjectName("font_spinBox")
+        self.horizontalLayout_17.addWidget(self.font_spinBox)
+        self.verticalLayout_13.addWidget(self.widget_3)
         spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_13.addItem(spacerItem2)
         self.verticalLayout_7.addWidget(self.Settingf_widget)
@@ -645,6 +681,7 @@ class Ui_MainWindow(object):
         self.page_4.setObjectName("page_4")
         self.verticalLayout_8 = QtWidgets.QVBoxLayout(self.page_4)
         self.verticalLayout_8.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_8.setSpacing(0)
         self.verticalLayout_8.setObjectName("verticalLayout_8")
         self.info_frame = QtWidgets.QFrame(self.page_4)
         self.info_frame.setMaximumSize(QtCore.QSize(16777215, 40))
@@ -653,10 +690,10 @@ class Ui_MainWindow(object):
         self.info_frame.setObjectName("info_frame")
         self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.info_frame)
         self.horizontalLayout_8.setObjectName("horizontalLayout_8")
-        self.label_4 = QtWidgets.QLabel(self.info_frame)
-        self.label_4.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_4.setObjectName("label_4")
-        self.horizontalLayout_8.addWidget(self.label_4)
+        self.asset_overview_label = QtWidgets.QLabel(self.info_frame)
+        self.asset_overview_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.asset_overview_label.setObjectName("asset_overview_label")
+        self.horizontalLayout_8.addWidget(self.asset_overview_label)
         self.callaps_btn_c = QtWidgets.QPushButton(self.info_frame)
         self.callaps_btn_c.setText("")
         self.callaps_btn_c.setIcon(icon8)
@@ -664,12 +701,27 @@ class Ui_MainWindow(object):
         self.callaps_btn_c.setObjectName("callaps_btn_c")
         self.horizontalLayout_8.addWidget(self.callaps_btn_c, 0, QtCore.Qt.AlignRight)
         self.verticalLayout_8.addWidget(self.info_frame)
-        self.help_text_label = QtWidgets.QLabel(self.page_4)
-        self.help_text_label.setMinimumSize(QtCore.QSize(0, 50))
-        self.help_text_label.setObjectName("help_text_label")
-        self.verticalLayout_8.addWidget(self.help_text_label)
+        self.scrollArea = QtWidgets.QScrollArea(self.page_4)
+        self.scrollArea.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollArea.setObjectName("scrollArea")
+        self.scrollAreaWidgetContents_2 = QtWidgets.QWidget()
+        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 317, 648))
+        self.scrollAreaWidgetContents_2.setObjectName("scrollAreaWidgetContents_2")
+        self.gallery_VLayout = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents_2)
+        self.gallery_VLayout.setContentsMargins(0, -1, 0, -1)
+        self.gallery_VLayout.setSpacing(12)
+        self.gallery_VLayout.setObjectName("gallery_VLayout")
+        self.description_textEdit2 = QtWidgets.QTextEdit(self.scrollAreaWidgetContents_2)
+        self.description_textEdit2.setMaximumSize(QtCore.QSize(16777215, 60))
+        self.description_textEdit2.setAcceptRichText(False)
+        self.description_textEdit2.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
+        self.description_textEdit2.setObjectName("description_textEdit2")
+        self.gallery_VLayout.addWidget(self.description_textEdit2)
         spacerItem3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout_8.addItem(spacerItem3)
+        self.gallery_VLayout.addItem(spacerItem3)
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents_2)
+        self.verticalLayout_8.addWidget(self.scrollArea)
         self.drop_stackedWidget.addWidget(self.page_4)
         self.verticalLayout_5.addWidget(self.drop_stackedWidget)
         self.verticalLayout_4.addWidget(self.drop_frame)
@@ -729,27 +781,32 @@ class Ui_MainWindow(object):
         self.galery_VLayout.setObjectName("galery_VLayout")
         self.verticalLayout_3.addWidget(self.galery_frame)
         self.horizontalLayout_3.addWidget(self.body_widget_2)
-        self.verticalLayout_15.addWidget(self.body_widget)
+        self.main_layout.addWidget(self.body_widget)
         self.footer_widget = QtWidgets.QWidget(self.centralwidget)
         self.footer_widget.setMinimumSize(QtCore.QSize(0, 30))
         self.footer_widget.setMaximumSize(QtCore.QSize(16777215, 30))
         self.footer_widget.setObjectName("footer_widget")
-        self.verticalLayout_12 = QtWidgets.QVBoxLayout(self.footer_widget)
-        self.verticalLayout_12.setObjectName("verticalLayout_12")
+        self.footer_layout = QtWidgets.QHBoxLayout(self.footer_widget)
+        self.footer_layout.setContentsMargins(15, 0, 0, 3)
+        self.footer_layout.setSpacing(0)
+        self.footer_layout.setObjectName("footer_layout")
         self.status_label = QtWidgets.QLabel(self.footer_widget)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.status_label.setFont(font)
         self.status_label.setObjectName("status_label")
-        self.verticalLayout_12.addWidget(self.status_label)
-        self.verticalLayout_15.addWidget(self.footer_widget)
+        self.footer_layout.addWidget(self.status_label)
+        self.main_layout.addWidget(self.footer_widget)
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.drop_stackedWidget.setCurrentIndex(0)
+        self.drop_stackedWidget.setCurrentIndex(2)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.window_label.setText(_translate("MainWindow", "Asset manager"))
+        self.window_label.setText(_translate("MainWindow", "Asset browser"))
         self.btn_close.setToolTip(_translate("MainWindow", "Close window"))
         self.expand_button.setToolTip(_translate("MainWindow", "add asset"))
         self.tree_button.setToolTip(_translate("MainWindow", "library tree"))
@@ -767,13 +824,18 @@ class Ui_MainWindow(object):
         self.scen_label.setText(_translate("MainWindow", "Scenes:"))
         self.erase_button.setText(_translate("MainWindow", "Erase form"))
         self.add_asset_button.setText(_translate("MainWindow", "Add Asset"))
-        self.label_5.setText(_translate("MainWindow", "Library tree"))
+        self.lib_tree_label.setText(_translate("MainWindow", "Library tree"))
         self.add_dir_line_edit.setPlaceholderText(_translate("MainWindow", "Type new directory name here"))
-        self.label_3.setText(_translate("MainWindow", "Settings"))
-        self.db_path_label.setText(_translate("MainWindow", "Database:"))
-        self.db_path_lineEdit.setPlaceholderText(_translate("MainWindow", "Add path to database file here"))
-        self.label_4.setText(_translate("MainWindow", "Asset overview"))
-        self.help_text_label.setText(_translate("MainWindow", "   The current asset is missing"))
+        self.settings_label.setText(_translate("MainWindow", "Settings"))
+        self.db_path_label.setText(_translate("MainWindow", "Сurrent library folder :"))
+        self.db_path_lineEdit.setPlaceholderText(_translate("MainWindow", "Path to library folder"))
+        self.label.setText(_translate("MainWindow", "Application font size:"))
+        self.asset_overview_label.setText(_translate("MainWindow", "Asset overview"))
+        self.description_textEdit2.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
         self.search_lineEdit.setPlaceholderText(_translate("MainWindow", "Type tag or tags here"))
-        self.status_label.setText(_translate("MainWindow", "In the database were found 345 items "))
+        self.status_label.setText(_translate("MainWindow", "In the database were found 0 items "))
 import resurses_rc

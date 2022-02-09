@@ -1,5 +1,7 @@
+import sys
+
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QWidget, QApplication, QMainWindow, QSizeGrip
 
 
 class CustomTitleBar(QWidget):
@@ -23,3 +25,13 @@ class CustomTitleBar(QWidget):
     def mouseReleaseEvent(self, event):
         self.offset = None
         super().mouseReleaseEvent(event)
+
+
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    window = CustomTitleBar()
+    window.show()
+    window.resize(240, 160)
+    app.exec_()

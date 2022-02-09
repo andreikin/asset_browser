@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1105</width>
-    <height>882</height>
+    <width>1001</width>
+    <height>787</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -39,12 +39,27 @@ Text2:#838ea2
 	color: #fff;
 }
 
-QLineEdit, QTextEdit, #tree_body, #galery_list_frame, #scens_list_frame  {
-padding: 0 10px;
-background-color:#1f232a;
-border-radius: 5px;
+#db_path_button:hover, #new_lib_button:hover, #add_asset_button:hover, #erase_button:hover {
+	border-left: 4px solid #343b47;
 }
- 
+
+#expand_button:hover, #info_button:hover, #settings_button:hover, #tree_button:hover, #callaps_btn_a:hover, #callaps_btn_b:hover, #callaps_btn_c:hover, #callaps_btn_d:hover{
+	border-left: 4px solid #16191d;
+}
+
+QLineEdit, QTextEdit, #tree_body, #galery_list_frame, #scens_list_frame  {
+	padding: 0 10px;
+	background-color:#1f232a;
+	border-radius: 5px;
+}
+
+#font_spinBox{
+	border-radius: 5px;
+	padding-right: 15px;
+	background-color: #1f232a;
+    padding: 3px 3px;
+	width: 70px;
+}
 #centralwidget{
 	background-color: #1f232a;
 }
@@ -60,7 +75,7 @@ border-radius: 5px;
 #header_widget, #footer_widget{
 	background-color:#2c313c;
 }
-#drop_frame {
+#drop_frame, #description_textEdit2 {
 	background-color:#343b47;
 	border-top-right-radius: 10px;
 	border-bottom-right-radius: 10px;
@@ -69,17 +84,9 @@ border-radius: 5px;
 	background-color:#16191d;
 	border-radius: 10px;
 }
-#add_asset_button, #erase_button{
-	background-color:#2c313c;
-	border: none;
-	border-radius: 6px;
-	min-height: 30px;
-}
 #status_label, #window_label, #help_text_label{
-color: #838ea2;
+	color: #838ea2;
 }
-
-
 QScrollBar:vertical {
  	border: none;
     width: 8px;
@@ -129,7 +136,7 @@ background-color:#2c313c;
 
 </string>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout_15">
+   <layout class="QVBoxLayout" name="main_layout">
     <property name="spacing">
      <number>0</number>
     </property>
@@ -230,7 +237,7 @@ background-color:#2c313c;
              </font>
             </property>
             <property name="text">
-             <string>Asset manager</string>
+             <string>Asset browser</string>
             </property>
            </widget>
           </item>
@@ -542,6 +549,9 @@ background-color:#2c313c;
              <enum>QFrame::Raised</enum>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_5">
+             <property name="leftMargin">
+              <number>15</number>
+             </property>
              <item>
               <widget class="QStackedWidget" name="drop_stackedWidget">
                <property name="currentIndex">
@@ -619,13 +629,13 @@ background-color:#2c313c;
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>323</width>
-                      <height>718</height>
+                      <width>317</width>
+                      <height>623</height>
                      </rect>
                     </property>
                     <layout class="QVBoxLayout" name="verticalLayout">
                      <property name="spacing">
-                      <number>0</number>
+                      <number>5</number>
                      </property>
                      <property name="leftMargin">
                       <number>0</number>
@@ -664,7 +674,7 @@ background-color:#2c313c;
                          <widget class="QLabel" name="name_label">
                           <property name="minimumSize">
                            <size>
-                            <width>70</width>
+                            <width>80</width>
                             <height>0</height>
                            </size>
                           </property>
@@ -729,7 +739,7 @@ background-color:#2c313c;
                          <widget class="QLabel" name="path_label">
                           <property name="minimumSize">
                            <size>
-                            <width>70</width>
+                            <width>80</width>
                             <height>0</height>
                            </size>
                           </property>
@@ -805,7 +815,7 @@ background-color:#2c313c;
                          <widget class="QLabel" name="tag_label">
                           <property name="minimumSize">
                            <size>
-                            <width>70</width>
+                            <width>80</width>
                             <height>0</height>
                            </size>
                           </property>
@@ -864,7 +874,7 @@ background-color:#2c313c;
                          <widget class="QLabel" name="image_label">
                           <property name="minimumSize">
                            <size>
-                            <width>70</width>
+                            <width>80</width>
                             <height>0</height>
                            </size>
                           </property>
@@ -983,6 +993,9 @@ background-color:#2c313c;
                             <width>16777215</width>
                             <height>180</height>
                            </size>
+                          </property>
+                          <property name="acceptRichText">
+                           <bool>false</bool>
                           </property>
                           <property name="placeholderText">
                            <string/>
@@ -1286,7 +1299,7 @@ background-color:#2c313c;
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
-                        <height>30</height>
+                        <height>0</height>
                        </size>
                       </property>
                       <property name="text">
@@ -1339,7 +1352,7 @@ background-color:#2c313c;
                    </property>
                    <layout class="QHBoxLayout" name="horizontalLayout_15">
                     <item>
-                     <widget class="QLabel" name="label_5">
+                     <widget class="QLabel" name="lib_tree_label">
                       <property name="text">
                        <string>Library tree</string>
                       </property>
@@ -1499,7 +1512,7 @@ background-color:#2c313c;
                    </property>
                    <layout class="QHBoxLayout" name="horizontalLayout_7">
                     <item>
-                     <widget class="QLabel" name="label_3">
+                     <widget class="QLabel" name="settings_label">
                       <property name="text">
                        <string>Settings</string>
                       </property>
@@ -1532,13 +1545,13 @@ background-color:#2c313c;
                   <widget class="QWidget" name="Settingf_widget" native="true">
                    <layout class="QVBoxLayout" name="verticalLayout_13">
                     <property name="spacing">
-                     <number>10</number>
+                     <number>9</number>
                     </property>
                     <property name="leftMargin">
-                     <number>0</number>
+                     <number>10</number>
                     </property>
                     <property name="topMargin">
-                     <number>10</number>
+                     <number>9</number>
                     </property>
                     <property name="rightMargin">
                      <number>0</number>
@@ -1556,12 +1569,12 @@ background-color:#2c313c;
                       </property>
                       <property name="maximumSize">
                        <size>
-                        <width>50</width>
+                        <width>150</width>
                         <height>16777215</height>
                        </size>
                       </property>
                       <property name="text">
-                       <string>Database:</string>
+                       <string>Сurrent library folder :</string>
                       </property>
                      </widget>
                     </item>
@@ -1574,6 +1587,33 @@ background-color:#2c313c;
                        <enum>QFrame::Raised</enum>
                       </property>
                       <layout class="QHBoxLayout" name="horizontalLayout_14">
+                       <property name="leftMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="topMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="rightMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="bottomMargin">
+                        <number>0</number>
+                       </property>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QWidget" name="widget_2" native="true">
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <layout class="QHBoxLayout" name="horizontalLayout_18">
+                       <property name="spacing">
+                        <number>0</number>
+                       </property>
                        <property name="leftMargin">
                         <number>0</number>
                        </property>
@@ -1601,15 +1641,27 @@ background-color:#2c313c;
                           </size>
                          </property>
                          <property name="placeholderText">
-                          <string>Add path to database file here</string>
+                          <string>Path to library folder</string>
                          </property>
                          <property name="clearButtonEnabled">
                           <bool>true</bool>
                          </property>
                         </widget>
                        </item>
-                       <item>
+                       <item alignment="Qt::AlignRight">
                         <widget class="QPushButton" name="db_path_button">
+                         <property name="minimumSize">
+                          <size>
+                           <width>40</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>30</width>
+                           <height>24</height>
+                          </size>
+                         </property>
                          <property name="text">
                           <string/>
                          </property>
@@ -1622,6 +1674,53 @@ background-color:#2c313c;
                            <width>24</width>
                            <height>24</height>
                           </size>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QWidget" name="widget_3" native="true">
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>50</height>
+                       </size>
+                      </property>
+                      <layout class="QHBoxLayout" name="horizontalLayout_17">
+                       <property name="leftMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="rightMargin">
+                        <number>40</number>
+                       </property>
+                       <item alignment="Qt::AlignLeft">
+                        <widget class="QLabel" name="label">
+                         <property name="minimumSize">
+                          <size>
+                           <width>150</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string>Application font size:</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QSpinBox" name="font_spinBox">
+                         <property name="maximumSize">
+                          <size>
+                           <width>60</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
+                         <property name="minimum">
+                          <number>8</number>
+                         </property>
+                         <property name="maximum">
+                          <number>11</number>
                          </property>
                         </widget>
                        </item>
@@ -1648,6 +1747,9 @@ background-color:#2c313c;
                </widget>
                <widget class="QWidget" name="page_4">
                 <layout class="QVBoxLayout" name="verticalLayout_8">
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
                  <property name="leftMargin">
                   <number>0</number>
                  </property>
@@ -1676,7 +1778,7 @@ background-color:#2c313c;
                    </property>
                    <layout class="QHBoxLayout" name="horizontalLayout_8">
                     <item>
-                     <widget class="QLabel" name="label_4">
+                     <widget class="QLabel" name="asset_overview_label">
                       <property name="text">
                        <string>Asset overview</string>
                       </property>
@@ -1706,30 +1808,71 @@ background-color:#2c313c;
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLabel" name="help_text_label">
-                   <property name="minimumSize">
-                    <size>
-                     <width>0</width>
-                     <height>50</height>
-                    </size>
+                  <widget class="QScrollArea" name="scrollArea">
+                   <property name="horizontalScrollBarPolicy">
+                    <enum>Qt::ScrollBarAlwaysOff</enum>
                    </property>
-                   <property name="text">
-                    <string>   The current asset is missing</string>
+                   <property name="widgetResizable">
+                    <bool>true</bool>
                    </property>
+                   <widget class="QWidget" name="scrollAreaWidgetContents_2">
+                    <property name="geometry">
+                     <rect>
+                      <x>0</x>
+                      <y>0</y>
+                      <width>317</width>
+                      <height>648</height>
+                     </rect>
+                    </property>
+                    <layout class="QVBoxLayout" name="gallery_VLayout">
+                     <property name="spacing">
+                      <number>12</number>
+                     </property>
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QTextEdit" name="description_textEdit2">
+                       <property name="maximumSize">
+                        <size>
+                         <width>16777215</width>
+                         <height>60</height>
+                        </size>
+                       </property>
+                       <property name="html">
+                        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                       </property>
+                       <property name="acceptRichText">
+                        <bool>false</bool>
+                       </property>
+                       <property name="textInteractionFlags">
+                        <set>Qt::NoTextInteraction</set>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <spacer name="verticalSpacer_4">
+                       <property name="orientation">
+                        <enum>Qt::Vertical</enum>
+                       </property>
+                       <property name="sizeHint" stdset="0">
+                        <size>
+                         <width>20</width>
+                         <height>40</height>
+                        </size>
+                       </property>
+                      </spacer>
+                     </item>
+                    </layout>
+                   </widget>
                   </widget>
-                 </item>
-                 <item>
-                  <spacer name="verticalSpacer_4">
-                   <property name="orientation">
-                    <enum>Qt::Vertical</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>20</width>
-                     <height>40</height>
-                    </size>
-                   </property>
-                  </spacer>
                  </item>
                 </layout>
                </widget>
@@ -1920,11 +2063,31 @@ background-color:#2c313c;
         <height>30</height>
        </size>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_12">
+      <layout class="QHBoxLayout" name="footer_layout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>15</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>3</number>
+       </property>
        <item>
         <widget class="QLabel" name="status_label">
+         <property name="font">
+          <font>
+           <pointsize>10</pointsize>
+          </font>
+         </property>
          <property name="text">
-          <string>In the database were found 345 items </string>
+          <string>In the database were found 0 items </string>
          </property>
         </widget>
        </item>

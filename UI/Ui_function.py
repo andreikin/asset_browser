@@ -1,11 +1,29 @@
-from PyQt5.QtCore import QVariantAnimation
+import os
+import tempfile
+
+from PyQt5.QtCore import QVariantAnimation, QSettings
 from PyQt5.QtWidgets import QFileDialog, QWidget
 
 from Utilities.Logging import logger
-from settings import DROP_MENU_WIDTH, SFX
+from Utilities.Utilities import get_library_path, convert_path_to_local
+from settings import DROP_MENU_WIDTH, SFX, DATABASE_NAME
 
 
 class UiFunction(QWidget):
+
+    def add_db_path_btn(self):
+        lib_path = QFileDialog.getExistingDirectory(self, directory=self.Controller.lib_path)
+        lib_path = lib_path.replace("\\", "/")
+        # self.switch_to_db(lib_path)
+        self.db_path_lineEdit.setText(lib_path)
+        self.Controller.lib_path = lib_path
+        self.Controller.connect_db = self.Controller.Models.initialize(lib_path)
+        if self.Controller.connect_db:
+            self.Controller.refresh_ui()
+        file_path = os.path.join(tempfile.gettempdir(), 'asset_manager_settings.ini')
+        settings = QSettings(file_path, QSettings.IniFormat)
+        settings.setValue("db settings", lib_path)
+        logger.debug("New lib path : " + self.Controller.lib_path)
 
     def switch_pages(self, page):
         if self.drop_menu.width() == 0:
@@ -28,16 +46,9 @@ class UiFunction(QWidget):
         self.ani.start()
 
     def add_path_btn(self):
-        asset_name = self.name_lineEdit.text()
         file_name = QFileDialog.getExistingDirectory(self, directory=self.Controller.lib_path)
-        file_name = file_name.replace("\\", "/") + "/" + asset_name + SFX
-        self.path_lineEdit.setText(file_name)
-
-    def add_db_path_btn(self):
-        file_name = QFileDialog.getSaveFileName(self, 'Save File', filter='*.db')[0]
-        file_name = file_name.replace("\\", "/")
-        self.db_path_lineEdit.setText(file_name)
-        # TODO: add database reconnect or program restart
+        if file_name:
+            self.path_lineEdit.setText(convert_path_to_local(file_name))
 
     def add_image_btn(self):
         file_name = QFileDialog.getOpenFileName(self, 'Open file')[0]
@@ -61,17 +72,24 @@ class UiFunction(QWidget):
                      self.description_textEdit, self.file_list_widget, self.gallery_list_widget]:
             form.clear()
 
-    def edit_path_when_input_name(self):
-        """
-        changes the path of the asset when the name is changed
-        """
-        path = self.path_lineEdit.text().split("/")[:-1]
-        name = self.name_lineEdit.text()
-        self.path_lineEdit.setText("/".join(path) + "/" + name + SFX)
-
     def status_message(self, message, state="INFO"):
         self.status_label.setText(message)
         if state == "ERROR":
             self.status_label.setStyleSheet(" color: red;")
         else:
             self.status_label.setStyleSheet(" color: #838ea2;")
+
+    def set_font_size(self):
+        self.settings.setValue("font size", self.font_spinBox.value())
+        headers_list = [self.window_label, self.status_label, self.asset_menu_label, self.lib_tree_label,
+                        self.settings_label, self.asset_overview_label]
+        for widget in self.Controller.application.allWidgets():
+            try:
+                size = self.font_spinBox.value()
+                if widget in headers_list:
+                    size += 2
+                font = widget.font()
+                font.setPointSize(size)
+                widget.setFont(font)
+            except:
+                pass

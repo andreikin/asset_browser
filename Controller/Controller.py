@@ -1,12 +1,12 @@
-import json
 import os
 import re
-from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QHBoxLayout
+from PyQt5.QtWidgets import QMainWindow
 
 from Asset import Asset
 from UI.MainWindow import MainWindow
 from Utilities.Logging import logger
-from Utilities.Utilities import get_db_path
+from Utilities.Utilities import get_library_path
+from settings import DATABASE_NAME
 
 
 class Controller(QMainWindow):
@@ -15,7 +15,7 @@ class Controller(QMainWindow):
     Connect the ui with the model
     """
 
-    def __init__(self, in_model, parent=None):
+    def __init__(self, in_model, application, parent=None):
         super(QMainWindow, self).__init__(parent)
 
         # tags received from the interface
@@ -28,41 +28,43 @@ class Controller(QMainWindow):
         # The constructor get model references.
         self.Models = in_model
 
-        # get path and initialize data base
-        self.db_path = get_db_path()
-        self.Models.initialize(self.db_path)
-        logger.debug("Database " + self.db_path + "  initialized successfully!")
+        self.application = application
 
         # get path to asset library
-        self.lib_path = os.path.dirname(self.db_path)
+        self.lib_path = get_library_path()
+        self.connect_db = self.Models.initialize(self.lib_path)
 
         # create Ui
         self.ui = MainWindow(self)
+
 
         # list of observers reacting to changes in current tags
         self._observers = [self, self.ui]
 
         # if we have old data we use it
-        if self.ui.search_lineEdit.text():
+        if self.ui.search_lineEdit.text() and self.connect_db:
             self.refresh_ui()
 
-        # temp function for filling ui
-        #self.temp_asset_filling()
-
     def create_asset(self):
-        # get asset data from ui
+        """
+        get asset data from ui
+        """
         asset_data = self.ui.get_asset_data()
         # create asset
         if asset_data:
             Asset(self, **asset_data).create()
+            self.ui.clear_form()
             logger.debug(" executed")
 
     def edit_asset(self):
-        # get asset data from ui
+        """
+        get asset data from ui
+        """
         asset_data = self.ui.get_asset_data()
         # edit asset
         if asset_data:
             Asset(self, **asset_data).edit_asset()
+            self.ui.clear_form()
             logger.debug(" executed")
 
     def refresh_ui(self):
@@ -70,39 +72,25 @@ class Controller(QMainWindow):
         Getting tags from linEdit and refresh_ui
         """
         self.current_tags = re.findall(r'[0-9A-z_]+', self.ui.search_lineEdit.text())
-        self.notify_observers()
-        logger.debug(" executed\n")
+        if self.connect_db:
+            self.notify_observers()
+            logger.debug(" executed\n")
+        else:
+            logger.error("Database path required for initialization\n")
 
     def current_state_changed(self):
         """
         When entering new tags, we find the corresponding tags and assets
         """
-        logger.debug(f"Started searching by tags {' '.join(self.current_tags)}")
-        self.found_assets = self.Models.find_assets_by_tag_list(self.current_tags)
-        if self.found_assets:
-            self.found_tags = self.Models.find_tags_by_asset_list(self.found_assets)
+        if self.current_tags:
+            logger.debug(f"Started searching by tags {' '.join(self.current_tags)}")
+            self.found_assets = self.Models.find_assets_by_tag_list(self.current_tags)
+            if self.found_assets:
+                self.found_tags = self.Models.find_tags_by_asset_list(self.found_assets)
 
     def notify_observers(self):
         for x in self._observers:
             x.current_state_changed()
-
-    def temp_asset_filling(self):
-        self.ui.name_lineEdit.setText("shotgan")
-        self.ui.tag_lineEdit.setText("weapon gun shoot")
-        self.ui.path_lineEdit.setText('U:/AssetStorage/library/weapon/shotgan_ast')
-        self.ui.image_lineEdit.setText("D:/work/_pythonProjects/asset_manager/images/im_07.PNG")
-        text = "A weapon incorporating a metal tube"
-        self.ui.description_textEdit.setPlainText(text)
-
-        scenes = ["D:/work/_pythonProjects/asset_manager/main.py", "D:/work/_pythonProjects/asset_manager/test.py"]
-        self.ui.file_list_widget.files_list = scenes
-
-
-        gallery = ["D:/work/_pythonProjects/asset_manager/images/im_08.PNG ",
-                   "D:/work/_pythonProjects/asset_manager/images/im_09.PNG "]
-        self.ui.gallery_list_widget.files_list = gallery
-
-
 
 
 if __name__ == '__main__':

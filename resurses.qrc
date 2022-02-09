@@ -1,7 +1,9 @@
 <RCC>
   <qresource prefix="icons">
+    <file>icons/normalise.png</file>
     <file>icons/edit.svg</file>
     <file>icons/camera-off.svg</file>
+    <file>icons/scale.png</file>
     <file>icons/image.svg</file>
     <file>icons/file.svg</file>
     <file>icons/x-square.svg</file>
@@ -21,8 +23,5 @@
     <file>icons/x.svg</file>
     <file>icons/square.svg</file>
     <file>icons/file-plus.svg</file>
-  </qresource>
-  <qresource prefix="blue">
-    <file>icons_blue/file-plus.svg</file>
   </qresource>
 </RCC>

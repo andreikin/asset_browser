@@ -29,7 +29,7 @@ class GalleryWidget(QWidget):
         self.__background_layout.setAlignment(Qt.AlignTop)
 
         self.__columns_layout_list = []
-        for i in range(int(1800 / icons_width)):
+        for i in range(int(4000 / icons_width)):
             v_layout = QVBoxLayout()
             v_layout.setAlignment(Qt.AlignTop)
             v_layout.setContentsMargins(0, 0, 0, 0)

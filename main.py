@@ -5,7 +5,6 @@ from Controller.Controller import Controller
 from Models import Models
 
 
-
 def main():
     app = QApplication(sys.argv)
 
@@ -13,7 +12,12 @@ def main():
     models = Models
 
     # create a controller and pass it a link to the model
-    controller = Controller(models)
+    controller = Controller(models, app)
+
+    # fnt = app.font()
+    # fnt.setPointSize(9)
+    # app.setFont(fnt)
+
     controller.ui.show()
     app.exec()
 
