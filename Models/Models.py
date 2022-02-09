@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from peewee import *
 from Utilities.Logging import logger
-from Utilities.Utilities import get_db_path
+from Utilities.Utilities import get_library_path
+from settings import DATABASE_NAME
 
 """
 The module Models.py defines the structure of the database and contains 
@@ -32,9 +33,20 @@ class Tag(BaseModel):
     asset_id = ForeignKeyField(Asset)
 
 
-def initialize(db_path):
-    data_base.init(db_path)
-    data_base.create_tables([Asset, Tag])
+def initialize(lib_path):
+    if not lib_path:
+        logger.error("Database path required for initialization")
+        return False
+    else:
+        db_path = lib_path + "/" + DATABASE_NAME
+        try:
+            data_base.init(db_path)
+            data_base.create_tables([Asset, Tag])
+            logger.debug("Database " + db_path + "  initialized successfully!")
+            return True
+        except Exception as message:
+            logger.error(message)
+            return False
 
 
 def add_asset_to_db(**kwargs):
@@ -107,9 +119,9 @@ def is_asset_in_db(name):
         return False
 
 
-def delete_asset(asset_id):
+def delete_asset(asset_name):
     try:
-        asset_obj = Asset.get(Asset.id == asset_id)
+        asset_obj = Asset.get(Asset.name == asset_name)
         for tag in Tag.select().where(Tag.asset_id == asset_obj):
             tag.delete_instance()
         asset_obj.delete_instance()
@@ -120,20 +132,29 @@ def delete_asset(asset_id):
 
 
 def edit_db_asset(**kwargs):
-    asset_obj = Asset.get(Asset.name == kwargs["name"])
-    for tag in Tag.select().where(Tag.asset_id == asset_obj):
-        tag.delete_instance()
-    for tag in kwargs["tags"]:
-        Tag.create(name=tag, asset_id=asset_obj)
-    asset_obj.icon = kwargs["icon"]
-    asset_obj.save()
+    try:
+        asset_obj = Asset.get(Asset.name == kwargs["name"])
+        for tag in Tag.select().where(Tag.asset_id == asset_obj):
+            tag.delete_instance()
+        for tag in kwargs["tags"]:
+            Tag.create(name=tag, asset_id=asset_obj)
+        asset_obj.icon = kwargs["icon"]
+        asset_obj.save()
+        logger.debug(" executed")
+    except Exception as message:
+        logger.error(message)
+        return False
 
 
 if __name__ == '__main__':
-    db_path = get_db_path()
+    from settings import DATABASE_NAME
+
+    db_path = get_library_path() + "/" + DATABASE_NAME
     initialize(db_path)
 
-    db_data ={"name": "shotgan", "tags": ["gun2", "shoot", "weapon"], "path": "U:/AssetStorage/library/weapon/shotgan_ast", "icon": "D:/work/_pythonProjects/asset_manager/images/im_09.PNG",}
+    db_data = {"name": "shotgan", "tags": ["gun2", "shoot", "weapon"],
+               "path": "U:/AssetStorage/library/weapon/shotgan_ast",
+               "icon": "D:/work/_pythonProjects/asset_manager/images/im_09.PNG", }
 
     edit_db_asset(**db_data)
     # pass
