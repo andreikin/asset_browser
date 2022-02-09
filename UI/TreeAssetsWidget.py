@@ -3,11 +3,14 @@ import re
 import subprocess
 import sys
 
-from PyQt5 import QtCore
 from PyQt5.QtCore import Qt, QEvent
 from PyQt5.QtGui import QCursor
 from PyQt5.QtWidgets import QHBoxLayout, QWidget, QApplication, QScrollArea, QTreeWidget, QTreeWidgetItem, QVBoxLayout, \
     QPushButton, QInputDialog, QDialog, QMenu, QAction
+
+from Utilities.Logging import logger
+from Utilities.Utilities import convert_path_to_local
+from settings import DELETED_ASSET_FOLDER
 
 
 class BaseTreeWidget(QTreeWidget):
@@ -17,12 +20,16 @@ class BaseTreeWidget(QTreeWidget):
         self.Controller = in_controller
         self.path = in_controller.lib_path
         self.setHeaderHidden(True)
-        self.update_ui()
+
+        if self.Controller.connect_db:
+            self.update_ui()
+
         self.setItemsExpandable(False)
         self.setRootIsDecorated(False)
         self.setStyleSheet("QTreeView {\n"
                            "border-radius: 10px;}\n"
                            "QTreeWidget::item{ height:20px;} ")
+        logger.debug(" executed")
 
     def get_tree(self, parent=None, root=None):
         if not parent:
@@ -32,7 +39,7 @@ class BaseTreeWidget(QTreeWidget):
         for f in os.listdir(root):
             filepath = os.path.join(root, f)
             pattern = r"_ast$"
-            if os.path.isdir(filepath) and not re.search(pattern, filepath):
+            if os.path.isdir(filepath) and not re.search(pattern, filepath) and not re.search(DELETED_ASSET_FOLDER, filepath):
                 item = QTreeWidgetItem()
                 parent.addChild(item)
                 item.setText(0, f)
@@ -41,8 +48,10 @@ class BaseTreeWidget(QTreeWidget):
 
     def update_ui(self):
         self.clear()
-        self.get_tree()
-        self.expandAll()
+        self.path = self.Controller.lib_path
+        if self.Controller.lib_path:
+            self.get_tree()
+            self.expandAll()
 
     def add_directory(self):
         if self.Controller.ui.add_dir_line_edit.text():
@@ -54,8 +63,6 @@ class BaseTreeWidget(QTreeWidget):
                 path = self.selectedItems()[0].data(0, 32)
                 path = os.path.abspath(path + "/" + dir_name)
             os.mkdir(path)
-            # for index in self.selectedItems():
-            #     path = index.data(0, 32)
             self.update_ui()
             self.Controller.ui.add_dir_line_edit.setText("")
         else:
@@ -79,9 +86,16 @@ class MenuTreeWidget(BaseTreeWidget):
         menu.setStyleSheet("""background-color: #16191d; color: #fff;""")
 
         menu.addAction(QAction("Open in explorer", self))
-        menu.exec_(QCursor().pos())
-        path = self.selectedItems()[0].data(0, 32)
-        subprocess.run(['explorer', os.path.realpath(path)])
+        menu.addAction(QAction("Add asset", self))
+        action = menu.exec_(QCursor().pos())
+        path = self.selectedItems()[0].data(0, 32).replace("\\", "/")+"/"
+        if action:
+            if action.text() == "Open in explorer":
+                subprocess.run(['explorer', os.path.realpath(path)])
+            if action.text() == "Add asset":
+                self.Controller.ui.switch_pages(0)
+                self.Controller.ui.clear_form()
+                self.Controller.ui.path_lineEdit.setText(convert_path_to_local(path))
 
 
 if __name__ == '__main__':
