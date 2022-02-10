@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-from PyQt5.QtWidgets import QWidget, QPushButton, QVBoxLayout
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QCursor
+from PyQt5.QtWidgets import QWidget, QPushButton, QVBoxLayout, QMenu, QAction
 
 from Utilities.Utilities import set_font_size
 
@@ -16,7 +18,7 @@ class TagButton(QWidget):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.layout)
         self.button = QPushButton(tag)
-        self.button.setFixedWidth(len(tag)*11)
+        self.button.setFixedWidth(len(tag) * 11)
         self.button.setToolTip(tag)
         self.button.clicked.connect(self.serch_asset)
 
@@ -25,11 +27,13 @@ class TagButton(QWidget):
                                   "background-color: #343b47;\n"
                                   "height: 23px;\n"
                                   "width: 86px;\n"
+                                  "font: bold;"
                                   "color:rgb(200, 200, 200);}\n"
+
                                   "QPushButton:hover {\n"
-                                  "background-color: #2c313c;}\n"
-                                  "QPushButton:pressed {\n"
-                                  "background-color: rgb(36, 36, 36); }\n")
+                                  "color:#9bc2ff;"
+                                  "background-color: #2c313c;"
+                                  "}\n")
 
         # set font size
         size = self.Controller.ui.font_spinBox.value()
@@ -37,6 +41,23 @@ class TagButton(QWidget):
 
         self.layout.addWidget(self.button)
 
+        # connect Context Menu
+        self.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.customContextMenuRequested.connect(self.right_click_handler)
+
     def serch_asset(self):
         self.Controller.ui.search_lineEdit.setText(self.tag)
         self.Controller.refresh_ui()
+
+    def right_click_handler(self, pos):
+        menu = QMenu()
+        menu.setStyleSheet("""background-color: #16191d; color: #fff;""")
+        menu.addAction(QAction("Add teg to search line", self))
+        action = menu.exec_(QCursor().pos())
+        if action:
+            if action.text() == "Add teg to search line":
+                tags = self.Controller.ui.search_lineEdit.text() + " " + self.tag
+                self.Controller.ui.search_lineEdit.setText(tags)
+                self.Controller.refresh_ui()
+            else:
+                pass
