@@ -1,19 +1,17 @@
 # -*- coding: utf-8 -*-
-import json
 import os
 import re
-import shutil
 import subprocess
 
 import PyQt5
 from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtCore import Qt, QSize, QRect, QEvent, QMimeData, QUrl
-from PyQt5.QtGui import QCursor, QDrag, QPixmap, QIcon
-from PyQt5.QtWidgets import QWidget, QPushButton, QVBoxLayout, QFrame, QSizePolicy, QApplication, QAction, QMenu, \
-    QMessageBox, QHBoxLayout, QLabel, QListWidget, QAbstractItemView, QGraphicsItem
+from PyQt5.QtCore import Qt, QEvent, QMimeData, QUrl
+from PyQt5.QtGui import QDrag, QPixmap, QIcon
+from PyQt5.QtWidgets import QWidget, QPushButton, QVBoxLayout, QFrame, QApplication, QMessageBox, QLabel
 
 from Asset import Asset
 from Models import Models
+from UI.Ui_function import UiFunction
 from Utilities.Logging import logger
 from Utilities.Utilities import get_library_path, convert_path_to_local, set_font_size
 from settings import COLUMN_WIDTH, DROP_MENU_WIDTH, DATABASE_NAME
@@ -54,6 +52,7 @@ class AssetWidget(QWidget):
         self.ast_label.setGeometry(10, 10, self.width - 20, 22)
         self.ast_label.setStyleSheet("background-color: #16191d;"
                                      "border-radius: 10px;"
+                                     "font: bold;"
                                      "padding: 0 10px;"
                                      "color: #fff;")
 
@@ -61,7 +60,6 @@ class AssetWidget(QWidget):
         self.open_button.clicked.connect(self.open_directory)
 
         self.open_button.setGeometry(self.places_buttons_by_x()[0], self.height - 35, BTN_WIDTH, BTN_WIDTH)
-        self.open_button.setIcon(QIcon(":/icons/icons//folder.svg"))
         self.open_button.setIconSize(QtCore.QSize(ICON_SIZE, ICON_SIZE))
         self.open_button.setStyleSheet("background-color: #16191d;"
                                        "border-radius: " + str(BTN_WIDTH / 2) + "px;")
@@ -69,7 +67,6 @@ class AssetWidget(QWidget):
         self.edit_button = QPushButton("", parent=self.frame_shadow)
         self.edit_button.clicked.connect(self.preparation_for_editing)
         self.edit_button.setGeometry(self.places_buttons_by_x()[1], self.height - 35, BTN_WIDTH, BTN_WIDTH)
-        self.edit_button.setIcon(QIcon(":/icons/icons/edit.svg"))
         self.edit_button.setIconSize(QtCore.QSize(ICON_SIZE, ICON_SIZE))
         self.edit_button.setStyleSheet("background-color: #16191d;"
                                        "border-radius: " + str(BTN_WIDTH / 2) + "px;")
@@ -77,7 +74,6 @@ class AssetWidget(QWidget):
         self.del_button = QPushButton("", parent=self.frame_shadow)
         self.del_button.clicked.connect(self.delete_asset)
         self.del_button.setGeometry(self.places_buttons_by_x()[2], self.height - 35, BTN_WIDTH, BTN_WIDTH)
-        self.del_button.setIcon(QIcon(":/icons/icons/x-circle.svg"))
         self.del_button.setIconSize(QtCore.QSize(ICON_SIZE, ICON_SIZE))
         self.del_button.setStyleSheet("background-color: #16191d;"
                                       "border-radius: " + str(BTN_WIDTH / 2) + "px;")
@@ -93,27 +89,36 @@ class AssetWidget(QWidget):
         size = self.Controller.ui.font_spinBox.value()
         set_font_size(self.ast_label, size)
 
-        # connect Context Menu
-        self.setContextMenuPolicy(Qt.CustomContextMenu)
-        # self.customContextMenuRequested.connect(self.right_click_handler)
+        self.decorate_icons_color()
+
+    def decorate_icons_color(self):
+        btn_dict = {self.open_button: "folder.svg",
+                    self.edit_button: "edit.svg",
+                    self.del_button: "x-circle",
+                    }
+        for button in btn_dict:
+            UiFunction.decorate_icon(button, btn_dict[button])
 
     def asset_overview(self):
         """
         starts the widget gallery view
         """
-
-        # If the selected asset is not loaded, it  loaded otherwise the menu is collapsed
-        if self == AssetWidget.current_asset and self.Controller.ui.drop_menu.width() != 0 and self.Controller.ui.drop_stackedWidget.currentIndex() == 3:
+        # If the selected asset is not loaded, it  loaded. Otherwise the menu is collapsed
+        if self == AssetWidget.current_asset and self.Controller.ui.drop_menu.width() != 0 \
+                and self.Controller.ui.drop_stackedWidget.currentIndex() == 3:
             self.Controller.ui.expand_close_animation("close")
             AssetWidget.current_asset = None
             logger.debug("None")
 
+        # open gallery page
         self.Controller.ui.drop_stackedWidget.setCurrentIndex(3)
         if self.Controller.ui.drop_menu.width() == 0:
             self.Controller.ui.expand_close_animation("expand")
-
         self.Controller.ui.asset_overview_label.setText(" View asset " + self.db_asset.name)
+
+        # get asset data from  and  fill forms
         asset_data = Asset.recognize_asset(self.db_asset.path)
+        # set description and form height
         self.Controller.ui.description_textEdit2.setPlainText(asset_data["description"])
         if not asset_data["description"]:
             self.Controller.ui.description_textEdit2.hide()
@@ -122,11 +127,13 @@ class AssetWidget(QWidget):
             lines_num = len(asset_data["description"]) / 40
             self.Controller.ui.description_textEdit2.setFixedHeight(lines_num * 17 + 17)
 
+        # delete old images
         for i in range(self.Controller.ui.gallery_VLayout.count()):
             widget = self.Controller.ui.gallery_VLayout.itemAt(i).widget()
             if type(widget) == PyQt5.QtWidgets.QFrame:
                 widget.deleteLater()
 
+        # create new images
         for image_path in asset_data["gallery"]:
             self.frame_image = QFrame()
             pix = QPixmap(image_path)
@@ -138,6 +145,7 @@ class AssetWidget(QWidget):
                                            "border-image: url(" + image_path + ") 3 10 3 10;}")
 
         logger.debug(self.db_asset.name + "\n")
+        # when  click on the asset widget again, the gallery closes. This requires an attribute - current_asset
         AssetWidget.current_asset = self
 
     def places_buttons_by_x(self, offset=0.05):
@@ -190,24 +198,6 @@ class AssetWidget(QWidget):
         for elem in self.hidden_list:
             elem.hide()
 
-    # def right_click_handler(self, pos):
-    #     menu = QMenu()
-    #     menu.setStyleSheet("""background-color: #16191d; color: #fff;""")
-    #     menu.addAction(QAction(self.db_asset.name, self))
-    #     menu.addSeparator()
-    #     menu.addAction(QAction("Open in explorer", self))
-    #     menu.addAction(QAction("Edit asset", self))
-    #     menu.addAction(QAction("Delete asset", self))
-    #     action = menu.exec_(QCursor().pos())
-    #     if action:
-    #         if action.text() == "Open in explorer":
-    #             subprocess.run(['explorer', os.path.realpath(self.db_asset.path)])
-    #         elif action.text() == "Delete asset":
-    #             self.delete_asset()
-    #         elif action.text() == "Edit asset":
-    #             self.preparation_for_editing()
-    #     self.outside_event()
-
     def open_directory(self):
         subprocess.run(['explorer', os.path.realpath(self.db_asset.path)])
 
@@ -235,7 +225,7 @@ class AssetWidget(QWidget):
 
     def delete_asset(self):
         dialog_message = "Delete asset", "Are you sure \nyou want to delete \nasset?"
-        dialog = QMessageBox(QMessageBox.Critical, *dialog_message, buttons=QMessageBox.Ok | QMessageBox.Cancel)
+        dialog = QMessageBox( QMessageBox.Critical, *dialog_message, parent=self.Controller.ui, buttons=QMessageBox.Ok | QMessageBox.Cancel)
         dialog.setStyleSheet("""background-color: #16191d; color: #fff;""")
         dialog_result = dialog.exec()
         if dialog_result == 1024:
