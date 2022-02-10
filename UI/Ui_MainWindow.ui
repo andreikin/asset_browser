@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1001</width>
-    <height>787</height>
+    <width>917</width>
+    <height>647</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -38,21 +38,14 @@ Text2:#838ea2
 	margin: 0;
 	color: #fff;
 }
-
-#db_path_button:hover, #new_lib_button:hover, #add_asset_button:hover, #erase_button:hover {
-	border-left: 4px solid #343b47;
+#add_asset_button:hover,  #erase_button:hover{
+	color:#9bc2ff;
 }
-
-#expand_button:hover, #info_button:hover, #settings_button:hover, #tree_button:hover, #callaps_btn_a:hover, #callaps_btn_b:hover, #callaps_btn_c:hover, #callaps_btn_d:hover{
-	border-left: 4px solid #16191d;
-}
-
 QLineEdit, QTextEdit, #tree_body, #galery_list_frame, #scens_list_frame  {
 	padding: 0 10px;
 	background-color:#1f232a;
 	border-radius: 5px;
 }
-
 #font_spinBox{
 	border-radius: 5px;
 	padding-right: 15px;
@@ -84,57 +77,37 @@ QLineEdit, QTextEdit, #tree_body, #galery_list_frame, #scens_list_frame  {
 	background-color:#16191d;
 	border-radius: 10px;
 }
-#status_label, #window_label, #help_text_label{
-	color: #838ea2;
+#status_label, #window_label{
+	color:#959aa2;
 }
+
+/* gallery scroll Area */
 QScrollBar:vertical {
  	border: none;
-    width: 8px;
+    width: 10px;
     margin: 0px 0 0px 0;
 	border-radius: 0px;
  }
 QScrollBar::handle:vertical {	
-	background: #343b47;
+	border: 3px solid #16191d;
+	background: #959aa2;
+	/*background:#838ea2;*/
+
 	min-height: 30px;
-	border-radius: 3px;
+	border-radius: 5px;
 }
 QScrollBar::handle:vertical:hover{	
-	background-color:#2c313c;
+	
+	background:#bbcbe6;
 }
-
 QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
 	background:#16191d;
 }
 
-/* add_assetscrollArea */
-
-add_assetscrollArea:QScrollBar:vertical {
- 	border: none;
-    width: 8px;
-    margin: 0px 0 0px 0;
-	border-radius: 0px;
- 
- }
-QScrollBar::handle:vertical {	
-	background-color: :rgb(255, 255, 0);
-	color: rgb(255, 255, 0);
-
-    background:rgb(31, 35, 42);
-
-	min-height: 30px;
-	border-radius: 3px;
-}
-QScrollBar::handle:vertical:hover{	
-background:rgb(56, 64, 77);
-}
-
-QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
-background-color:#2c313c;
-}
 
 
 
-</string>
+ </string>
    </property>
    <layout class="QVBoxLayout" name="main_layout">
     <property name="spacing">
@@ -400,7 +373,7 @@ background-color:#2c313c;
            <number>0</number>
           </property>
           <property name="topMargin">
-           <number>15</number>
+           <number>9</number>
           </property>
           <property name="rightMargin">
            <number>0</number>
@@ -450,7 +423,7 @@ background-color:#2c313c;
             </property>
             <property name="icon">
              <iconset resource="../resurses.qrc">
-              <normaloff>:/icons/icons/tree.png</normaloff>:/icons/icons/tree.png</iconset>
+              <normaloff>:/icons/icons/tree2.png</normaloff>:/icons/icons/tree2.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -461,7 +434,7 @@ background-color:#2c313c;
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="info_button">
+           <widget class="QPushButton" name="gallery_button">
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -560,7 +533,7 @@ background-color:#2c313c;
                <widget class="QWidget" name="page_1">
                 <layout class="QVBoxLayout" name="verticalLayout_17">
                  <property name="spacing">
-                  <number>0</number>
+                  <number>10</number>
                  </property>
                  <property name="leftMargin">
                   <number>0</number>
@@ -576,6 +549,12 @@ background-color:#2c313c;
                  </property>
                  <item>
                   <widget class="QFrame" name="add_asset_heder">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
                    <property name="maximumSize">
                     <size>
                      <width>16777215</width>
@@ -630,7 +609,7 @@ background-color:#2c313c;
                       <x>0</x>
                       <y>0</y>
                       <width>317</width>
-                      <height>623</height>
+                      <height>463</height>
                      </rect>
                     </property>
                     <layout class="QVBoxLayout" name="verticalLayout">
@@ -641,7 +620,7 @@ background-color:#2c313c;
                       <number>0</number>
                      </property>
                      <property name="topMargin">
-                      <number>6</number>
+                      <number>0</number>
                      </property>
                      <property name="rightMargin">
                       <number>6</number>
@@ -781,8 +760,8 @@ background-color:#2c313c;
                           </property>
                           <property name="iconSize">
                            <size>
-                            <width>24</width>
-                            <height>24</height>
+                            <width>22</width>
+                            <height>22</height>
                            </size>
                           </property>
                          </widget>
@@ -916,8 +895,8 @@ background-color:#2c313c;
                           </property>
                           <property name="iconSize">
                            <size>
-                            <width>24</width>
-                            <height>24</height>
+                            <width>22</width>
+                            <height>22</height>
                            </size>
                           </property>
                          </widget>
@@ -1820,8 +1799,8 @@ background-color:#2c313c;
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>317</width>
-                      <height>648</height>
+                      <width>90</width>
+                      <height>90</height>
                      </rect>
                     </property>
                     <layout class="QVBoxLayout" name="gallery_VLayout">

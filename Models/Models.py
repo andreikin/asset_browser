@@ -2,7 +2,6 @@
 from peewee import *
 from Utilities.Logging import logger
 from Utilities.Utilities import get_library_path
-from settings import DATABASE_NAME
 
 """
 The module Models.py defines the structure of the database and contains 
@@ -34,6 +33,7 @@ class Tag(BaseModel):
 
 
 def initialize(lib_path):
+    from settings import DATABASE_NAME
     if not lib_path:
         logger.error("Database path required for initialization")
         return False

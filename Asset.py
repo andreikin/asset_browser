@@ -13,7 +13,10 @@ from settings import INFO_FOLDER, CONTENT_FOLDER, GALLERY_FOLDER, SFX, ICON_WIDT
 
 
 class Asset:
-
+    """
+    The class defines an asset as a structure of folders and files.
+    Contains methods for creating, modifying, and deleting assets
+    """
     def __init__(self, in_controller, **kwargs):
         self.Controller = in_controller
         self.__icon = ""
@@ -88,18 +91,16 @@ class Asset:
         logger.debug("edit_asset")
 
     def verification_and_copying_files(self, source_files, destination_folder):
-        logger.debug("edit")
         destination_files = [destination_folder + "/" + x for x in os.listdir(destination_folder)]
-
-        logger.debug(source_files)
+        # if the file is not in the destination folder, copy it there
         while source_files:
             curent_file = source_files.pop()
             if curent_file in destination_files:
-                destination_files.remove(curent_file)
+                destination_files.remove(curent_file)  # remove current_file from list destination_files
             else:
                 file_name = os.path.basename(curent_file)
                 shutil.copyfile(curent_file, destination_folder + "/" + file_name)
-
+        # delete the remaining files in the destination folder
         for curent_file in destination_files:
             try:
                 os.remove(curent_file)
@@ -160,12 +161,12 @@ class Asset:
             self.Controller.ui.status_message("information from the database was not deleted", state="ERROR")
         else:
             try:
-                del_folder = get_library_path()+"/"+DELETED_ASSET_FOLDER
+                del_folder = get_library_path() + "/" + DELETED_ASSET_FOLDER
                 if not os.path.exists(del_folder):
                     os.mkdir(del_folder)
                 time = datetime.datetime.now().strftime("%d-%m-%Y_%H-%M")
-                os.rename(self.path, self.path + "_"+time)
-                shutil.move(self.path + "_"+time, del_folder)
+                os.rename(self.path, self.path + "_" + time)
+                shutil.move(self.path + "_" + time, del_folder)
                 logger.debug("Asset " + self.name + " deleted successfully")
                 self.Controller.refresh_ui()
                 self.Controller.ui.status_message("Asset " + self.name + " deleted successfully")
@@ -173,9 +174,6 @@ class Asset:
                 logger.error(message)
                 self.Controller.ui.status_message("An error occurred and the asset was not correctly deleted",
                                                   state="ERROR")
-
-
-
 
     def asset_data(self):
 

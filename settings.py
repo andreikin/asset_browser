@@ -17,5 +17,5 @@ DATABASE_NAME = "database.db"
 DELETED_ASSET_FOLDER = "deleted_assets"
 
 """over"""
-LOGGING_TO_fILE = False
+LOGGING_TO_fILE = True
 

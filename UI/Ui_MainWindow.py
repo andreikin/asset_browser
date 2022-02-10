@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1002, 782)
+        MainWindow.resize(917, 647)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setMinimumSize(QtCore.QSize(0, 40))
         self.centralwidget.setStyleSheet("/*\n"
@@ -34,21 +34,14 @@ class Ui_MainWindow(object):
 "    margin: 0;\n"
 "    color: #fff;\n"
 "}\n"
-"\n"
-"#db_path_button:hover, #new_lib_button:hover, #add_asset_button:hover, #erase_button:hover {\n"
-"    border-left: 4px solid #343b47;\n"
+"#add_asset_button:hover,  #erase_button:hover{\n"
+"    color:#9bc2ff;\n"
 "}\n"
-"\n"
-"#expand_button:hover, #info_button:hover, #settings_button:hover, #tree_button:hover, #callaps_btn_a:hover, #callaps_btn_b:hover, #callaps_btn_c:hover, #callaps_btn_d:hover{\n"
-"    border-left: 4px solid #16191d;\n"
-"}\n"
-"\n"
 "QLineEdit, QTextEdit, #tree_body, #galery_list_frame, #scens_list_frame  {\n"
 "    padding: 0 10px;\n"
 "    background-color:#1f232a;\n"
 "    border-radius: 5px;\n"
 "}\n"
-"\n"
 "#font_spinBox{\n"
 "    border-radius: 5px;\n"
 "    padding-right: 15px;\n"
@@ -80,57 +73,37 @@ class Ui_MainWindow(object):
 "    background-color:#16191d;\n"
 "    border-radius: 10px;\n"
 "}\n"
-"#status_label, #window_label, #help_text_label{\n"
-"    color: #838ea2;\n"
+"#status_label, #window_label{\n"
+"    color:#959aa2;\n"
 "}\n"
+"\n"
+"/* gallery scroll Area */\n"
 "QScrollBar:vertical {\n"
 "     border: none;\n"
-"    width: 8px;\n"
+"    width: 10px;\n"
 "    margin: 0px 0 0px 0;\n"
 "    border-radius: 0px;\n"
 " }\n"
 "QScrollBar::handle:vertical {    \n"
-"    background: #343b47;\n"
+"    border: 3px solid #16191d;\n"
+"    background: #959aa2;\n"
+"    /*background:#838ea2;*/\n"
+"\n"
 "    min-height: 30px;\n"
-"    border-radius: 3px;\n"
+"    border-radius: 5px;\n"
 "}\n"
 "QScrollBar::handle:vertical:hover{    \n"
-"    background-color:#2c313c;\n"
+"    \n"
+"    background:#bbcbe6;\n"
 "}\n"
-"\n"
 "QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {\n"
 "    background:#16191d;\n"
 "}\n"
 "\n"
-"/* add_assetscrollArea */\n"
-"\n"
-"add_assetscrollArea:QScrollBar:vertical {\n"
-"     border: none;\n"
-"    width: 8px;\n"
-"    margin: 0px 0 0px 0;\n"
-"    border-radius: 0px;\n"
-" \n"
-" }\n"
-"QScrollBar::handle:vertical {    \n"
-"    background-color: :rgb(255, 255, 0);\n"
-"    color: rgb(255, 255, 0);\n"
-"\n"
-"    background:rgb(31, 35, 42);\n"
-"\n"
-"    min-height: 30px;\n"
-"    border-radius: 3px;\n"
-"}\n"
-"QScrollBar::handle:vertical:hover{    \n"
-"background:rgb(56, 64, 77);\n"
-"}\n"
-"\n"
-"QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {\n"
-"background-color:#2c313c;\n"
-"}\n"
 "\n"
 "\n"
 "\n"
-"")
+" ")
         self.centralwidget.setObjectName("centralwidget")
         self.main_layout = QtWidgets.QVBoxLayout(self.centralwidget)
         self.main_layout.setContentsMargins(0, 0, 0, 0)
@@ -231,7 +204,7 @@ class Ui_MainWindow(object):
         self.left_panel.setMaximumSize(QtCore.QSize(40, 16777215))
         self.left_panel.setObjectName("left_panel")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.left_panel)
-        self.verticalLayout_2.setContentsMargins(0, 15, 0, 0)
+        self.verticalLayout_2.setContentsMargins(0, 9, 0, 0)
         self.verticalLayout_2.setSpacing(0)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.expand_button = QtWidgets.QPushButton(self.left_panel)
@@ -247,20 +220,20 @@ class Ui_MainWindow(object):
         self.tree_button.setMinimumSize(QtCore.QSize(0, 40))
         self.tree_button.setText("")
         icon5 = QtGui.QIcon()
-        icon5.addPixmap(QtGui.QPixmap(":/icons/icons/tree.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon5.addPixmap(QtGui.QPixmap(":/icons/icons/tree2.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.tree_button.setIcon(icon5)
         self.tree_button.setIconSize(QtCore.QSize(20, 20))
         self.tree_button.setObjectName("tree_button")
         self.verticalLayout_2.addWidget(self.tree_button)
-        self.info_button = QtWidgets.QPushButton(self.left_panel)
-        self.info_button.setMinimumSize(QtCore.QSize(0, 40))
-        self.info_button.setText("")
+        self.gallery_button = QtWidgets.QPushButton(self.left_panel)
+        self.gallery_button.setMinimumSize(QtCore.QSize(0, 40))
+        self.gallery_button.setText("")
         icon6 = QtGui.QIcon()
         icon6.addPixmap(QtGui.QPixmap(":/icons/icons/image.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.info_button.setIcon(icon6)
-        self.info_button.setIconSize(QtCore.QSize(24, 24))
-        self.info_button.setObjectName("info_button")
-        self.verticalLayout_2.addWidget(self.info_button)
+        self.gallery_button.setIcon(icon6)
+        self.gallery_button.setIconSize(QtCore.QSize(24, 24))
+        self.gallery_button.setObjectName("gallery_button")
+        self.verticalLayout_2.addWidget(self.gallery_button)
         self.settings_button = QtWidgets.QPushButton(self.left_panel)
         self.settings_button.setMinimumSize(QtCore.QSize(0, 40))
         self.settings_button.setText("")
@@ -293,9 +266,14 @@ class Ui_MainWindow(object):
         self.page_1.setObjectName("page_1")
         self.verticalLayout_17 = QtWidgets.QVBoxLayout(self.page_1)
         self.verticalLayout_17.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout_17.setSpacing(0)
+        self.verticalLayout_17.setSpacing(10)
         self.verticalLayout_17.setObjectName("verticalLayout_17")
         self.add_asset_heder = QtWidgets.QFrame(self.page_1)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.add_asset_heder.sizePolicy().hasHeightForWidth())
+        self.add_asset_heder.setSizePolicy(sizePolicy)
         self.add_asset_heder.setMaximumSize(QtCore.QSize(16777215, 40))
         self.add_asset_heder.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.add_asset_heder.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -319,10 +297,10 @@ class Ui_MainWindow(object):
         self.add_assetscrollArea.setWidgetResizable(True)
         self.add_assetscrollArea.setObjectName("add_assetscrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 317, 618))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 317, 463))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
-        self.verticalLayout.setContentsMargins(0, 6, 6, 0)
+        self.verticalLayout.setContentsMargins(0, 0, 6, 0)
         self.verticalLayout.setSpacing(5)
         self.verticalLayout.setObjectName("verticalLayout")
         self.name_frame = QtWidgets.QFrame(self.scrollAreaWidgetContents)
@@ -366,7 +344,7 @@ class Ui_MainWindow(object):
         icon9 = QtGui.QIcon()
         icon9.addPixmap(QtGui.QPixmap(":/icons/icons/folder.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.path_Button.setIcon(icon9)
-        self.path_Button.setIconSize(QtCore.QSize(24, 24))
+        self.path_Button.setIconSize(QtCore.QSize(22, 22))
         self.path_Button.setObjectName("path_Button")
         self.horizontalLayout_10.addWidget(self.path_Button)
         self.verticalLayout.addWidget(self.path_frame)
@@ -408,7 +386,7 @@ class Ui_MainWindow(object):
         self.image_Button = QtWidgets.QPushButton(self.images_frame)
         self.image_Button.setText("")
         self.image_Button.setIcon(icon9)
-        self.image_Button.setIconSize(QtCore.QSize(24, 24))
+        self.image_Button.setIconSize(QtCore.QSize(22, 22))
         self.image_Button.setObjectName("image_Button")
         self.horizontalLayout_11.addWidget(self.image_Button)
         self.verticalLayout.addWidget(self.images_frame)
@@ -706,7 +684,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents_2 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 317, 648))
+        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 90, 90))
         self.scrollAreaWidgetContents_2.setObjectName("scrollAreaWidgetContents_2")
         self.gallery_VLayout = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents_2)
         self.gallery_VLayout.setContentsMargins(0, -1, 0, -1)
@@ -800,7 +778,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.drop_stackedWidget.setCurrentIndex(2)
+        self.drop_stackedWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):

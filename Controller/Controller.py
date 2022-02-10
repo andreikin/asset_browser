@@ -1,5 +1,7 @@
 import os
 import re
+
+from PyQt5 import QtGui
 from PyQt5.QtWidgets import QMainWindow
 
 from Asset import Asset
@@ -36,7 +38,6 @@ class Controller(QMainWindow):
 
         # create Ui
         self.ui = MainWindow(self)
-
 
         # list of observers reacting to changes in current tags
         self._observers = [self, self.ui]
