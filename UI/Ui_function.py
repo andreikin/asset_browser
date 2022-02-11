@@ -30,6 +30,9 @@ class UiFunction(QWidget):
         logger.debug("New lib path : " + self.Controller.lib_path)
 
     def switch_pages(self, page):
+        """
+        toggles the left menu between add/edit asset, library try, asset overview and settings modes
+        """
         self.decorate_buttons_background(page)
         if self.drop_menu.width() == 0:
             self.expand_close_animation("expand")
