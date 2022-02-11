@@ -112,6 +112,7 @@ class AssetWidget(QWidget):
 
         # open gallery page
         self.Controller.ui.drop_stackedWidget.setCurrentIndex(3)
+        self.Controller.ui.decorate_buttons_background(3)
         if self.Controller.ui.drop_menu.width() == 0:
             self.Controller.ui.expand_close_animation("expand")
         self.Controller.ui.asset_overview_label.setText(" View asset " + self.db_asset.name)

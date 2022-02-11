@@ -137,6 +137,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
             if self.drop_menu.width() == 0:
                 self.expand_close_animation("expand")
             self.drop_stackedWidget.setCurrentIndex(0)
+            self.decorate_buttons_background(0)
             self.asset_menu_label.setText("Edit Asset")
             self.erase_button.setText("Cancel")
             self.add_asset_button.setText("Edit")
