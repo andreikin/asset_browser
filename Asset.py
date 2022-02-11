@@ -11,6 +11,7 @@ from Utilities.Logging import logger
 from Utilities.Utilities import get_library_path
 from settings import INFO_FOLDER, CONTENT_FOLDER, GALLERY_FOLDER, SFX, ICON_WIDTH, DELETED_ASSET_FOLDER
 
+# TODO: Asset.py.info_file() [Errno 22] Invalid argument: 'U:/AssetStorage/library/food/fruit/orange_ast/info/data.txt'
 
 class Asset:
     """
