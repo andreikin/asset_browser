@@ -41,7 +41,7 @@ class AssetWidget(QWidget):
         icon_path = Asset.dir_names(self.db_asset.path)["icon"]
         self.frame_image.setStyleSheet("border-radius: 12px;"
                                        "background-color: #2c313c;"
-                                       "border-image: url(" + icon_path + ") 3 10 3 10;")
+                                       "border-image: url(" + icon_path + ") 0 0 0 0;")
 
         self.frame_shadow = QPushButton(parent=self)
         self.frame_shadow.setObjectName("frame_shadow")
@@ -156,7 +156,7 @@ class AssetWidget(QWidget):
             self.Controller.ui.gallery_VLayout.insertWidget(1, image_preview_btn)
             image_preview_btn.setStyleSheet("border-radius: 6px;"
                                            "background-color: #2c313c;"
-                                           "border-image: url(" + icon_path + ") 3 10 3 10;}")
+                                           "border-image: url(" + icon_path + ") 0 0 0 0;}")
 
         logger.debug(self.db_asset.name + "\n")
 
