@@ -173,10 +173,11 @@ class Asset:
         """
         gets information about an existing asset, paths from info and files from folders
         """
-        asset_json = Asset.dir_names(path)["asset_json"]
-        asset_data = Asset.info_file(asset_json)
-        asset_data["path"] = path
         try:
+            asset_json = Asset.dir_names(path)["asset_json"]
+            asset_data = Asset.info_file(asset_json)
+            asset_data["path"] = path
+
             asset_content = os.listdir(Asset.dir_names(path)["content_folder"])
             asset_data["scenes"] = [Asset.dir_names(path)["content_folder"] + "/" + x for x in asset_content]
             gallery_content = os.listdir(Asset.dir_names(path)["gallery_folder"])
