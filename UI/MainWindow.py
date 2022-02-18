@@ -241,6 +241,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
         """
         When window closed it save fields settings
         """
+        logger.debug("\n\n__________________Close button clicked___________________")
         self.settings.setValue("ui settings", self.search_lineEdit.text())
         self.settings.setValue("db settings", self.db_path_lineEdit.text())
         self.settings.setValue("ui pos", self.pos())

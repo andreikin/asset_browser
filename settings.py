@@ -19,5 +19,5 @@ DATABASE_NAME = "database.db"
 DELETED_ASSET_FOLDER = "deleted_assets"
 
 """over"""
-LOGGING_TO_fILE = True
 IMAGE_PREVIEW_SUFFIX = "_light"
+LOGGING_TO_fILE = False
