@@ -12,8 +12,6 @@ from Utilities.Utilities import get_library_path, get_preview_images
 from settings import INFO_FOLDER, CONTENT_FOLDER, GALLERY_FOLDER, ICON_WIDTH, DELETED_ASSET_FOLDER
 
 
-# TODO: Asset.py.info_file() [Errno 22] Invalid argument: 'U:/AssetStorage/library/food/fruit/orange_ast/info/data.txt'
-
 class Asset:
     """
     The class defines an asset as a structure of folders and files.
@@ -26,7 +24,7 @@ class Asset:
         self.__path = None
 
         # folders for info and content
-        self.asset_id = None
+        self.asset_id = self.Controller.Models.find_asset_by_name(kwargs["name"])
         self.asset_json = None
         self.asset_info_folder = None
         self.content_folder = None
@@ -44,13 +42,17 @@ class Asset:
 
     @staticmethod
     def dir_names(in_path):
-        out = dict()
-        out["info_folder"] = in_path + "/" + INFO_FOLDER
-        out["content_folder"] = in_path + "/" + CONTENT_FOLDER
-        out["gallery_folder"] = in_path + "/" + GALLERY_FOLDER
-        out["asset_json"] = in_path + "/" + INFO_FOLDER + "/data.txt"
-        out["icon"] = in_path + "/" + INFO_FOLDER + "/icon.png"
-        return out
+        try:
+            out = dict()
+            out["info_folder"] = in_path + "/" + INFO_FOLDER
+            out["content_folder"] = in_path + "/" + CONTENT_FOLDER
+            out["gallery_folder"] = in_path + "/" + GALLERY_FOLDER
+            out["asset_json"] = in_path + "/" + INFO_FOLDER + "/data.txt"
+            out["icon"] = in_path + "/" + INFO_FOLDER + "/icon.png"
+            return out
+        except Exception as message:
+            logger.error(message)
+            return False
 
     @property
     def path(self):
@@ -119,7 +121,7 @@ class Asset:
                 logger.error(message)
 
     def create(self):
-        if not self.Controller.Models.is_asset_in_db(self.name):
+        if not self.Controller.Models.find_asset_by_name(self.name):
             try:
                 self.verification_and_copying_files(self.scenes, self.content_folder)
                 self.verification_and_copying_files(self.gallery, self.gallery_folder)
@@ -142,14 +144,14 @@ class Asset:
             self.Controller.ui.status_message("Asset with " + self.name + " name already exists!", state="ERROR")
 
     @staticmethod
-    def info_file(json_path, asset_data=None):  # if asset_data  create mode else read
+    def info_file(json_path):  # if asset_data  create mode else read
         try:
             with open(json_path, "r") as read_file:
                 asset_data = json.load(read_file)
                 return asset_data
         except Exception as message:
             logger.error(message)
-            return False
+            return None
 
     @staticmethod
     def write_info_file(json_path, asset_data):  # create info file

@@ -118,11 +118,14 @@ def find_asset_by_path(path):
     return res
 
 
-def is_asset_in_db(name):
-    if Asset.select().where(Asset.name == name):
-        return True
-    else:
-        return False
+def find_asset_by_name(name):
+    logger.debug(name)
+    try:
+        res = Asset.select().where(Asset.name == name)[0]
+        return res.id
+    except Exception as message:
+        logger.error(message)
+        return None
 
 
 def delete_asset(asset_name):
@@ -172,6 +175,7 @@ def rename_directory(old_path, new_path, old_name, new_name):
     except Exception as message:
         logger.error(message)
         return False
+
 
 def get_all_from_folder(path):
     try:
