@@ -10,7 +10,6 @@ START_WINDOW_SIZE = [1300, 800]
 FONT_SIZE = 9
 
 """ name of assets folders"""
-
 INFO_FOLDER = "info"
 CONTENT_FOLDER = "content"
 GALLERY_FOLDER = "gallery"
