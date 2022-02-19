@@ -155,9 +155,6 @@ def edit_db_asset(**kwargs):
         # edit name
         if kwargs.setdefault("name", None):
             asset_obj.name = kwargs["name"]
-        # edit icon
-        # if kwargs.setdefault("icon", ""):
-        #     asset_obj.icon = kwargs["icon"]
         # edit path
         if kwargs.setdefault("path", None):
             asset_obj.path = kwargs["path"]
