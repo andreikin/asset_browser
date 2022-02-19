@@ -28,7 +28,11 @@ class AssetWidget(QWidget):
         self.db_asset = db_asset  # asset object from database
         self.Controller = in_controller
         self.width = width
-        self.height = self.height_calculation()
+        self.icon_path = Asset.dir_names(self.db_asset.path)["icon"]
+        self.height = QPixmap(self.icon_path).scaledToWidth(self.width).height()
+
+        if not self.height:
+            self.height = self.width * 1.5
 
         self.layout = QVBoxLayout()
         self.layout.setContentsMargins(0, 0, 0, 0)
@@ -38,10 +42,9 @@ class AssetWidget(QWidget):
         self.frame_image.setObjectName("frame_image")
         self.frame_image.setFixedSize(self.width, self.height)
         self.layout.addWidget(self.frame_image)
-        icon_path = Asset.dir_names(self.db_asset.path)["icon"]
         self.frame_image.setStyleSheet("border-radius: 12px;"
                                        "background-color: #2c313c;"
-                                       "border-image: url(" + icon_path + ") 0 0 0 0;")
+                                       "border-image: url(" + self.icon_path + ") 0 0 0 0;")
 
         self.frame_shadow = QPushButton(parent=self)
         self.frame_shadow.setObjectName("frame_shadow")
@@ -88,7 +91,7 @@ class AssetWidget(QWidget):
             self.open_button.clicked.connect(self.open_directory)
             self.edit_button.clicked.connect(self.preparation_for_editing)
 
-        if not os.path.exists(icon_path):
+        if not os.path.exists(self.icon_path):
             self.frame_shadow.setIcon(QIcon(":/icons/icons/camera-off.svg"))
             self.frame_shadow.setIconSize(QtCore.QSize(25, 25))
             self.hidden_list.pop(0)  # liable not hiding
@@ -123,7 +126,7 @@ class AssetWidget(QWidget):
 
         # get asset data from  and  fill forms
         try:
-            asset_data = Asset.recognize_asset(self.db_asset.path)
+            asset_data = Asset.recognize_asset(self.db_asset.path, self.Controller.Models)
         except Exception as message:
             logger.error(message)
 
@@ -170,12 +173,12 @@ class AssetWidget(QWidget):
                 widget_centre - BTN_WIDTH / 2,
                 widget_centre + BTN_WIDTH / 2 + dist]
 
-    def height_calculation(self, ):
-        pix = QPixmap(self.db_asset.icon)
-        try:
-            return pix.height() / (pix.width() / self.width)
-        except ZeroDivisionError:
-            return self.width * 1.5
+    # def height_calculation(self, ):
+    #     pix = QPixmap(self.db_asset.icon)
+    #     try:
+    #         return pix.height() / (pix.width() / self.width)
+    #     except ZeroDivisionError:
+    #         return self.width * 1.5
 
     def mouseMoveEvent(self, e):
         """
@@ -218,7 +221,7 @@ class AssetWidget(QWidget):
         change the menu mode and fill in the fields for editing
         """
         self.Controller.ui.asset_menu_mode = "Edit"
-        asset_data = Asset.recognize_asset(self.db_asset.path)
+        asset_data = Asset.recognize_asset(self.db_asset.path, self.Controller.Models)
 
         pattern = r"_ast$"
         asset_data['name'] = re.sub(pattern, "", asset_data['name'])
@@ -232,6 +235,7 @@ class AssetWidget(QWidget):
         self.Controller.ui.file_list_widget.add_files_list(asset_data['scenes'])
         self.Controller.ui.gallery_list_widget.clear()
         self.Controller.ui.gallery_list_widget.add_files_list(asset_data['gallery'])
+        self.Controller.ui.current_asset = self.db_asset.id
         logger.debug("fill in the fields for editing")
 
     def delete_asset(self):
@@ -242,15 +246,13 @@ class AssetWidget(QWidget):
         dialog_result = dialog.exec()
         if dialog_result == 1024:
             logger.debug("\n\n__________________Delete asset clicked___________________")
-            asset_data = Asset.recognize_asset(self.db_asset.path)
+
             process_result = self.Controller.Models.delete_asset(self.db_asset.name)
             self.Controller.refresh_ui()
             if not process_result:
                 self.Controller.ui.status_message("information from the database was not deleted", state="ERROR")
 
-            if asset_data:
-                Asset(self.Controller, **asset_data).delete_asset()
-            else:
+            if not Asset.delete_asset(self.db_asset.name, self.db_asset.path):
                 self.Controller.ui.status_message("Information was removed only from database. "
                                                   "The asset folder may be in an undefined location.", state="ERROR")
             logger.debug(" executed")
