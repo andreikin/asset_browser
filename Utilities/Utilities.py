@@ -4,8 +4,8 @@ from PyQt5.QtCore import QSettings, Qt
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QApplication
 
-#from Utilities.Logging import logger
-from settings import IMAGE_PREVIEW_SUFFIX, DROP_MENU_WIDTH
+# from Utilities.Logging import logger
+from settings import IMAGE_PREVIEW_SUFFIX, DROP_MENU_WIDTH, SFX
 
 
 def get_library_path():
@@ -80,18 +80,33 @@ def get_preview_images(**kwargs):
                     image_light = image_light.scaledToWidth(DROP_MENU_WIDTH - 45, mode=Qt.SmoothTransformation)
                     image_light.save(icon_path)
                 out.append([icon_path, image_path])
-        #logger.debug(out)
+        # logger.debug(out)
         return out
     except Exception as message:
-        #logger.error(message)
+        # logger.error(message)
         pass
     return out
 
 
+def rename_path_list(old_name, new_name, path_list):
+    """
+    renames multiple paths when changing the name of an asset
+    """
+    out = []
+    for path in path_list:
+        out.append(path.replace(old_name + SFX, new_name + SFX))
+    return out
+
 
 if __name__ == '__main__':
     import sys
+
     # app = QApplication(sys.argv)
-    # path = "U:/AssetStorage/asset_browser/Characters/Human/Torso/Girl_Torso_03_ast/gallery"
-    # print(create_preview_images(path))
+    path = "U:/AssetStorage/asset_browser/Characters/Human/Torso/Girl_Torso_03_ast/gallery"
+
+    old_name = "Girl_Torso_03"
+    new_name = "AssetSt"
+
+    p_list = rename_path_list(old_name, new_name, [path, ])[0]
+    print(p_list)
     # sys.exit(app.exec_())
