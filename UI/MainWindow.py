@@ -41,6 +41,9 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
         # there are two states of the assets menu
         self.__asset_menu_mode = "Add"
 
+        # in edit mod save current asset id
+        self.current_asset = None
+
         self.Controller = in_controller
         self.setupUi(self)
         self.window_label.setText("Asset browser  " + VERSION)
@@ -126,10 +129,8 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
             self.add_asset_button.setText("Create")
             self.add_asset_button.clicked.connect(self.Controller.create_asset)
             self.erase_button.clicked.connect(self.clear_form)
-            for le in [self.name_lineEdit, self.path_lineEdit]:
-                le.setReadOnly(False)
-                le.setStyleSheet("color:  #fff;")
             self.decorate_icon(self.add_asset_button, "file-plus.svg")
+            self.current_asset = None
             logger.debug(" Add mod")
 
         else:  # mode="Edit"
@@ -144,10 +145,6 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
             self.add_asset_button.setText("Ok")
             self.add_asset_button.clicked.connect(self.Controller.edit_asset)
             self.erase_button.clicked.connect(self.discard_edit)
-            for le in [self.name_lineEdit, self.path_lineEdit]:
-                le.setReadOnly(True)
-                le.setStyleSheet("color:  #838ea2;"
-                                 "background-color:#2c313c;")
             self.decorate_icon(self.add_asset_button, "edit.svg")
 
     def current_state_changed(self):
@@ -183,6 +180,8 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
         out_dict['path'] = self.path_lineEdit.text()
 
         if out_dict['name'] and out_dict['path']:
+            out_dict['asset_id'] = self.current_asset
+
             out_dict['path'] = convert_path_to_global(out_dict['path']) + "/" + out_dict['name'] + SFX
             out_dict['icon'] = self.image_lineEdit.text()
             out_dict['description'] = self.description_textEdit.toPlainText()
