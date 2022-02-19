@@ -57,6 +57,7 @@ def initialize(lib_path):
 
 def add_asset_to_db(**kwargs):
     tags = kwargs.pop('tags')
+    kwargs['icon'] = ""
     try:
         db_asset = Asset.create(**kwargs)
         for tag in tags:
@@ -112,17 +113,19 @@ def find_tags_by_asset_list(asset_list):
     return out
 
 
-def find_asset_by_path(path):
-    logger.debug(path)
-    res = Asset.select().where(Asset.path == path)
-    return res
-
-
-def find_asset_by_name(name):
-    logger.debug(name)
+def find_asset(id=None, name=None, path=None):
     try:
-        res = Asset.select().where(Asset.name == name)[0]
-        return res.id
+        asset=None
+        if id:
+            asset = Asset.select().where(Asset.id == id).get()
+        if name:
+            asset = Asset.select().where(Asset.name == name).get()
+        if path:
+            asset = Asset.select().where(Asset.path == path).get()
+        if asset:
+            return asset.id, asset.name, asset.path
+        else:
+            return None
     except Exception as message:
         logger.error(message)
         return None
@@ -142,19 +145,25 @@ def delete_asset(asset_name):
 
 def edit_db_asset(**kwargs):
     try:
-        asset_obj = Asset.get(Asset.name == kwargs["name"])
+        asset_obj = Asset.get(Asset.id == kwargs["asset_id"])
         # edit tags
-        for tag in Tag.select().where(Tag.asset_id == asset_obj):
-            tag.delete_instance()
-        for tag in kwargs["tags"]:
-            Tag.create(name=tag, asset_id=asset_obj)
+        if kwargs.setdefault("tags", None):
+            for tag in Tag.select().where(Tag.asset_id == asset_obj):
+                tag.delete_instance()
+            for tag in kwargs["tags"]:
+                Tag.create(name=tag, asset_id=asset_obj)
+        # edit name
+        if kwargs.setdefault("name", None):
+            asset_obj.name = kwargs["name"]
         # edit icon
-        asset_obj.icon = kwargs["icon"]
+        # if kwargs.setdefault("icon", ""):
+        #     asset_obj.icon = kwargs["icon"]
         # edit path
-        asset_obj.path = kwargs["path"]
+        if kwargs.setdefault("path", None):
+            asset_obj.path = kwargs["path"]
         asset_obj.save()
-
         logger.debug(" executed")
+
     except Exception as message:
         logger.error(message)
         return False
@@ -196,6 +205,5 @@ if __name__ == '__main__':
     db_path = get_library_path()
     initialize(db_path)
 
-    path = "U:/AssetStorage/library/super_food"
 
-    print(get_all_from_folder(path))
+    edit_db_asset(**{"name": "name", "asset_id": 17})
