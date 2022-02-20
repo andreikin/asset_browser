@@ -52,7 +52,9 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
         self.add_window_scale()
 
         # name verification
-        self.name_lineEdit.setValidator(QRegExpValidator(QRegExp("^[A-z0-9]+$")))
+        self.name_lineEdit.setValidator(QRegExpValidator(QRegExp("[A-z0-9]+")))
+        self.path_lineEdit.setValidator(QRegExpValidator(QRegExp("[/A-z0-9]+")))
+        self.add_dir_line_edit.setValidator(QRegExpValidator(QRegExp("[/A-z0-9]+")))
 
         # insert Gallery widget
         self.gallery = GalleryWidget(icons_width=COLUMN_WIDTH, spacing=SPACING)
@@ -131,7 +133,6 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
             self.erase_button.clicked.connect(self.clear_form)
             self.decorate_icon(self.add_asset_button, "file-plus.svg")
             self.current_asset = None
-            logger.debug(" Add mod")
 
         else:  # mode="Edit"
             logger.debug("\n\n__________________Set edit mode___________________")
