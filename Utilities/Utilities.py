@@ -54,7 +54,7 @@ def set_font_size(widget, size):
     widget.setFont(font)
 
 
-def get_preview_images(**kwargs):
+def create_preview_images(**kwargs):
     gallery_path = kwargs.setdefault("gallery_folder", "")
     info_folder = kwargs.setdefault("info_folder", "")
     out = []

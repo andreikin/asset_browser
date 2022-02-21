@@ -14,7 +14,7 @@ from Asset import Asset
 from Models import Models
 from UI.Ui_function import UiFunction
 from Utilities.Logging import logger
-from Utilities.Utilities import get_library_path, convert_path_to_local, set_font_size, get_preview_images
+from Utilities.Utilities import get_library_path, convert_path_to_local, set_font_size, create_preview_images
 from settings import COLUMN_WIDTH, DROP_MENU_WIDTH, DATABASE_NAME
 
 BTN_WIDTH = 30  # The size of the buttons inside the widget
@@ -147,7 +147,7 @@ class AssetWidget(QWidget):
 
             # create new images if necessary
             asset_folders = Asset.dir_names(self.db_asset.path)
-            preview_images = get_preview_images(**asset_folders)
+            preview_images = create_preview_images(**asset_folders)
 
             for icon_path, image_path in preview_images:
                 image_preview_btn = QPushButton()
