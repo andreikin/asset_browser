@@ -8,8 +8,9 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 
 from Utilities.Logging import logger
-from Utilities.Utilities import get_library_path, get_preview_images, rename_path_list
-from settings import INFO_FOLDER, CONTENT_FOLDER, GALLERY_FOLDER, ICON_WIDTH, DELETED_ASSET_FOLDER, SFX
+from Utilities.Utilities import get_library_path, create_preview_images, rename_path_list
+from settings import INFO_FOLDER, CONTENT_FOLDER, GALLERY_FOLDER, ICON_WIDTH, DELETED_ASSET_FOLDER, SFX, \
+    IMAGE_PREVIEW_SUFFIX
 
 
 class Asset:
@@ -61,7 +62,9 @@ class Asset:
 
             # copy files
             self.copy_files()
-            self.Controller.refresh_ui()
+
+            self.Controller.get_from_folder(os.path.dirname(self.path)+"/")
+            self.Controller.ui.search_lineEdit.setText("")
             logger.debug(" executed")
         else:
             logger.error(" path : " + self.path + " exists")
@@ -84,20 +87,9 @@ class Asset:
 
         # copy files
         self.copy_files()
-
-        self.Controller.refresh_ui()
+        self.Controller.get_from_folder(os.path.dirname(self.path)+"/")
+        self.Controller.ui.search_lineEdit.setText("")
         logger.debug(" executed")
-
-    def edit_path(self):
-        if self.path != self.old_asset_data["path"]:
-            try:
-                shutil.move(self.old_asset_data["path"], self.path)
-                for i in range(len(self.gallery)):
-                    self.gallery[i] = self.gallery[i].replace(self.old_asset_data["path"], self.path)
-                for i in range(len(self.scenes)):
-                    self.scenes[i] = self.scenes[i].replace(self.old_asset_data["path"], self.path)
-            except Exception as message:
-                logger.error(message)
 
     def edit_name(self):
         if self.name != self.old_asset_data["name"]:
@@ -123,6 +115,17 @@ class Asset:
                 logger.error(message)
                 return None
 
+    def edit_path(self):
+        if self.path != self.old_asset_data["path"]:
+            try:
+                shutil.move(self.old_asset_data["path"], self.path)
+                for i in range(len(self.gallery)):
+                    self.gallery[i] = self.gallery[i].replace(self.old_asset_data["path"], self.path)
+                for i in range(len(self.scenes)):
+                    self.scenes[i] = self.scenes[i].replace(self.old_asset_data["path"], self.path)
+            except Exception as message:
+                logger.error(message)
+
     def edit_icon(self):
         icon_default_path = Asset.dir_names(self.path)["icon"]
         if self.icon != icon_default_path:
@@ -131,7 +134,6 @@ class Asset:
                 os.remove(icon_default_path)
             if self.icon:
                 self.icon = self.create_icon("icon.png", self.icon, ICON_WIDTH)
-
 
     def get_old_asset_data(self):
         out = dict()
@@ -142,7 +144,6 @@ class Asset:
             logger.error(message)
         return out
 
-
     def copy_files(self):
         try:
             for source_files, destination_folder in [(self.scenes, self.content_folder),
@@ -152,15 +153,24 @@ class Asset:
                 while source_files:
                     curent_file = source_files.pop()
                     if curent_file in destination_files:
-                        destination_files.remove(curent_file)  # remove current_file from list destination_files
+                        destination_files.remove(curent_file)  # remove current_file from variable destination_files
                     else:
                         file_name = os.path.basename(curent_file)
                         shutil.copyfile(curent_file, destination_folder + "/" + file_name)
+
                 # delete the remaining files in the destination folder
                 for curent_file in destination_files:
                     os.remove(curent_file)
+
+                    # if file has icon - delete it
+                    filepath, file_extension = os.path.splitext(curent_file)
+                    file = os.path.basename(filepath)
+                    icon_path = self.asset_info_folder + "/" + file + IMAGE_PREVIEW_SUFFIX + file_extension
+                    if os.path.exists(icon_path):
+                        os.remove(icon_path)
+
             asset_folders = Asset.dir_names(self.path)
-            get_preview_images(**asset_folders)
+            create_preview_images(**asset_folders)
         except Exception as message:
             logger.error(message)
 
