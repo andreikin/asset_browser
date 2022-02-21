@@ -53,11 +53,14 @@ class MenuTreeWidget(QTreeWidget):
                 self.get_tree(item, filepath)
 
     def update_ui(self):
-        self.clear()
-        self.path = self.Controller.lib_path
-        if self.Controller.lib_path:
-            self.get_tree()
-            self.expandAll()
+        try:
+            self.clear()
+            self.path = self.Controller.lib_path
+            if self.Controller.lib_path:
+                self.get_tree()
+                self.expandAll()
+        except Exception as message:
+            logger.error(message)
 
     def add_directory(self):
         if self.Controller.ui.add_dir_line_edit.text():
