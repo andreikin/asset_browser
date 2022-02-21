@@ -116,52 +116,53 @@ class AssetWidget(QWidget):
         starts the widget gallery view
         """
         logger.debug("\n\n__________________Asset " + self.db_asset.name + " clicked___________________")
-
-        # open gallery page
-        self.Controller.ui.drop_stackedWidget.setCurrentIndex(3)
-        self.Controller.ui.decorate_buttons_background(3)
-        if self.Controller.ui.drop_menu.width() == 0:
-            self.Controller.ui.expand_close_animation("expand")
-        self.Controller.ui.asset_overview_label.setText(" View asset " + self.db_asset.name)
-
-        # get asset data from  and  fill forms
         try:
+            # open gallery page
+            self.Controller.ui.drop_stackedWidget.setCurrentIndex(3)
+            self.Controller.ui.decorate_buttons_background(3)
+            if self.Controller.ui.drop_menu.width() == 0:
+                self.Controller.ui.expand_close_animation("expand")
+            self.Controller.ui.asset_overview_label.setText(" View asset " + self.db_asset.name)
+
+            # get asset data from  and  fill forms
+
             asset_data = Asset.recognize_asset(self.db_asset.path, self.Controller.Models)
+
+
+            # set description and form height
+            self.Controller.ui.description_textEdit2.setPlainText(asset_data["description"])
+            if not asset_data["description"]:
+                self.Controller.ui.description_textEdit2.hide()
+            else:
+                self.Controller.ui.description_textEdit2.show()
+                lines_num = len(asset_data["description"]) / 40
+                self.Controller.ui.description_textEdit2.setFixedHeight(lines_num * 17 + 17)
+
+            # delete old images
+
+            for i in range(self.Controller.ui.gallery_VLayout.count()):
+                widget = self.Controller.ui.gallery_VLayout.itemAt(i).widget()
+                if type(widget) == PyQt5.QtWidgets.QPushButton:
+                    widget.deleteLater()
+
+            # create new images if necessary
+            asset_folders = Asset.dir_names(self.db_asset.path)
+            preview_images = get_preview_images(**asset_folders)
+
+            for icon_path, image_path in preview_images:
+                image_preview_btn = QPushButton()
+                image_preview_btn.clicked.connect(lambda y, x=image_path: os.system(x))
+                pix = QPixmap(icon_path)
+                pix = pix.scaledToWidth(DROP_MENU_WIDTH - 45, mode=Qt.SmoothTransformation)
+                image_preview_btn.setFixedSize(pix.width(), pix.height())
+                self.Controller.ui.gallery_VLayout.insertWidget(1, image_preview_btn)
+                image_preview_btn.setStyleSheet("border-radius: 6px;"
+                                               "background-color: #2c313c;"
+                                               "border-image: url(" + icon_path + ") 0 0 0 0;}")
+
+            logger.debug(self.db_asset.name + "\n")
         except Exception as message:
             logger.error(message)
-
-        # set description and form height
-        self.Controller.ui.description_textEdit2.setPlainText(asset_data["description"])
-        if not asset_data["description"]:
-            self.Controller.ui.description_textEdit2.hide()
-        else:
-            self.Controller.ui.description_textEdit2.show()
-            lines_num = len(asset_data["description"]) / 40
-            self.Controller.ui.description_textEdit2.setFixedHeight(lines_num * 17 + 17)
-
-        # delete old images
-
-        for i in range(self.Controller.ui.gallery_VLayout.count()):
-            widget = self.Controller.ui.gallery_VLayout.itemAt(i).widget()
-            if type(widget) == PyQt5.QtWidgets.QPushButton:
-                widget.deleteLater()
-
-        # create new images if necessary
-        asset_folders = Asset.dir_names(self.db_asset.path)
-        preview_images = get_preview_images(**asset_folders)
-
-        for icon_path, image_path in preview_images:
-            image_preview_btn = QPushButton()
-            image_preview_btn.clicked.connect(lambda y, x=image_path: os.system(x))
-            pix = QPixmap(icon_path)
-            pix = pix.scaledToWidth(DROP_MENU_WIDTH - 45, mode=Qt.SmoothTransformation)
-            image_preview_btn.setFixedSize(pix.width(), pix.height())
-            self.Controller.ui.gallery_VLayout.insertWidget(1, image_preview_btn)
-            image_preview_btn.setStyleSheet("border-radius: 6px;"
-                                           "background-color: #2c313c;"
-                                           "border-image: url(" + icon_path + ") 0 0 0 0;}")
-
-        logger.debug(self.db_asset.name + "\n")
 
     def places_buttons_by_x(self, offset=0.05):
         """
