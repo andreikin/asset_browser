@@ -85,8 +85,6 @@ class Asset:
         # copy files
         self.copy_files()
 
-
-
         self.Controller.refresh_ui()
         logger.debug(" executed")
 
@@ -101,18 +99,15 @@ class Asset:
             except Exception as message:
                 logger.error(message)
 
-
-
     def edit_name(self):
         if self.name != self.old_asset_data["name"]:
             try:
                 # rename folders
-                logger.debug(" test")
                 new_asset_path = rename_path_list(self.old_asset_data["name"], self.name, [self.old_asset_data["path"]])[0]
                 self.scenes = rename_path_list(self.old_asset_data["name"], self.name, self.scenes)
                 self.gallery = rename_path_list(self.old_asset_data["name"], self.name, self.gallery)
                 os.rename(self.old_asset_data["path"], new_asset_path)
-                self.path = new_asset_path
+                self.old_asset_data["path"] = new_asset_path
                 # bd path edit
                 self.Controller.Models.edit_db_asset(**{"name": self.name,
                                                         "asset_id": self.old_asset_data["asset_id"],
