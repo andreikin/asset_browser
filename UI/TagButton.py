@@ -11,22 +11,23 @@ class TagButton(QWidget):
     def __init__(self, tag, in_controller, parent=None, ):
         QWidget.__init__(self, parent)
 
-        self.tag = tag
+        self.tag = tag.lower()
         self.Controller = in_controller
 
         self.layout = QVBoxLayout()
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.layout)
-        self.button = QPushButton(tag)
-        self.button.setFixedWidth(len(tag) * 11)
-        self.button.setToolTip(tag)
+        self.button = QPushButton(self.tag)
+        #self.button.setFixedWidth(len(self.tag) * 11)
+        self.button.setToolTip(self.tag)
         self.button.clicked.connect(self.serch_asset)
 
         self.button.setStyleSheet("QPushButton  { \n"
                                   "border-radius: 11px;\n"
+                                  "padding: 0 15px;"
                                   "background-color: #343b47;\n"
                                   "height: 23px;\n"
-                                  "width: 86px;\n"
+                                  #"width: 86px;\n"
                                   "font: bold;"
                                   "color:rgb(200, 200, 200);}\n"
 

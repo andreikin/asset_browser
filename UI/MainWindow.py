@@ -18,7 +18,7 @@ from UI.TreeAssetsWidget import MenuTreeWidget
 from UI.Ui_MainWindow import Ui_MainWindow
 from UI.Ui_function import UiFunction
 from Utilities.Logging import logger
-from Utilities.Utilities import get_tags_from_path, convert_path_to_global
+from Utilities.Utilities import convert_path_to_global, remove_non_unique_tags
 from settings import COLUMN_WIDTH, SPACING, START_WINDOW_SIZE, SFX, FONT_SIZE, VERSION
 
 
@@ -189,9 +189,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
 
             # get a list of tags
             out_dict['tags'] = re.findall(r'[0-9A-z_]+', self.tag_lineEdit.text())
-            folders_tags = get_tags_from_path(out_dict['path'])
-            out_dict['tags'] += folders_tags
-            out_dict['tags'] = list(set(out_dict['tags']))  # make tags uniqueness
+            out_dict['tags'] = remove_non_unique_tags(out_dict['tags'])   # make tags uniqueness
 
             # get a list of scenes paths
             out_dict['scenes'] = self.file_list_widget.get_list()

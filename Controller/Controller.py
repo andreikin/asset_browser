@@ -60,7 +60,7 @@ class Controller(QMainWindow):
         asset_data = self.ui.get_asset_data()
         # edit asset
         if asset_data:
-            Asset(self, **asset_data).edit_asset()
+            Asset(self, **asset_data).edit()
             self.ui.clear_form()
             logger.debug(" executed")
 
@@ -69,6 +69,8 @@ class Controller(QMainWindow):
         Getting tags from linEdit and refresh_ui
         """
         self.current_tags = re.findall(r'[0-9A-z_]+', self.ui.search_lineEdit.text())
+        self.current_tags += [x.capitalize() for x in self.current_tags]
+
         if self.connect_db:
             self.notify_observers()
             logger.debug(" executed")

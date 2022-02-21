@@ -17,15 +17,6 @@ def get_library_path():
     return settings.value("db settings")
 
 
-def get_tags_from_path(path):
-    """
-    Function to get tags from the folder or folders in which the asset is located
-    """
-    db_path = get_library_path()
-    tags = path.split(db_path)[-1].split("/")
-    return [x for x in tags if x][:-1]
-
-
 def convert_path_to_local(path):
     """
     return local path to asset
@@ -98,15 +89,23 @@ def rename_path_list(old_name, new_name, path_list):
     return out
 
 
+def remove_non_unique_tags(tags_list):
+    out = []
+    for tag in tags_list:
+        if tag not in out:
+            out.append(tag.lower())
+    return out
+
+
 if __name__ == '__main__':
     import sys
 
     # app = QApplication(sys.argv)
-    path = "U:/AssetStorage/asset_browser/Characters/Human/Torso/Girl_Torso_03_ast/gallery"
-
-    old_name = "Girl_Torso_03"
-    new_name = "AssetSt"
-
-    p_list = rename_path_list(old_name, new_name, [path, ])[0]
-    print(p_list)
+    # path = "U:/AssetStorage/asset_browser/Characters/Human/Torso/Girl_Torso_03_ast/gallery"
+    #
+    # old_name = "Girl_Torso_03"
+    # new_name = "AssetSt"
+    #
+    # p_list = rename_path_list(old_name, new_name, [path, ])[0]
+    print(remove_non_unique_tags(["Aa", "Tags_list", "aa", "ss"]))
     # sys.exit(app.exec_())

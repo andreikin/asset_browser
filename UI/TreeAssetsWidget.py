@@ -76,7 +76,7 @@ class MenuTreeWidget(QTreeWidget):
 
     def double_click_handler(self, item):
         path = item.data(0, 32).replace("\\", "/") + "/"
-        self.Controller.ui.search_lineEdit.setText(item.data(0, 0))
+        self.Controller.ui.search_lineEdit.setText(item.data(0, 0).lower())
         self.Controller.get_from_folder(path)
 
     def right_click_handler(self, pos):
