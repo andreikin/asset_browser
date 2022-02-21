@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QCursor
-from PyQt5.QtWidgets import QWidget, QPushButton, QVBoxLayout, QMenu, QAction
+from PyQt5.QtWidgets import QWidget, QPushButton, QVBoxLayout, QMenu, QAction, QSizePolicy
 
 from Utilities.Utilities import set_font_size
 
@@ -18,7 +18,7 @@ class TagButton(QWidget):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.layout)
         self.button = QPushButton(self.tag)
-        #self.button.setFixedWidth(len(self.tag) * 11)
+        self.button.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Fixed)
         self.button.setToolTip(self.tag)
         self.button.clicked.connect(self.serch_asset)
 
@@ -26,8 +26,7 @@ class TagButton(QWidget):
                                   "border-radius: 11px;\n"
                                   "padding: 0 15px;"
                                   "background-color: #343b47;\n"
-                                  "height: 23px;\n"
-                                  #"width: 86px;\n"
+                                  "height: 23px;\n" 
                                   "font: bold;"
                                   "color:rgb(200, 200, 200);}\n"
 
