@@ -52,9 +52,9 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
         self.add_window_scale()
 
         # name verification
-        self.name_lineEdit.setValidator(QRegExpValidator(QRegExp("[A-z0-9]+")))
-        self.path_lineEdit.setValidator(QRegExpValidator(QRegExp("[/A-z0-9]+")))
-        self.add_dir_line_edit.setValidator(QRegExpValidator(QRegExp("[/A-z0-9]+")))
+        self.name_lineEdit.setValidator(QRegExpValidator(QRegExp("[-A-z0-9]+")))
+        self.path_lineEdit.setValidator(QRegExpValidator(QRegExp("[-/A-z0-9]+")))
+        self.add_dir_line_edit.setValidator(QRegExpValidator(QRegExp("[-/A-z0-9]+")))
 
         # insert Gallery widget
         self.gallery = GalleryWidget(icons_width=COLUMN_WIDTH, spacing=SPACING)
@@ -152,11 +152,14 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
         """
         Run in Controller.notify_observers as reacting to changes in current tags list
         """
-        self.asset_menu_mode = "Add"
-        self.update_assets_widgets()
-        self.update_tags_widgets()
-        self.tree_widget.update_ui()
-        self.status_message(f"In the database were found {len(self.Controller.found_assets)} items ")
+        try:
+            self.asset_menu_mode = "Add"
+            self.update_assets_widgets()
+            self.update_tags_widgets()
+            self.tree_widget.update_ui()
+            self.status_message(f"In the database were found {len(self.Controller.found_assets)} items ")
+        except Exception as message:
+            logger.error(message)
 
     def update_assets_widgets(self):
         self.gallery.clear()
