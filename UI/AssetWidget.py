@@ -115,6 +115,7 @@ class AssetWidget(QWidget):
         """
         starts the widget gallery view
         """
+        self.Controller.ui.asset_menu_mode = "Add"
         logger.debug("\n\n__________________Asset " + self.db_asset.name + " clicked___________________")
         try:
             # open gallery page
@@ -135,8 +136,8 @@ class AssetWidget(QWidget):
                 self.Controller.ui.description_textEdit2.hide()
             else:
                 self.Controller.ui.description_textEdit2.show()
-                lines_num = len(asset_data["description"]) / 40
-                self.Controller.ui.description_textEdit2.setFixedHeight(lines_num * 17 + 17)
+                lines_num = len(asset_data["description"]) / 35
+                self.Controller.ui.description_textEdit2.setFixedHeight(lines_num * 18 + 20)
 
             # delete old images
 
@@ -161,6 +162,7 @@ class AssetWidget(QWidget):
                                                "border-image: url(" + icon_path + ") 0 0 0 0;}")
 
             logger.debug(self.db_asset.name + "\n")
+            self.Controller.ui.status_message("")
         except Exception as message:
             logger.error(message)
 
@@ -174,12 +176,6 @@ class AssetWidget(QWidget):
                 widget_centre - BTN_WIDTH / 2,
                 widget_centre + BTN_WIDTH / 2 + dist]
 
-    # def height_calculation(self, ):
-    #     pix = QPixmap(self.db_asset.icon)
-    #     try:
-    #         return pix.height() / (pix.width() / self.width)
-    #     except ZeroDivisionError:
-    #         return self.width * 1.5
 
     def mouseMoveEvent(self, e):
         """
@@ -237,6 +233,7 @@ class AssetWidget(QWidget):
         self.Controller.ui.gallery_list_widget.clear()
         self.Controller.ui.gallery_list_widget.add_files_list(asset_data['gallery'])
         self.Controller.ui.current_asset = self.db_asset.id
+
         logger.debug("fill in the fields for editing")
 
     def delete_asset(self):
@@ -249,7 +246,8 @@ class AssetWidget(QWidget):
             logger.debug("\n\n__________________Delete asset clicked___________________")
 
             process_result = self.Controller.Models.delete_asset(self.db_asset.name)
-            self.Controller.refresh_ui()
+            self.Controller.get_from_folder(os.path.dirname(self.db_asset.path)+"/")
+
             if not process_result:
                 self.Controller.ui.status_message("information from the database was not deleted", state="ERROR")
 

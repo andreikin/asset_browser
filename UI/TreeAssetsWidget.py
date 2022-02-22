@@ -96,6 +96,7 @@ class MenuTreeWidget(QTreeWidget):
                     subprocess.run(['explorer', os.path.realpath(path)])
                 if action.text() == "Add asset":
                     self.Controller.ui.switch_pages(0)
+                    self.Controller.ui.asset_menu_mode = "Add"
                     self.Controller.ui.clear_form()
                     self.Controller.ui.path_lineEdit.setText(convert_path_to_local(path))
                 if action.text() == "Rename folder":

@@ -49,7 +49,6 @@ class Controller(QMainWindow):
         # create asset
         if asset_data:
             Asset(self, **asset_data).create()
-            self.ui.clear_form()
             logger.debug(" executed")
 
     def edit_asset(self):
@@ -61,7 +60,6 @@ class Controller(QMainWindow):
         # edit asset
         if asset_data:
             Asset(self, **asset_data).edit()
-            self.ui.clear_form()
             logger.debug(" executed")
 
     def refresh_ui(self):

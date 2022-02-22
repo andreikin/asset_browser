@@ -103,7 +103,6 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
         self.btn_maximize.clicked.connect(self.maximize_restore)
         self.font_spinBox.valueChanged.connect(self.set_font_size)
 
-        self.asset_menu_mode = "Add"
         self.maximize = False  # application size state
 
         # object for save settings
@@ -126,6 +125,8 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
         self.add_asset_button.disconnect()
         self.erase_button.disconnect()
         if mode == "Add":
+            logger.debug("Set add mode")
+            self.clear_form()
             self.__asset_menu_mode = "Add"
             self.asset_menu_label.setText("Add Asset")
             self.add_asset_button.setText("Create")
@@ -147,6 +148,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
             self.add_asset_button.clicked.connect(self.Controller.edit_asset)
             self.erase_button.clicked.connect(self.discard_edit)
             self.decorate_icon(self.add_asset_button, "edit.svg")
+            self.Controller.ui.status_message("Edit mode activated")
 
     def current_state_changed(self):
         """
@@ -191,7 +193,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
             out_dict['description'] = self.description_textEdit.toPlainText()
 
             # get a list of tags
-            out_dict['tags'] = re.findall(r'[0-9A-z_]+', self.tag_lineEdit.text())
+            out_dict['tags'] = re.findall(r'[-0-9A-z_]+', self.tag_lineEdit.text())
             out_dict['tags'] = remove_non_unique_tags(out_dict['tags'])   # make tags uniqueness
 
             # get a list of scenes paths
