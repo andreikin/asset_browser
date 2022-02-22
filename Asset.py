@@ -60,11 +60,13 @@ class Asset:
             self.asset_id = self.Controller.Models.add_asset_to_db(**self.asset_data())
             self.write_info_file(self.asset_json, self.asset_data())
 
-            # copy files
-            self.copy_files()
-
             self.Controller.get_from_folder(os.path.dirname(self.path)+"/")
             self.Controller.ui.search_lineEdit.setText("")
+            self.Controller.ui.clear_form()
+            self.Controller.ui.status_message("Asset " + self.name + " created successfully!", )
+
+            # copy files
+            self.copy_files()
             logger.debug(" executed")
         else:
             logger.error(" path : " + self.path + " exists")
@@ -78,42 +80,48 @@ class Asset:
             return asset_icon_path
 
     def edit(self):
-        self.edit_name()
-        self.edit_path()
-        self.edit_icon()
+        if self.name != self.old_asset_data["name"] and  self.Controller.Models.find_asset(name=self.name):
+            logger.error(" path : " + self.path + " exists")
+            self.Controller.ui.status_message("Asset with " + self.name + " name already exists!", state="ERROR")
+        else:
+            self.edit_name()
+            self.edit_path()
+            self.edit_icon()
 
-        self.write_info_file(self.asset_json, self.asset_data())
-        self.Controller.Models.edit_db_asset(**self.asset_data())
+            self.write_info_file(self.asset_json, self.asset_data())
+            self.Controller.Models.edit_db_asset(**self.asset_data())
 
-        # copy files
-        self.copy_files()
-        self.Controller.get_from_folder(os.path.dirname(self.path)+"/")
-        self.Controller.ui.search_lineEdit.setText("")
-        logger.debug(" executed")
+            self.Controller.get_from_folder(os.path.dirname(self.path)+"/")
+            self.Controller.ui.search_lineEdit.setText("")
+            self.Controller.ui.clear_form()
+            self.Controller.ui.status_message("Asset " + self.name + " edited successfully!", )
+
+            # copy files
+            self.copy_files()
+            logger.debug(" executed")
 
     def edit_name(self):
-        if self.name != self.old_asset_data["name"]:
-            try:
-                # rename folders
-                new_asset_path = rename_path_list(self.old_asset_data["name"], self.name, [self.old_asset_data["path"]])[0]
-                self.scenes = rename_path_list(self.old_asset_data["name"], self.name, self.scenes)
-                self.gallery = rename_path_list(self.old_asset_data["name"], self.name, self.gallery)
-                os.rename(self.old_asset_data["path"], new_asset_path)
-                self.old_asset_data["path"] = new_asset_path
-                # bd path edit
-                self.Controller.Models.edit_db_asset(**{"name": self.name,
-                                                        "asset_id": self.old_asset_data["asset_id"],
-                                                        "path": new_asset_path})
-                # edit info
-                asset_json = self.dir_names(new_asset_path)["asset_json"]
-                asset_data = self.info_file(asset_json)
-                asset_data["name"] = self.name
-                self.write_info_file(asset_json, asset_data)
+        try:
+            # rename folders
+            new_asset_path = rename_path_list(self.old_asset_data["name"], self.name, [self.old_asset_data["path"]])[0]
+            self.scenes = rename_path_list(self.old_asset_data["name"], self.name, self.scenes)
+            self.gallery = rename_path_list(self.old_asset_data["name"], self.name, self.gallery)
+            os.rename(self.old_asset_data["path"], new_asset_path)
+            self.old_asset_data["path"] = new_asset_path
+            # bd path edit
+            self.Controller.Models.edit_db_asset(**{"name": self.name,
+                                                    "asset_id": self.old_asset_data["asset_id"],
+                                                    "path": new_asset_path})
+            # edit info
+            asset_json = self.dir_names(new_asset_path)["asset_json"]
+            asset_data = self.info_file(asset_json)
+            asset_data["name"] = self.name
+            self.write_info_file(asset_json, asset_data)
 
-                logger.debug(" executed")
-            except Exception as message:
-                logger.error(message)
-                return None
+            logger.debug(" executed")
+        except Exception as message:
+            logger.error(message)
+            return None
 
     def edit_path(self):
         if self.path != self.old_asset_data["path"]:
