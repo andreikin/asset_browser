@@ -8,7 +8,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 
 from Utilities.Logging import logger
-from Utilities.Utilities import get_library_path, create_preview_images, rename_path_list
+from Utilities.Utilities import get_library_path, create_preview_images, rename_path_list, rename_scenes
 from settings import INFO_FOLDER, CONTENT_FOLDER, GALLERY_FOLDER, ICON_WIDTH, DELETED_ASSET_FOLDER, SFX, \
     IMAGE_PREVIEW_SUFFIX
 
@@ -40,6 +40,8 @@ class Asset:
             # if old asset data exist set edit mod
             self.old_asset_data = self.get_old_asset_data() if self.asset_id else None
 
+            self.rename_content = self.Controller.ui.rename_checkBox.isChecked()
+
             logger.debug(json.dumps(self.asset_data()))
 
         except Exception as message:
@@ -67,6 +69,7 @@ class Asset:
 
             # copy files
             self.copy_files()
+
             logger.debug(" executed")
         else:
             logger.error(" path : " + self.path + " exists")
@@ -179,6 +182,10 @@ class Asset:
 
             asset_folders = Asset.dir_names(self.path)
             create_preview_images(**asset_folders)
+
+            if self.rename_content:
+                rename_scenes(self.name, self.content_folder)
+
         except Exception as message:
             logger.error(message)
 
@@ -261,7 +268,7 @@ class Asset:
         asset_data["gallery_folder"] = self.gallery_folder
         asset_data["scenes"] = self.scenes
         asset_data["gallery"] = self.gallery
-
+        asset_data["rename_content"] = self.rename_content
         return asset_data
 
     @staticmethod
