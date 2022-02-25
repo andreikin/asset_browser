@@ -57,15 +57,18 @@ class FileListWidget(QListView):
         self.set_height()
 
     def create_item(self, file_path):
-        if not self.is_file_in_widget(file_path):
-            file_name = os.path.basename(file_path)
-            label = file_name if len(file_name) < 30 else file_name[:29] + "..."
-            item = QStandardItem(label)
-            item.setData(file_path, role=Qt.ToolTipRole)
-            self.model.appendRow(item)
-            self.setIndexWidget(item.index(), DeleteItemButton(item, self))
-            self.set_height()
-            logger.debug("File added to ui " + file_path)
+        try:
+            if not self.is_file_in_widget(file_path):
+                file_name = os.path.basename(file_path)
+                label = file_name if len(file_name) < 30 else file_name[:29] + "..."
+                item = QStandardItem(label)
+                item.setData(file_path, role=Qt.ToolTipRole)
+                self.model.appendRow(item)
+                self.setIndexWidget(item.index(), DeleteItemButton(item, self))
+                self.set_height()
+                logger.debug("File added to ui " + file_path)
+        except Exception as message:
+            logger.error(message)
 
     def is_file_in_widget(self, file):
         return file in self.get_list()
