@@ -152,7 +152,7 @@ class AssetWidget(QWidget):
 
             for icon_path, image_path in preview_images:
                 image_preview_btn = QPushButton()
-                image_preview_btn.clicked.connect(lambda y, x=image_path: os.system(x))
+                image_preview_btn.clicked.connect(lambda y, x=image_path: self.open_image(x))
                 pix = QPixmap(icon_path)
                 pix = pix.scaledToWidth(DROP_MENU_WIDTH - 45, mode=Qt.SmoothTransformation)
                 image_preview_btn.setFixedSize(pix.width(), pix.height())
@@ -165,6 +165,10 @@ class AssetWidget(QWidget):
             self.Controller.ui.status_message("")
         except Exception as message:
             logger.error(message)
+
+    def open_image(self, path):
+        os.system(path)
+        logger.debug(" Image opened" + "\n")
 
     def places_buttons_by_x(self, offset=0.05):
         """
