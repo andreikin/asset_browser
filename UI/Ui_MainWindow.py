@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'D:/work/_pythonProjects/asset_manager/UI/Ui_MainWindow.ui'
+# Form implementation generated from reading ui file 'D:/work/_pythonProjects/asset_brouser/UI/Ui_MainWindow.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.2
 #
@@ -434,6 +434,7 @@ class Ui_MainWindow(object):
         self.galery_frame_.setObjectName("galery_frame_")
         self.galery_frame_verticalLayout = QtWidgets.QVBoxLayout(self.galery_frame_)
         self.galery_frame_verticalLayout.setContentsMargins(0, 10, 0, 0)
+        self.galery_frame_verticalLayout.setSpacing(10)
         self.galery_frame_verticalLayout.setObjectName("galery_frame_verticalLayout")
         self.galery_label = QtWidgets.QLabel(self.galery_frame_)
         self.galery_label.setMaximumSize(QtCore.QSize(16777215, 20))
@@ -471,11 +472,17 @@ class Ui_MainWindow(object):
         self.scen_frame.setObjectName("scen_frame")
         self.scens_framelLayout = QtWidgets.QVBoxLayout(self.scen_frame)
         self.scens_framelLayout.setContentsMargins(0, 20, 0, 2)
+        self.scens_framelLayout.setSpacing(10)
         self.scens_framelLayout.setObjectName("scens_framelLayout")
         self.scen_label = QtWidgets.QLabel(self.scen_frame)
         self.scen_label.setMaximumSize(QtCore.QSize(16777215, 20))
         self.scen_label.setObjectName("scen_label")
         self.scens_framelLayout.addWidget(self.scen_label)
+        self.rename_checkBox = QtWidgets.QCheckBox(self.scen_frame)
+        self.rename_checkBox.setChecked(True)
+        self.rename_checkBox.setTristate(False)
+        self.rename_checkBox.setObjectName("rename_checkBox")
+        self.scens_framelLayout.addWidget(self.rename_checkBox)
         self.galery_subframe_2 = QtWidgets.QFrame(self.scen_frame)
         self.galery_subframe_2.setMinimumSize(QtCore.QSize(0, 24))
         self.galery_subframe_2.setMaximumSize(QtCore.QSize(16777215, 25))
@@ -693,7 +700,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents_2 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 317, 513))
+        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 100, 90))
         self.scrollAreaWidgetContents_2.setObjectName("scrollAreaWidgetContents_2")
         self.gallery_VLayout = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents_2)
         self.gallery_VLayout.setContentsMargins(0, -1, 0, -1)
@@ -790,7 +797,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.drop_stackedWidget.setCurrentIndex(3)
+        self.drop_stackedWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -812,6 +819,7 @@ class Ui_MainWindow(object):
         self.description_label.setText(_translate("MainWindow", "Description:"))
         self.galery_label.setText(_translate("MainWindow", "Galery images:"))
         self.scen_label.setText(_translate("MainWindow", "Scenes:"))
+        self.rename_checkBox.setText(_translate("MainWindow", "Auto rename scenes files"))
         self.erase_button.setText(_translate("MainWindow", "Cancel"))
         self.add_asset_button.setText(_translate("MainWindow", "Create"))
         self.lib_tree_label.setText(_translate("MainWindow", "Library tree"))

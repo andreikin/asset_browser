@@ -551,7 +551,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
              <item>
               <widget class="QStackedWidget" name="drop_stackedWidget">
                <property name="currentIndex">
-                <number>3</number>
+                <number>0</number>
                </property>
                <widget class="QWidget" name="page_1">
                 <layout class="QVBoxLayout" name="verticalLayout_17">
@@ -1028,6 +1028,9 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                         <enum>QFrame::Raised</enum>
                        </property>
                        <layout class="QVBoxLayout" name="galery_frame_verticalLayout">
+                        <property name="spacing">
+                         <number>10</number>
+                        </property>
                         <property name="leftMargin">
                          <number>0</number>
                         </property>
@@ -1145,6 +1148,9 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                         <enum>QFrame::Raised</enum>
                        </property>
                        <layout class="QVBoxLayout" name="scens_framelLayout">
+                        <property name="spacing">
+                         <number>10</number>
+                        </property>
                         <property name="leftMargin">
                          <number>0</number>
                         </property>
@@ -1167,6 +1173,19 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                           </property>
                           <property name="text">
                            <string>Scenes:</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QCheckBox" name="rename_checkBox">
+                          <property name="text">
+                           <string>Auto rename scenes files</string>
+                          </property>
+                          <property name="checked">
+                           <bool>true</bool>
+                          </property>
+                          <property name="tristate">
+                           <bool>false</bool>
                           </property>
                          </widget>
                         </item>
@@ -1822,8 +1841,8 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>317</width>
-                      <height>513</height>
+                      <width>100</width>
+                      <height>90</height>
                      </rect>
                     </property>
                     <layout class="QVBoxLayout" name="gallery_VLayout">

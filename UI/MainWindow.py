@@ -77,7 +77,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
         # insert content widget
         self.content_list = []
         self.file_list_widget = FileListWidget(self.content_list)
-        self.scens_framelLayout.insertWidget(1, self.file_list_widget)
+        self.scens_framelLayout.insertWidget(2, self.file_list_widget)
 
         # connect Ui to functions
         self.search_button.clicked.connect(self.Controller.refresh_ui)
@@ -211,6 +211,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
 
     def discard_edit(self):
         self.asset_menu_mode = "Add"
+        self.status_message("")
         self.clear_form()
 
     def load_settings(self):
