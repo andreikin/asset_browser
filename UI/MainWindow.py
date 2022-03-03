@@ -5,8 +5,8 @@ import sys
 import tempfile
 
 from PyQt5.QtCore import QSettings, QRegExp
-from PyQt5.QtGui import QIcon, QRegExpValidator
-from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QFileDialog, QWidget, QLabel, QSizeGrip
+from PyQt5.QtGui import  QRegExpValidator
+from PyQt5.QtWidgets import QMainWindow
 
 from UI.AssetWidget import AssetWidget
 from UI.CustomTitleBar import CustomTitleBar
@@ -104,17 +104,14 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
         self.font_spinBox.valueChanged.connect(self.set_font_size)
 
         self.maximize = False  # application size state
-
-        # object for save settings
-        self.settings = None
+        self.copy_progress_bar.hide() # hide progress bar
+        self.settings = None # object for save settings
         self.load_settings()
-
         self.decorate_icons_color()
 
         if not self.Controller.connect_db:
             self.status_message("Problems connecting to the database.", state="ERROR")
         logger.debug("Ui loaded successfully.\n")
-
 
     @property
     def asset_menu_mode(self):
@@ -122,10 +119,12 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
 
     @asset_menu_mode.setter
     def asset_menu_mode(self, mode):
+        """
+        Changes the properties of buttons and labels when switching menu modes Create / Edit
+        """
         self.add_asset_button.disconnect()
         self.erase_button.disconnect()
         if mode == "Add":
-            logger.debug("Set add mode")
             self.clear_form()
             self.__asset_menu_mode = "Add"
             self.asset_menu_label.setText("Add Asset")
@@ -164,37 +163,42 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
             logger.error(message)
 
     def update_assets_widgets(self):
+        """
+        Updates rendered assets after searching
+        """
         self.gallery.clear()
         if self.Controller.found_assets:
             for asset in self.Controller.found_assets:
                 asset_widget = AssetWidget(asset, self.Controller, width=COLUMN_WIDTH)
                 self.gallery.add_widget(asset_widget)
-        logger.debug(" executed")
 
     def update_tags_widgets(self):
+        """
+        Updates rendered tags buttons after searching
+        """
         self.tag_widget.clear()
         if self.Controller.found_tags:
             for each_tag in self.Controller.found_tags:
                 tag_widget = TagButton(each_tag, self.Controller)
                 self.tag_widget.add_widget(tag_widget)
-        logger.debug(" executed")
 
     def get_asset_data(self):
-        # get from ui
+        """
+        Reading menu fields when creating/editing asset
+        """
         out_dict = dict()
         out_dict['name'] = self.name_lineEdit.text()
         out_dict['path'] = self.path_lineEdit.text()
 
         if out_dict['name'] and out_dict['path']:
             out_dict['asset_id'] = self.current_asset
-
             out_dict['path'] = convert_path_to_global(out_dict['path']) + "/" + out_dict['name'] + SFX
             out_dict['icon'] = self.image_lineEdit.text()
             out_dict['description'] = self.description_textEdit.toPlainText()
 
             # get a list of tags
             out_dict['tags'] = re.findall(r'[-0-9A-z_]+', self.tag_lineEdit.text())
-            out_dict['tags'] = remove_non_unique_tags(out_dict['tags'])   # make tags uniqueness
+            out_dict['tags'] = remove_non_unique_tags(out_dict['tags'])  # make tags uniqueness
 
             # get a list of scenes paths
             out_dict['scenes'] = self.file_list_widget.get_list()
@@ -210,6 +214,9 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
             return None
 
     def discard_edit(self):
+        """
+        Edit mode cancel button
+        """
         self.asset_menu_mode = "Add"
         self.status_message("")
         self.clear_form()
@@ -232,7 +239,6 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
             self.db_path_lineEdit.setText(self.settings.value("db settings"))
         if self.settings.contains("ui pos"):
             self.move(self.settings.value("ui pos"))
-
         if self.settings.contains("font size"):
             self.font_spinBox.setValue(int(self.settings.value("font size")))
         else:
@@ -253,9 +259,3 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
         logger.debug("Settings saved")
 
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    window = MainWindow()
-
-    window.show()
-    app.exec_()
