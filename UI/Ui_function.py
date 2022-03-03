@@ -1,10 +1,9 @@
 import os
 import tempfile
 
-from PyQt5 import QtCore
-from PyQt5.QtCore import QVariantAnimation, QSettings
+from PyQt5.QtCore import QVariantAnimation, QSettings, Qt
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QFileDialog, QWidget, QSizeGrip
+from PyQt5.QtWidgets import QFileDialog, QWidget, QSizeGrip, qApp
 
 from Utilities.Logging import logger
 from Utilities.Utilities import convert_path_to_local
@@ -15,7 +14,6 @@ class UiFunction(QWidget):
     """
     Functions for customizing the interface, animation, changing icons, etc.
     """
-
     def add_db_path_btn(self):
         lib_path = QFileDialog.getExistingDirectory(self, directory=self.Controller.lib_path)
         lib_path = lib_path.replace("\\", "/")
@@ -172,7 +170,7 @@ class UiFunction(QWidget):
         self.settings.setValue("font size", self.font_spinBox.value())
         headers_list = [self.window_label, self.status_label, self.asset_menu_label, self.lib_tree_label,
                         self.settings_label, self.asset_overview_label, self.tree_widget]
-        for widget in self.Controller.application.allWidgets():
+        for widget in qApp.allWidgets():
             try:
                 size = self.font_spinBox.value()
                 if widget in headers_list:
@@ -190,4 +188,4 @@ class UiFunction(QWidget):
         sizegrip = QSizeGrip(self)
         sizegrip.setStyleSheet("image: url(:/icons/icons//scale.png);")
         sizegrip.setFixedSize(30, 20)
-        self.footer_layout.addWidget(sizegrip, 0, QtCore.Qt.AlignBottom | QtCore.Qt.AlignRight)
+        self.footer_layout.addWidget(sizegrip, 0, Qt.AlignBottom | Qt.AlignRight)
