@@ -14,7 +14,7 @@ from Asset import Asset
 from Models import Models
 from UI.Ui_function import UiFunction
 from Utilities.Logging import logger
-from Utilities.Utilities import get_library_path, convert_path_to_local, set_font_size, create_preview_images
+from Utilities.Utilities import get_library_path, convert_path_to_local, set_font_size, get_preview_images
 from settings import COLUMN_WIDTH, DROP_MENU_WIDTH, DATABASE_NAME
 
 BTN_WIDTH = 30  # The size of the buttons inside the widget
@@ -22,7 +22,9 @@ ICON_SIZE = 22  # The size of the icon in it
 
 
 class AssetWidget(QWidget):
-
+    """
+    Widget that displays each asset from the library in the interface.
+    """
     def __init__(self, db_asset, in_controller, parent=None, width=100):
         QWidget.__init__(self, parent)
         self.db_asset = db_asset  # asset object from database
@@ -104,6 +106,10 @@ class AssetWidget(QWidget):
         self.decorate_icons_color()
 
     def decorate_icons_color(self):
+        """
+        Adds a change in the color of the icons on the buttons when
+        hovering over with the mouse
+        """
         btn_dict = {self.open_button: "folder.svg",
                     self.edit_button: "edit.svg",
                     self.del_button: "x-circle",
@@ -125,10 +131,8 @@ class AssetWidget(QWidget):
                 self.Controller.ui.expand_close_animation("expand")
             self.Controller.ui.asset_overview_label.setText(" View asset " + self.db_asset.name)
 
-            # get asset data from  and  fill forms
-
+            # get asset data
             asset_data = Asset.recognize_asset(self.db_asset.path, self.Controller.Models)
-
 
             # set description and form height
             self.Controller.ui.description_textEdit2.setPlainText(asset_data["description"])
@@ -139,8 +143,7 @@ class AssetWidget(QWidget):
                 lines_num = len(asset_data["description"]) / 35
                 self.Controller.ui.description_textEdit2.setFixedHeight(lines_num * 18 + 20)
 
-            # delete old images
-
+            # clear old images from ui
             for i in range(self.Controller.ui.gallery_VLayout.count()):
                 widget = self.Controller.ui.gallery_VLayout.itemAt(i).widget()
                 if type(widget) == PyQt5.QtWidgets.QPushButton:
@@ -148,7 +151,7 @@ class AssetWidget(QWidget):
 
             # create new images if necessary
             asset_folders = Asset.dir_names(self.db_asset.path)
-            preview_images = create_preview_images(**asset_folders)
+            preview_images = get_preview_images(**asset_folders)
 
             for icon_path, image_path in preview_images:
                 image_preview_btn = QPushButton()
@@ -158,8 +161,8 @@ class AssetWidget(QWidget):
                 image_preview_btn.setFixedSize(pix.width(), pix.height())
                 self.Controller.ui.gallery_VLayout.insertWidget(1, image_preview_btn)
                 image_preview_btn.setStyleSheet("border-radius: 6px;"
-                                               "background-color: #2c313c;"
-                                               "border-image: url(" + icon_path + ") 0 0 0 0;}")
+                                                "background-color: #2c313c;"
+                                                "border-image: url(" + icon_path + ") 0 0 0 0;}")
 
             logger.debug(self.db_asset.name + "\n")
             self.Controller.ui.status_message("")
@@ -167,6 +170,9 @@ class AssetWidget(QWidget):
             logger.error(message)
 
     def open_image(self, path):
+        """
+        Opens a preview of the asset in the default Windows application
+        """
         os.system(path)
         logger.debug(" Image opened" + "\n")
 
@@ -179,7 +185,6 @@ class AssetWidget(QWidget):
         return [widget_centre - BTN_WIDTH - BTN_WIDTH / 2 - dist,
                 widget_centre - BTN_WIDTH / 2,
                 widget_centre + BTN_WIDTH / 2 + dist]
-
 
     def mouseMoveEvent(self, e):
         """
@@ -204,17 +209,26 @@ class AssetWidget(QWidget):
         return super(AssetWidget, self).eventFilter(obj, event)
 
     def inside_event(self):
+        """
+        Executed when the mouse is hovered over the asset
+        """
         for elem in self.hidden_list:
             elem.show()
         self.frame_shadow.setStyleSheet("background-color: rgba(0, 0, 0, 100);"
                                         "border-radius: 12px;")
 
     def outside_event(self):
+        """
+        Executed when the mouse moves out of the bounds of the asset
+        """
         self.frame_shadow.setStyleSheet("background-color: rgba(0, 0, 0, 0);")
         for elem in self.hidden_list:
             elem.hide()
 
     def open_directory(self):
+        """
+        open asset directory
+        """
         subprocess.run(['explorer', os.path.realpath(self.db_asset.path)])
 
     def preparation_for_editing(self):
@@ -241,45 +255,28 @@ class AssetWidget(QWidget):
         logger.debug("fill in the fields for editing")
 
     def delete_asset(self):
-        dialog_message = "Delete asset", "Are you sure \nyou want to delete \nasset?"
-        dialog = QMessageBox(QMessageBox.Critical, *dialog_message, parent=self.Controller.ui,
-                             buttons=QMessageBox.Ok | QMessageBox.Cancel)
-        dialog.setStyleSheet("""background-color: #16191d; color: #fff;""")
-        dialog_result = dialog.exec()
-        if dialog_result == 1024:
-            logger.debug("\n\n__________________Delete asset clicked___________________")
+        """
+        Opens a dialog box, then deletes the database entry and asset folder
+        """
+        try:
+            dialog_message = "Delete asset", "Are you sure \nyou want to delete \nasset?"
+            dialog = QMessageBox(QMessageBox.Critical, *dialog_message, parent=self.Controller.ui,
+                                 buttons=QMessageBox.Ok | QMessageBox.Cancel)
+            dialog.setStyleSheet("""background-color: #16191d; color: #fff;""")
+            dialog_result = dialog.exec()
+            if dialog_result == 1024:
+                logger.debug("\n\n__________________Delete asset clicked___________________")
 
-            process_result = self.Controller.Models.delete_asset(self.db_asset.name)
-            self.Controller.get_from_folder(os.path.dirname(self.db_asset.path)+"/")
+                process_result = self.Controller.Models.delete_asset(self.db_asset.name)
+                self.Controller.get_from_folder(os.path.dirname(self.db_asset.path) + "/")
 
-            if not process_result:
-                self.Controller.ui.status_message("information from the database was not deleted", state="ERROR")
+                if not process_result:
+                    self.Controller.ui.status_message("information from the database was not deleted", state="ERROR")
 
-            if not Asset.delete_asset(self.db_asset.name, self.db_asset.path):
-                self.Controller.ui.status_message("Information was removed only from database. "
-                                                  "The asset folder may be in an undefined location.", state="ERROR")
-            logger.debug(" executed")
+                if not Asset.delete_asset(self.db_asset.name, self.db_asset.path):
+                    self.Controller.ui.status_message("Information was removed only from database. "
+                                                      "The asset folder may be in an undefined location.", state="ERROR")
+                logger.debug(" executed")
+        except Exception as message:
+            logger.error(message)
 
-
-if __name__ == "__main__":
-    import sys
-
-
-    class MyWindow(QWidget):
-        def __init__(self, parent=None):
-            QWidget.__init__(self, parent)
-            self.vbox = QVBoxLayout()
-            self.db_path = get_library_path() + "/" + DATABASE_NAME
-            Models.initialize(self.db_path)
-            db_asset = Models.find_assets_by_tag_list(["orange", ])[0]
-            self.asset = AssetWidget(db_asset, Models)
-
-            self.vbox.addWidget(self.asset)
-            self.setLayout(self.vbox)
-
-
-    app = QApplication(sys.argv)
-    window = MyWindow()
-    window.resize(500, 300)
-    window.show()
-    sys.exit(app.exec_())
