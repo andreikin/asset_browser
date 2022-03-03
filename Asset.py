@@ -3,6 +3,7 @@ import datetime
 import json
 import os
 import shutil
+import tempfile
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
@@ -84,6 +85,9 @@ class Asset:
                 icon = QPixmap(seurce).scaledToWidth(width, mode=Qt.SmoothTransformation)
                 asset_icon_path = self.path + "/" + INFO_FOLDER + "/" + name
                 icon.save(asset_icon_path)
+                # if image from temp folder remove it
+                if tempfile.gettempdir().replace("\\", "/") in seurce:
+                    os.remove(seurce)
                 return asset_icon_path
         except Exception as message:
             logger.error(message)
