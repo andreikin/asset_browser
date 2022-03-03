@@ -11,7 +11,7 @@ class Controller(QMainWindow):
     Class represents a controller implementation.
     Connect the ui with the model
     """
-    def __init__(self, in_model, application, parent=None):
+    def __init__(self, in_model, parent=None):
         super(QMainWindow, self).__init__(parent)
 
         # tags received from the interface
@@ -23,8 +23,6 @@ class Controller(QMainWindow):
 
         # The constructor get model references.
         self.Models = in_model
-
-        self.application = application
 
         # get path to asset library
         self.lib_path = get_library_path()
@@ -67,8 +65,9 @@ class Controller(QMainWindow):
         Getting tags from linEdit and refresh_ui
         """
         self.current_tags = re.findall(r'[0-9A-z_]+', self.ui.search_lineEdit.text())
+        self.current_tags = [x.lower() for x in self.current_tags]
         self.current_tags += [x.capitalize() for x in self.current_tags]
-
+        logger.debug(self.current_tags)
         if self.connect_db:
             self.notify_observers()
             logger.debug(" executed")
@@ -86,8 +85,6 @@ class Controller(QMainWindow):
                 self.found_tags = self.Models.find_tags_by_asset_list(self.found_assets)
 
     def get_from_folder(self, path):
-        logger.debug("\n\n__________________Find asset in folder clicked___________________")
-        logger.debug(path)
         self.found_assets = self.Models.get_all_from_folder(path)
         if self.found_assets:
             self.found_tags = self.Models.find_tags_by_asset_list(self.found_assets)

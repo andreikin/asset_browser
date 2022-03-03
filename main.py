@@ -15,7 +15,7 @@ def main():
     models = Models
 
     # create a controller and pass it a link to the model
-    controller = Controller(models, app)
+    controller = Controller(models)
     controller.ui.show()
 
     app.exec()
