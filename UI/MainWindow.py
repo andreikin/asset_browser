@@ -4,9 +4,9 @@ import re
 import sys
 import tempfile
 
-from PyQt5.QtCore import QSettings, QRegExp
-from PyQt5.QtGui import  QRegExpValidator
-from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtCore import QSettings, QRegExp, Qt
+from PyQt5.QtGui import QRegExpValidator, QCursor
+from PyQt5.QtWidgets import QMainWindow, QMenu, QAction, QApplication
 
 from UI.AssetWidget import AssetWidget
 from UI.CustomTitleBar import CustomTitleBar
@@ -109,10 +109,31 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
         self.load_settings()
         self.decorate_icons_color()
 
+        # add contrext menu
+        self.image_lineEdit.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.image_lineEdit.customContextMenuRequested.connect(self.icon_line_edit_context_menu)
+
         if not self.Controller.connect_db:
             self.status_message("Problems connecting to the database.", state="ERROR")
         logger.debug("Ui loaded successfully.\n")
 
+    def icon_line_edit_context_menu(self):
+        menu = QMenu()
+        menu.setStyleSheet("""background-color: #16191d; color: #fff;""")
+        menu.addAction(QAction("Paste from clipboard", self))
+        action = menu.exec_(QCursor().pos())
+        if action and action.text() == "Paste from clipboard":
+            clipboard = QApplication.clipboard()
+            icon = clipboard.image()
+            if icon:
+                file_path = os.path.join(tempfile.gettempdir(), 'tmp_image.png')
+                result = icon.save(file_path)
+                if result:
+                    file_path = file_path.replace("\\", "/")
+                    self.image_lineEdit.setText(file_path)
+                    self.Controller.ui.status_message("Image added successfully")
+                else:
+                    self.Controller.ui.status_message("Information on the clipboard is not an image", state="ERROR")
     @property
     def asset_menu_mode(self):
         return self.__asset_menu_mode
