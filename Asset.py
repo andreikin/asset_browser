@@ -7,8 +7,9 @@ import shutil
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 
+from Utilities.CopyContent import CopyInThread, ProgBarThread
 from Utilities.Logging import logger
-from Utilities.Utilities import get_library_path, create_preview_images, rename_path_list, rename_scenes
+from Utilities.Utilities import get_library_path, rename_path_list
 from settings import INFO_FOLDER, CONTENT_FOLDER, GALLERY_FOLDER, ICON_WIDTH, DELETED_ASSET_FOLDER, SFX, \
     IMAGE_PREVIEW_SUFFIX
 
@@ -18,7 +19,6 @@ class Asset:
     The class defines an asset as a structure of folders and files.
     Contains methods for creating, modifying, and deleting assets
     """
-
     def __init__(self, in_controller, **kwargs):
         try:
             self.Controller = in_controller
@@ -39,71 +39,84 @@ class Asset:
 
             # if old asset data exist set edit mod
             self.old_asset_data = self.get_old_asset_data() if self.asset_id else None
-
             self.rename_content = self.Controller.ui.rename_checkBox.isChecked()
 
-            logger.debug(json.dumps(self.asset_data()))
+            logger.debug(" executed")
 
         except Exception as message:
             logger.error(message)
 
     def create(self):
-        if not self.Controller.Models.find_asset(name=self.name):
+        """
+        Create asset file structure and write it to the database
+        """
+        try:
+            if not self.Controller.Models.find_asset(name=self.name):
 
-            # mack folders
-            for each_path in [self.path, self.asset_info_folder, self.content_folder, self.gallery_folder]:
-                if not os.path.exists(each_path):
-                    os.makedirs(each_path)
+                # mack folders
+                for each_path in [self.path, self.asset_info_folder, self.content_folder, self.gallery_folder]:
+                    if not os.path.exists(each_path):
+                        os.makedirs(each_path)
 
-            # set asset icon
-            self.icon = self.create_icon("icon.png", self.icon, ICON_WIDTH)
+                # set asset icon
+                self.icon = self.create_icon("icon.png", self.icon, ICON_WIDTH)
 
-            # add to database and record info file
-            self.asset_id = self.Controller.Models.add_asset_to_db(**self.asset_data())
-            self.write_info_file(self.asset_json, self.asset_data())
+                # add to database and record info file
+                self.asset_id = self.Controller.Models.add_asset_to_db(**self.asset_data())
+                self.write_info_file(self.asset_json, self.asset_data())
 
-            self.Controller.get_from_folder(os.path.dirname(self.path)+"/")
-            self.Controller.ui.search_lineEdit.setText("")
-            self.Controller.ui.clear_form()
-            self.Controller.ui.status_message("Asset " + self.name + " created successfully!", )
+                self.refresh_ui_after_edit()
 
-            # copy files
-            self.copy_files()
-
-            logger.debug(" executed")
-        else:
-            logger.error(" path : " + self.path + " exists")
-            self.Controller.ui.status_message("Asset with " + self.name + " name already exists!", state="ERROR")
+                # copy files
+                self.copy_files()
+                logger.debug(" executed")
+            else:
+                self.Controller.ui.status_message("Asset with " + self.name + " name already exists!", state="ERROR")
+        except Exception as message:
+            logger.error(message)
 
     def create_icon(self, name, seurce, width):
-        if seurce:
-            icon = QPixmap(seurce).scaledToWidth(width, mode=Qt.SmoothTransformation)
-            asset_icon_path = self.path + "/" + INFO_FOLDER + "/" + name
-            icon.save(asset_icon_path)
-            return asset_icon_path
+        """
+        Creating the main asset icon
+        """
+        try:
+            if seurce:
+                icon = QPixmap(seurce).scaledToWidth(width, mode=Qt.SmoothTransformation)
+                asset_icon_path = self.path + "/" + INFO_FOLDER + "/" + name
+                icon.save(asset_icon_path)
+                return asset_icon_path
+        except Exception as message:
+            logger.error(message)
 
     def edit(self):
-        if self.name != self.old_asset_data["name"] and  self.Controller.Models.find_asset(name=self.name):
-            logger.error(" path : " + self.path + " exists")
-            self.Controller.ui.status_message("Asset with " + self.name + " name already exists!", state="ERROR")
-        else:
-            self.edit_name()
-            self.edit_path()
-            self.edit_icon()
+        """
+        Edit asset file structure and write it to the database
+        """
+        try:
+            if self.name != self.old_asset_data["name"] and self.Controller.Models.find_asset(name=self.name):
+                logger.error(" path : " + self.path + " exists")
+                self.Controller.ui.status_message("Asset with " + self.name + " name already exists!", state="ERROR")
+            else:
+                self.edit_name()
+                self.edit_path()
+                self.edit_icon()
 
-            self.write_info_file(self.asset_json, self.asset_data())
-            self.Controller.Models.edit_db_asset(**self.asset_data())
+                self.write_info_file(self.asset_json, self.asset_data())
+                self.Controller.Models.edit_db_asset(**self.asset_data())
 
-            self.Controller.get_from_folder(os.path.dirname(self.path)+"/")
-            self.Controller.ui.search_lineEdit.setText("")
-            self.Controller.ui.clear_form()
-            self.Controller.ui.status_message("Asset " + self.name + " edited successfully!", )
+                self.refresh_ui_after_edit(mode=" edited")
 
-            # copy files
-            self.copy_files()
-            logger.debug(" executed")
+                # copy files
+                self.copy_files()
+                logger.debug(" executed")
+        except Exception as message:
+            logger.error(message)
 
     def edit_name(self):
+        """
+        When editing the name of an asset, it changes the name of the folders,
+        the information in the database, and the information file
+        """
         try:
             # rename folders
             new_asset_path = rename_path_list(self.old_asset_data["name"], self.name, [self.old_asset_data["path"]])[0]
@@ -117,7 +130,7 @@ class Asset:
                                                     "path": new_asset_path})
             # edit info
             asset_json = self.dir_names(new_asset_path)["asset_json"]
-            asset_data = self.info_file(asset_json)
+            asset_data = self.get_info_file(asset_json)
             asset_data["name"] = self.name
             self.write_info_file(asset_json, asset_data)
 
@@ -127,6 +140,9 @@ class Asset:
             return None
 
     def edit_path(self):
+        """
+        Move asset to another directory
+        """
         if self.path != self.old_asset_data["path"]:
             try:
                 shutil.move(self.old_asset_data["path"], self.path)
@@ -138,15 +154,21 @@ class Asset:
                 logger.error(message)
 
     def edit_icon(self):
+        """
+        icon update or delete
+        """
         icon_default_path = Asset.dir_names(self.path)["icon"]
         if self.icon != icon_default_path:
-            # delete the old path if there is no new path or if the new path is not equal to the old one
+            # delete the old icon if there is no new path or if the new path is not equal to the old one
             if not self.icon and os.path.exists(icon_default_path):
                 os.remove(icon_default_path)
             if self.icon:
                 self.icon = self.create_icon("icon.png", self.icon, ICON_WIDTH)
 
     def get_old_asset_data(self):
+        """
+        when changing the main attributes of asset, it takes the old data from the database
+        """
         out = dict()
         try:
             out["asset_id"], out["name"], out["path"] = self.Controller.Models.find_asset(id=self.asset_id)
@@ -156,42 +178,72 @@ class Asset:
         return out
 
     def copy_files(self):
+        """
+        Creates a stream for copying files and a stream for the progress bar
+        """
         try:
+            copy_list = self.prepare_files_for_copy()
+            if copy_list:
+                # creating a copy thread
+                copy_data = self.asset_data()
+                copy_data["progress_bar"] = self.Controller.ui.copy_progress_bar
+                self.Controller.ui.copy_thread = CopyInThread(**copy_data)
+
+                # creating a progress bar thread
+                files_size = sum([os.stat(x[0]).st_size for x in copy_list])
+                self.Controller.ui.progress_bar_thread = ProgBarThread(files_size, self.Controller.ui.copy_progress_bar)
+                self.Controller.ui.copy_thread.copy_list = copy_list
+                logger.debug(self.Controller.ui.copy_thread.copy_list)
+
+                self.Controller.ui.copy_thread.start()
+                self.Controller.ui.progress_bar_thread.start()
+                logger.debug(" executed")
+        except Exception as message:
+            logger.error(message)
+
+    def prepare_files_for_copy(self):
+        """
+        Sorts files - leave unchanged, copy or delete. Deletes here
+        """
+        try:
+            copy_list = []
             for source_files, destination_folder in [(self.scenes, self.content_folder),
                                                      (self.gallery, self.gallery_folder)]:
                 destination_files = [destination_folder + "/" + x for x in os.listdir(destination_folder)]
-                # if the file is not in the destination folder, copy it there
+
                 while source_files:
                     curent_file = source_files.pop()
                     if curent_file in destination_files:
                         destination_files.remove(curent_file)  # remove current_file from variable destination_files
                     else:
                         file_name = os.path.basename(curent_file)
-                        shutil.copyfile(curent_file, destination_folder + "/" + file_name)
-
-                # delete the remaining files in the destination folder
-                for curent_file in destination_files:
-                    os.remove(curent_file)
-
-                    # if file has icon - delete it
-                    filepath, file_extension = os.path.splitext(curent_file)
-                    file = os.path.basename(filepath)
-                    icon_path = self.asset_info_folder + "/" + file + IMAGE_PREVIEW_SUFFIX + file_extension
-                    if os.path.exists(icon_path):
-                        os.remove(icon_path)
-
-            asset_folders = Asset.dir_names(self.path)
-            create_preview_images(**asset_folders)
-
-            if self.rename_content:
-                rename_scenes(self.name, self.content_folder)
-
+                        copy_list.append([curent_file, destination_folder + "/" + file_name])
+                self.del_file_and_its_icon(destination_files)
+            return copy_list
         except Exception as message:
             logger.error(message)
 
+    def del_file_and_its_icon(self, files):
+        """
+        Deletes the gallery file and its icon
+        """
+        try:
+            for curent_file in files:
+                os.remove(curent_file)
+                # if file has icon - delete it
+                filepath, file_extension = os.path.splitext(curent_file)
+                file = os.path.basename(filepath)
+                icon_path = self.asset_info_folder + "/" + file + IMAGE_PREVIEW_SUFFIX + file_extension
+                if os.path.exists(icon_path):
+                    os.remove(icon_path)
+        except Exception as message:
+            logger.error(message)
 
     @staticmethod
-    def info_file(json_path):  # if asset_data  create mode else read
+    def get_info_file(json_path):
+        """
+        read info file
+        """
         try:
             with open(json_path, "r") as read_file:
                 asset_data = json.load(read_file)
@@ -201,7 +253,10 @@ class Asset:
             return None
 
     @staticmethod
-    def write_info_file(json_path, asset_data):  # create info file
+    def write_info_file(json_path, asset_data):
+        """
+        create info file
+        """
         try:
             recorded_info = {"name": asset_data["name"],
                              "asset_id": asset_data["asset_id"],
@@ -223,7 +278,7 @@ class Asset:
         """
         try:
             asset_json = Asset.dir_names(path)["asset_json"]
-            asset_data = Asset.info_file(asset_json)
+            asset_data = Asset.get_info_file(asset_json)
             asset_data["path"] = path
 
             asset_data['icon'] = ""
@@ -241,8 +296,21 @@ class Asset:
             logger.error(message)
             return False
 
+    def refresh_ui_after_edit(self, mode=" created"):
+        """
+        Open the folder with the asset in the ui
+        """
+        self.Controller.get_from_folder(os.path.dirname(self.path) + "/")
+        self.Controller.ui.search_lineEdit.setText("")
+        self.Controller.ui.clear_form()
+        self.Controller.ui.status_message("Asset " + self.name + mode + " successfully!", )
+        
     @staticmethod
     def delete_asset(name, path):
+        """
+        When an asset is deleted, the structure is moved to a special
+        folder for deleted assets. Delete time added to folder name
+        """
         try:
             del_folder = get_library_path() + "/" + DELETED_ASSET_FOLDER
             if not os.path.exists(del_folder):
@@ -257,6 +325,9 @@ class Asset:
             return False
 
     def asset_data(self):
+        """
+        Returns the values of the main attributes of an asset
+        """
         asset_data = dict()
         asset_data["name"] = self.name
         asset_data["path"] = self.path
@@ -264,6 +335,7 @@ class Asset:
         asset_data["icon"] = self.icon
         asset_data["tags"] = self.tags
         asset_data["description"] = self.description
+        asset_data["info_folder"] = self.asset_info_folder
         asset_data["content_folder"] = self.content_folder
         asset_data["gallery_folder"] = self.gallery_folder
         asset_data["scenes"] = self.scenes
@@ -273,6 +345,9 @@ class Asset:
 
     @staticmethod
     def dir_names(in_path):
+        """
+        Returns the paths to the main folders of the asset and to the info file
+        """
         try:
             out = dict()
             out["info_folder"] = in_path + "/" + INFO_FOLDER
@@ -284,9 +359,3 @@ class Asset:
         except Exception as message:
             logger.error(message)
             return False
-
-
-if __name__ == '__main__':
-    path = "U:/AssetStorage/library/food/fruit/orange2_ast/info/" + "icon.png"
-
-
