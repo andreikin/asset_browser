@@ -118,6 +118,9 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
         logger.debug("Ui loaded successfully.\n")
 
     def icon_line_edit_context_menu(self):
+        """
+        creates a context menu that allows you to insert an image from a clipboard
+        """
         menu = QMenu()
         menu.setStyleSheet("""background-color: #16191d; color: #fff;""")
         menu.addAction(QAction("Paste from clipboard", self))
