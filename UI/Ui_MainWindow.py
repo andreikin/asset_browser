@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(917, 647)
+        MainWindow.resize(945, 700)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setMinimumSize(QtCore.QSize(0, 40))
         self.centralwidget.setStyleSheet("/*\n"
@@ -34,6 +34,20 @@ class Ui_MainWindow(object):
 "    margin: 0;\n"
 "    color: #fff;\n"
 "}\n"
+"\n"
+"QProgressBar {\n"
+"    background-color: #16191d;\n"
+"    border-radius: 5px;\n"
+"     border-radius: 3px;\n"
+"}\n"
+"\n"
+"QProgressBar::chunk {\n"
+"    background-color: #343b47;\n"
+"    border: 2px solid #1f232a;\n"
+"     border-radius: 5px;\n"
+" \n"
+"}\n"
+"\n"
 "#add_asset_button:hover,  #erase_button:hover{\n"
 "    color:#9bc2ff;\n"
 "}\n"
@@ -306,7 +320,7 @@ class Ui_MainWindow(object):
         self.add_assetscrollArea.setWidgetResizable(True)
         self.add_assetscrollArea.setObjectName("add_assetscrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 317, 463))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 317, 516))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setContentsMargins(0, 0, 6, 0)
@@ -700,7 +714,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents_2 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 100, 90))
+        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 317, 568))
         self.scrollAreaWidgetContents_2.setObjectName("scrollAreaWidgetContents_2")
         self.gallery_VLayout = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents_2)
         self.gallery_VLayout.setContentsMargins(0, -1, 0, -1)
@@ -785,7 +799,7 @@ class Ui_MainWindow(object):
         self.footer_widget.setObjectName("footer_widget")
         self.footer_layout = QtWidgets.QHBoxLayout(self.footer_widget)
         self.footer_layout.setContentsMargins(15, 0, 0, 3)
-        self.footer_layout.setSpacing(0)
+        self.footer_layout.setSpacing(10)
         self.footer_layout.setObjectName("footer_layout")
         self.status_label = QtWidgets.QLabel(self.footer_widget)
         font = QtGui.QFont()
@@ -793,6 +807,15 @@ class Ui_MainWindow(object):
         self.status_label.setFont(font)
         self.status_label.setObjectName("status_label")
         self.footer_layout.addWidget(self.status_label)
+        self.copy_progress_bar = QtWidgets.QProgressBar(self.footer_widget)
+        self.copy_progress_bar.setMaximumSize(QtCore.QSize(16777215, 10))
+        font = QtGui.QFont()
+        font.setPointSize(6)
+        self.copy_progress_bar.setFont(font)
+        self.copy_progress_bar.setProperty("value", 24)
+        self.copy_progress_bar.setTextVisible(False)
+        self.copy_progress_bar.setObjectName("copy_progress_bar")
+        self.footer_layout.addWidget(self.copy_progress_bar)
         self.main_layout.addWidget(self.footer_widget)
         MainWindow.setCentralWidget(self.centralwidget)
 

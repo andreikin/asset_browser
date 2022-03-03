@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>917</width>
-    <height>647</height>
+    <width>945</width>
+    <height>700</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -38,6 +38,20 @@ Text2:#838ea2
 	margin: 0;
 	color: #fff;
 }
+
+QProgressBar {
+    background-color: #16191d;
+    border-radius: 5px;
+ 	border-radius: 3px;
+}
+
+QProgressBar::chunk {
+    background-color: #343b47;
+	border: 2px solid #1f232a;
+     border-radius: 5px;
+ 
+}
+
 #add_asset_button:hover,  #erase_button:hover{
 	color:#9bc2ff;
 }
@@ -632,7 +646,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                       <x>0</x>
                       <y>0</y>
                       <width>317</width>
-                      <height>463</height>
+                      <height>516</height>
                      </rect>
                     </property>
                     <layout class="QVBoxLayout" name="verticalLayout">
@@ -1841,8 +1855,8 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>100</width>
-                      <height>90</height>
+                      <width>317</width>
+                      <height>568</height>
                      </rect>
                     </property>
                     <layout class="QVBoxLayout" name="gallery_VLayout">
@@ -2087,7 +2101,7 @@ p, li { white-space: pre-wrap; }
       </property>
       <layout class="QHBoxLayout" name="footer_layout">
        <property name="spacing">
-        <number>0</number>
+        <number>10</number>
        </property>
        <property name="leftMargin">
         <number>15</number>
@@ -2110,6 +2124,27 @@ p, li { white-space: pre-wrap; }
          </property>
          <property name="text">
           <string>In the database were found 0 items </string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QProgressBar" name="copy_progress_bar">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>10</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>6</pointsize>
+          </font>
+         </property>
+         <property name="value">
+          <number>24</number>
+         </property>
+         <property name="textVisible">
+          <bool>false</bool>
          </property>
         </widget>
        </item>
