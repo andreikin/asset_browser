@@ -1,14 +1,16 @@
 import os
 import re
+import shutil
 import subprocess
 import sys
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QCursor
-from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QMenu, QAction, QInputDialog
+from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QMenu, QAction, QInputDialog, QMessageBox
 
+from Asset import Asset
 from Utilities.Logging import logger
-from Utilities.Utilities import convert_path_to_local
+from Utilities.Utilities import convert_path_to_local, get_library_path
 from settings import DELETED_ASSET_FOLDER
 
 
@@ -23,7 +25,7 @@ class MenuTreeWidget(QTreeWidget):
         if self.Controller.connect_db:
             self.update_ui()
 
-        self.setItemsExpandable(False)
+        self.setItemsExpandable(True)
         self.setRootIsDecorated(False)
         self.setStyleSheet("QTreeView {\n"
                            "border-radius: 10px;}\n"
@@ -78,6 +80,7 @@ class MenuTreeWidget(QTreeWidget):
             self.Controller.ui.status_message("You must enter a directory name")
 
     def double_click_handler(self, item):
+        logger.debug("\n\n__________________Find asset in folder clicked___________________")
         path = item.data(0, 32).replace("\\", "/") + "/"
         self.Controller.ui.search_lineEdit.setText(item.data(0, 0).lower())
         self.Controller.get_from_folder(path)
@@ -88,9 +91,11 @@ class MenuTreeWidget(QTreeWidget):
         menu.addAction(QAction("Open in explorer", self))
         menu.addAction(QAction("Add asset", self))
         menu.addAction(QAction("Rename folder", self))
+        menu.addAction(QAction("Delete folder", self))
         action = menu.exec_(QCursor().pos())
         try:
             path = self.selectedItems()[0].data(0, 32).replace("\\", "/") + "/"
+            name = self.selectedItems()[0].data(0, 0)
             if action:
                 if action.text() == "Open in explorer":
                     subprocess.run(['explorer', os.path.realpath(path)])
@@ -101,12 +106,40 @@ class MenuTreeWidget(QTreeWidget):
                     self.Controller.ui.path_lineEdit.setText(convert_path_to_local(path))
                 if action.text() == "Rename folder":
                     self.rename_path(path)
+                if action.text() == "Delete folder":
+                    self.delete_folder(name, path)
+
+        except Exception as message:
+            logger.error(message)
+
+    def delete_folder(self, name, path):
+        """
+        Deletes all assets inside the folder and then the folder itself
+        """
+        try:
+            dialog_message = "Delete asset", "Are you sure \nyou want to delete \nfolder?"
+            dialog = QMessageBox(QMessageBox.Critical, *dialog_message, parent=self.Controller.ui,
+                                 buttons=QMessageBox.Ok | QMessageBox.Cancel)
+            dialog.setStyleSheet("""background-color: #16191d; color: #fff;""")
+            dialog_result = dialog.exec()
+            logger.debug("\n\n__________________Delete folder clicked___________________")
+            if dialog_result == 1024:
+
+                db_assets = self.Controller.Models.get_all_from_folder(path)
+                if db_assets:
+                    for asset in db_assets:
+                        self.Controller.Models.delete_asset(asset.name)
+                Asset.delete_asset(name, path)
+                self.Controller.ui.gallery.clear()
+                self.update_ui()
 
         except Exception as message:
             logger.error(message)
 
     def rename_path(self, path):
-
+        """
+        Renames the folder and changes all asset paths inside
+        """
         dialog = QInputDialog(self)
         dialog.setLabelText("Rename folder :")
         dialog.setOkButtonText("   Rename  ")
@@ -120,7 +153,7 @@ class MenuTreeWidget(QTreeWidget):
             new_name = dialog.textValue()
             new_path = path[:-len(old_name) - 1] + new_name + "/"
             # edit db
-            path_list = self.Controller.Models.rename_directory(path, new_path, old_name, new_name)
+            self.Controller.Models.rename_directory(path, new_path, old_name, new_name)
             os.rename(path, new_path)
 
             self.selectedItems()[0].setText(0, new_name)
