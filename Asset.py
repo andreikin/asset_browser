@@ -320,9 +320,10 @@ class Asset:
             if not os.path.exists(del_folder):
                 os.mkdir(del_folder)
             time = datetime.datetime.now().strftime("%d-%m-%Y_%H-%M")
+
+            path = shutil.move(path, del_folder)
             os.rename(path, path + "_" + time)
-            shutil.move(path + "_" + time, del_folder)
-            logger.debug("Asset " + name + " deleted successfully")
+            logger.debug(name + " deleted successfully")
             return True
         except Exception as message:
             logger.error(message)
