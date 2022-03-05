@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(945, 700)
+        MainWindow.resize(962, 674)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setMinimumSize(QtCore.QSize(0, 40))
         self.centralwidget.setStyleSheet("/*\n"
@@ -48,7 +48,7 @@ class Ui_MainWindow(object):
 " \n"
 "}\n"
 "\n"
-"#add_asset_button:hover,  #erase_button:hover{\n"
+"#add_asset_button:hover,  #erase_button:hover, #export_basket_button:hover, #erase_basket_button:hover{\n"
 "    color:#9bc2ff;\n"
 "}\n"
 "QLineEdit, QTextEdit, #tree_body, #galery_list_frame, #scens_list_frame  {\n"
@@ -83,7 +83,7 @@ class Ui_MainWindow(object):
 "    border-top-right-radius: 10px;\n"
 "    border-bottom-right-radius: 10px;\n"
 "}\n"
-"#search_lineEdit, #add_asset_heder, #Settingf_frame, #info_frame, #tree_title_frame{\n"
+"#search_lineEdit, #add_asset_heder, #Settingf_frame, #info_frame, #tree_title_frame, #basket_frame{\n"
 "    background-color:#16191d;\n"
 "    border-radius: 10px;\n"
 "}\n"
@@ -320,7 +320,7 @@ class Ui_MainWindow(object):
         self.add_assetscrollArea.setWidgetResizable(True)
         self.add_assetscrollArea.setObjectName("add_assetscrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 317, 516))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 317, 490))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setContentsMargins(0, 0, 6, 0)
@@ -714,7 +714,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents_2 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 317, 568))
+        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 317, 540))
         self.scrollAreaWidgetContents_2.setObjectName("scrollAreaWidgetContents_2")
         self.gallery_VLayout = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents_2)
         self.gallery_VLayout.setContentsMargins(0, -1, 0, -1)
@@ -731,9 +731,60 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidget(self.scrollAreaWidgetContents_2)
         self.verticalLayout_8.addWidget(self.scrollArea)
         self.drop_stackedWidget.addWidget(self.page_4)
-        self.page = QtWidgets.QWidget()
-        self.page.setObjectName("page")
-        self.drop_stackedWidget.addWidget(self.page)
+        self.page_5 = QtWidgets.QWidget()
+        self.page_5.setObjectName("page_5")
+        self.verticalLayout_9 = QtWidgets.QVBoxLayout(self.page_5)
+        self.verticalLayout_9.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_9.setSpacing(0)
+        self.verticalLayout_9.setObjectName("verticalLayout_9")
+        self.basket_frame = QtWidgets.QFrame(self.page_5)
+        self.basket_frame.setMaximumSize(QtCore.QSize(16777215, 40))
+        self.basket_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.basket_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.basket_frame.setObjectName("basket_frame")
+        self.horizontalLayout_19 = QtWidgets.QHBoxLayout(self.basket_frame)
+        self.horizontalLayout_19.setObjectName("horizontalLayout_19")
+        self.basket_label = QtWidgets.QLabel(self.basket_frame)
+        self.basket_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.basket_label.setObjectName("basket_label")
+        self.horizontalLayout_19.addWidget(self.basket_label)
+        self.callaps_btn_e = QtWidgets.QPushButton(self.basket_frame)
+        self.callaps_btn_e.setText("")
+        self.callaps_btn_e.setIcon(icon9)
+        self.callaps_btn_e.setIconSize(QtCore.QSize(24, 24))
+        self.callaps_btn_e.setObjectName("callaps_btn_e")
+        self.horizontalLayout_19.addWidget(self.callaps_btn_e, 0, QtCore.Qt.AlignRight)
+        self.verticalLayout_9.addWidget(self.basket_frame)
+        self.frame = QtWidgets.QFrame(self.page_5)
+        self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame.setObjectName("frame")
+        self.basket_layout = QtWidgets.QVBoxLayout(self.frame)
+        self.basket_layout.setObjectName("basket_layout")
+        self.add_asset_btn_contaner_2 = QtWidgets.QWidget(self.frame)
+        self.add_asset_btn_contaner_2.setMinimumSize(QtCore.QSize(0, 30))
+        self.add_asset_btn_contaner_2.setObjectName("add_asset_btn_contaner_2")
+        self.horizontalLayout_20 = QtWidgets.QHBoxLayout(self.add_asset_btn_contaner_2)
+        self.horizontalLayout_20.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_20.setObjectName("horizontalLayout_20")
+        self.erase_basket_button = QtWidgets.QPushButton(self.add_asset_btn_contaner_2)
+        self.erase_basket_button.setIcon(icon11)
+        self.erase_basket_button.setIconSize(QtCore.QSize(24, 24))
+        self.erase_basket_button.setObjectName("erase_basket_button")
+        self.horizontalLayout_20.addWidget(self.erase_basket_button)
+        self.export_basket_button = QtWidgets.QPushButton(self.add_asset_btn_contaner_2)
+        self.export_basket_button.setMinimumSize(QtCore.QSize(0, 0))
+        icon13 = QtGui.QIcon()
+        icon13.addPixmap(QtGui.QPixmap(":/icons/icons/file.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.export_basket_button.setIcon(icon13)
+        self.export_basket_button.setIconSize(QtCore.QSize(24, 24))
+        self.export_basket_button.setObjectName("export_basket_button")
+        self.horizontalLayout_20.addWidget(self.export_basket_button)
+        self.basket_layout.addWidget(self.add_asset_btn_contaner_2)
+        spacerItem4 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.basket_layout.addItem(spacerItem4)
+        self.verticalLayout_9.addWidget(self.frame)
+        self.drop_stackedWidget.addWidget(self.page_5)
         self.verticalLayout_5.addWidget(self.drop_stackedWidget)
         self.verticalLayout_4.addWidget(self.drop_frame)
         self.horizontalLayout_3.addWidget(self.drop_menu)
@@ -758,9 +809,9 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4.addWidget(self.search_lineEdit)
         self.search_button = QtWidgets.QPushButton(self.serch_frame)
         self.search_button.setText("")
-        icon13 = QtGui.QIcon()
-        icon13.addPixmap(QtGui.QPixmap(":/icons/icons/search.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.search_button.setIcon(icon13)
+        icon14 = QtGui.QIcon()
+        icon14.addPixmap(QtGui.QPixmap(":/icons/icons/search.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.search_button.setIcon(icon14)
         self.search_button.setIconSize(QtCore.QSize(24, 24))
         self.search_button.setObjectName("search_button")
         self.horizontalLayout_4.addWidget(self.search_button)
@@ -820,7 +871,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.drop_stackedWidget.setCurrentIndex(0)
+        self.drop_stackedWidget.setCurrentIndex(4)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -857,6 +908,9 @@ class Ui_MainWindow(object):
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
+        self.basket_label.setText(_translate("MainWindow", "Assets basket"))
+        self.erase_basket_button.setText(_translate("MainWindow", "Cancel"))
+        self.export_basket_button.setText(_translate("MainWindow", "Export assets"))
         self.search_lineEdit.setPlaceholderText(_translate("MainWindow", "Type tag or tags here"))
         self.status_label.setText(_translate("MainWindow", "In the database were found 0 items "))
 import resurses_rc

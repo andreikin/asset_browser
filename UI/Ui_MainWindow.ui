@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>945</width>
-    <height>700</height>
+    <width>962</width>
+    <height>674</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -52,7 +52,7 @@ QProgressBar::chunk {
  
 }
 
-#add_asset_button:hover,  #erase_button:hover{
+#add_asset_button:hover,  #erase_button:hover, #export_basket_button:hover, #erase_basket_button:hover{
 	color:#9bc2ff;
 }
 QLineEdit, QTextEdit, #tree_body, #galery_list_frame, #scens_list_frame  {
@@ -87,7 +87,7 @@ QLineEdit, QTextEdit, #tree_body, #galery_list_frame, #scens_list_frame  {
 	border-top-right-radius: 10px;
 	border-bottom-right-radius: 10px;
 }
-#search_lineEdit, #add_asset_heder, #Settingf_frame, #info_frame, #tree_title_frame{
+#search_lineEdit, #add_asset_heder, #Settingf_frame, #info_frame, #tree_title_frame, #basket_frame{
 	background-color:#16191d;
 	border-radius: 10px;
 }
@@ -565,7 +565,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
              <item>
               <widget class="QStackedWidget" name="drop_stackedWidget">
                <property name="currentIndex">
-                <number>0</number>
+                <number>4</number>
                </property>
                <widget class="QWidget" name="page_1">
                 <layout class="QVBoxLayout" name="verticalLayout_17">
@@ -646,7 +646,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                       <x>0</x>
                       <y>0</y>
                       <width>317</width>
-                      <height>516</height>
+                      <height>490</height>
                      </rect>
                     </property>
                     <layout class="QVBoxLayout" name="verticalLayout">
@@ -1856,7 +1856,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                       <x>0</x>
                       <y>0</y>
                       <width>317</width>
-                      <height>568</height>
+                      <height>540</height>
                      </rect>
                     </property>
                     <layout class="QVBoxLayout" name="gallery_VLayout">
@@ -1911,7 +1911,159 @@ p, li { white-space: pre-wrap; }
                  </item>
                 </layout>
                </widget>
-               <widget class="QWidget" name="page"/>
+               <widget class="QWidget" name="page_5">
+                <layout class="QVBoxLayout" name="verticalLayout_9">
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QFrame" name="basket_frame">
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                   <property name="frameShape">
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_19">
+                    <item>
+                     <widget class="QLabel" name="basket_label">
+                      <property name="text">
+                       <string>Assets basket</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item alignment="Qt::AlignRight">
+                     <widget class="QPushButton" name="callaps_btn_e">
+                      <property name="text">
+                       <string/>
+                      </property>
+                      <property name="icon">
+                       <iconset resource="../resurses.qrc">
+                        <normaloff>:/icons/icons/x-circle.svg</normaloff>:/icons/icons/x-circle.svg</iconset>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>24</width>
+                        <height>24</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="frame">
+                   <property name="frameShape">
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
+                   </property>
+                   <layout class="QVBoxLayout" name="basket_layout">
+                    <item>
+                     <widget class="QWidget" name="add_asset_btn_contaner_2" native="true">
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <layout class="QHBoxLayout" name="horizontalLayout_20">
+                       <property name="leftMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="topMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="rightMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="bottomMargin">
+                        <number>0</number>
+                       </property>
+                       <item>
+                        <widget class="QPushButton" name="erase_basket_button">
+                         <property name="text">
+                          <string>Cancel</string>
+                         </property>
+                         <property name="icon">
+                          <iconset resource="../resurses.qrc">
+                           <normaloff>:/icons/icons/x-square.svg</normaloff>:/icons/icons/x-square.svg</iconset>
+                         </property>
+                         <property name="iconSize">
+                          <size>
+                           <width>24</width>
+                           <height>24</height>
+                          </size>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QPushButton" name="export_basket_button">
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string>Export assets</string>
+                         </property>
+                         <property name="icon">
+                          <iconset resource="../resurses.qrc">
+                           <normaloff>:/icons/icons/file.svg</normaloff>:/icons/icons/file.svg</iconset>
+                         </property>
+                         <property name="iconSize">
+                          <size>
+                           <width>24</width>
+                           <height>24</height>
+                          </size>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="verticalSpacer_5">
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>20</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
               </widget>
              </item>
             </layout>
