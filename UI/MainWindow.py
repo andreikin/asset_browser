@@ -10,7 +10,7 @@ from PyQt5.QtWidgets import QMainWindow, QMenu, QAction, QApplication
 
 from UI.AssetWidget import AssetWidget
 from UI.CustomTitleBar import CustomTitleBar
-from UI.FileListWidget import FileListWidget
+from UI.FileListWidget import FileListWidget, BasketWidget
 from UI.GalleryWidget import GalleryWidget
 from UI.TagButton import TagButton
 from UI.TagsWidget import TagsWidget
@@ -79,6 +79,11 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
         self.file_list_widget = FileListWidget(self.content_list)
         self.scens_framelLayout.insertWidget(2, self.file_list_widget)
 
+        # insert basket widget
+        self.out_asset_list = []
+        self.file_list_widget = BasketWidget(self.out_asset_list)
+        self.basket_layout.insertWidget(0, self.file_list_widget)
+
         # connect Ui to functions
         self.search_button.clicked.connect(self.Controller.refresh_ui)
         self.search_lineEdit.returnPressed.connect(self.Controller.refresh_ui)
@@ -93,6 +98,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
         self.callaps_btn_b.clicked.connect(lambda: self.expand_close_animation("close"))
         self.callaps_btn_c.clicked.connect(lambda: self.expand_close_animation("close"))
         self.callaps_btn_d.clicked.connect(lambda: self.expand_close_animation("close"))
+        self.callaps_btn_e.clicked.connect(lambda: self.expand_close_animation("close"))
         self.path_Button.clicked.connect(self.add_path_btn)
         self.image_Button.clicked.connect(self.add_image_btn)
         self.scens_Button.clicked.connect(self.add_scenes_btn)
