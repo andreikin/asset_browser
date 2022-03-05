@@ -137,6 +137,7 @@ def delete_asset(asset_name):
         for tag in Tag.select().where(Tag.asset_id == asset_obj):
             tag.delete_instance()
         asset_obj.delete_instance()
+        logger.error("Deleted asset " + asset_obj.name)
         return True
     except Exception as message:
         logger.error(message)
