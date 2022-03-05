@@ -37,6 +37,7 @@ class FileListWidget(QListView):
     """
     class creates a list of files with a button to delete each of them
     """
+
     def __init__(self, files_list, parent=None):
         super(FileListWidget, self).__init__(parent=parent)
         self.setDragDropMode(QAbstractItemView.DragDrop)
@@ -127,6 +128,13 @@ class FileListWidget(QListView):
                 event.accept()
             else:
                 event.ignore()
+
+
+class BasketWidget(FileListWidget):
+    def __init__(self, files_list=None, parent=None):
+        super(BasketWidget, self).__init__(files_list, parent=parent)
+        if files_list is None:
+            files_list = []
 
 
 if __name__ == "__main__":
