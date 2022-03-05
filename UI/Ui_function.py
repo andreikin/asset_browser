@@ -68,6 +68,8 @@ class UiFunction(QWidget):
                     self.add_dir_button: "folder-plus.svg",
                     self.tag_widget.left_button: "chevrons-left.svg",
                     self.tag_widget.right_button: "chevrons-right.svg",
+                    self.erase_basket_button: "x-square.svg",
+                    self.export_basket_button: "file.svg",
                     }
         for button in btn_dict:
             self.decorate_icon(button, btn_dict[button])
