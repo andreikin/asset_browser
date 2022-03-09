@@ -7,8 +7,9 @@ import subprocess
 import PyQt5
 from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtCore import Qt, QEvent, QMimeData, QUrl
-from PyQt5.QtGui import QDrag, QPixmap, QIcon
-from PyQt5.QtWidgets import QWidget, QPushButton, QVBoxLayout, QFrame, QApplication, QMessageBox, QLabel
+from PyQt5.QtGui import QDrag, QPixmap, QIcon, QCursor
+from PyQt5.QtWidgets import QWidget, QPushButton, QVBoxLayout, QFrame, QApplication, QMessageBox, QLabel, QMenu, \
+    QAction, QCheckBox
 
 from Asset import Asset
 from Models import Models
@@ -25,6 +26,7 @@ class AssetWidget(QWidget):
     """
     Widget that displays each asset from the library in the interface.
     """
+
     def __init__(self, db_asset, in_controller, parent=None, width=100):
         QWidget.__init__(self, parent)
         self.db_asset = db_asset  # asset object from database
@@ -73,14 +75,21 @@ class AssetWidget(QWidget):
         self.edit_button.setStyleSheet("background-color: #16191d;"
                                        "border-radius: " + str(BTN_WIDTH / 2) + "px;")
 
-        self.del_button = QPushButton("", parent=self.frame_shadow)
-        self.del_button.clicked.connect(self.delete_asset)
-        self.del_button.setGeometry(self.places_buttons_by_x()[2], self.height - 35, BTN_WIDTH, BTN_WIDTH)
-        self.del_button.setIconSize(QtCore.QSize(ICON_SIZE, ICON_SIZE))
-        self.del_button.setStyleSheet("background-color: #16191d;"
-                                      "border-radius: " + str(BTN_WIDTH / 2) + "px;")
+        self.check_box = QPushButton("", parent=self.frame_shadow)
+        self.check_box.setGeometry(self.places_buttons_by_x()[2], self.height - 35, BTN_WIDTH, BTN_WIDTH)
+        self.check_box.setIconSize(QtCore.QSize(ICON_SIZE, ICON_SIZE))
+        self.check_box.setStyleSheet("background-color: #16191d;"
+                                     "padding: 9px;"
+                                     "border-radius: " + str(BTN_WIDTH / 2) + "px;")
 
-        self.hidden_list = [self.ast_label, self.edit_button, self.del_button, self.open_button]
+        self.hidden_list = [self.ast_label, self.edit_button, self.check_box, self.open_button]
+
+        if self.db_asset.path in self.Controller.ui.basket_list_widget.get_list():
+            self.select_asset()
+        else:
+            self.deselect_asset()
+
+        self.check_box.clicked.connect(self.check_box_state_changed)
 
         # if folder not exists
         if not os.path.exists(self.db_asset.path):
@@ -99,11 +108,44 @@ class AssetWidget(QWidget):
             self.hidden_list.pop(0)  # liable not hiding
         self.outside_event()
 
+        # connect Context Menu
+        self.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.customContextMenuRequested.connect(self.right_click_handler)
+
         # set font size
         size = self.Controller.ui.font_spinBox.value()
         set_font_size(self.ast_label, size)
 
         self.decorate_icons_color()
+
+    def check_box_state_changed(self):
+        if self.check_box.state:
+            self.deselect_asset()
+        else:
+            self.select_asset()
+
+    def select_asset(self):
+        UiFunction.decorate_icon(self.check_box, "check-circle.svg")
+        self.check_box.state = True
+        if self.check_box in self.hidden_list:
+            self.hidden_list.remove(self.check_box)
+        self.Controller.ui.basket_list_widget.add_file(self.db_asset.path)
+
+    def deselect_asset(self):
+        UiFunction.decorate_icon(self.check_box, "circle.svg")
+        self.check_box.state = False
+        if self.check_box not in self.hidden_list:
+            self.hidden_list.append(self.check_box)
+        self.Controller.ui.basket_list_widget.remove_file(self.db_asset.path)
+
+    def right_click_handler(self):
+        menu = QMenu()
+        menu.setStyleSheet("""background-color: #16191d; color: #fff; border-radius: 10px;""")
+        menu.addAction(QAction("Delete asset", self))
+        action = menu.exec_(QCursor().pos())
+        if action:
+            if action.text() == "Delete asset":
+                self.delete_asset()
 
     def decorate_icons_color(self):
         """
@@ -111,8 +153,7 @@ class AssetWidget(QWidget):
         hovering over with the mouse
         """
         btn_dict = {self.open_button: "folder.svg",
-                    self.edit_button: "edit.svg",
-                    self.del_button: "x-circle",
+                    self.edit_button: "edit.svg"
                     }
         for button in btn_dict:
             UiFunction.decorate_icon(button, btn_dict[button])
@@ -275,8 +316,8 @@ class AssetWidget(QWidget):
 
                 if not Asset.delete_asset(self.db_asset.name, self.db_asset.path):
                     self.Controller.ui.status_message("Information was removed only from database. "
-                                                      "The asset folder may be in an undefined location.", state="ERROR")
+                                                      "The asset folder may be in an undefined location.",
+                                                      state="ERROR")
                 logger.debug(" executed")
         except Exception as message:
             logger.error(message)
-
