@@ -191,3 +191,7 @@ class UiFunction(QWidget):
         sizegrip.setStyleSheet("image: url(:/icons/icons//scale.png);")
         sizegrip.setFixedSize(30, 20)
         self.footer_layout.addWidget(sizegrip, 0, Qt.AlignBottom | Qt.AlignRight)
+
+    def erase_basket(self):
+        self.basket_list_widget.clear()
+        self.update_assets_widgets()
