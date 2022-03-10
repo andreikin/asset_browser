@@ -71,18 +71,19 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
 
         # insert gallery widget
         self.gallery_list = []
-        self.gallery_list_widget = FileListWidget(self.gallery_list)
+        self.gallery_list_widget = FileListWidget(self.Controller, self.gallery_list)
         self.galery_frame_verticalLayout.insertWidget(1, self.gallery_list_widget)
 
         # insert content widget
         self.content_list = []
-        self.file_list_widget = FileListWidget(self.content_list)
+        self.file_list_widget = FileListWidget(self.Controller, self.content_list)
         self.scens_framelLayout.insertWidget(2, self.file_list_widget)
 
         # insert basket widget
         self.out_asset_list = []
-        self.file_list_widget = BasketWidget(self.out_asset_list)
-        self.basket_layout.insertWidget(0, self.file_list_widget)
+        self.basket_list_widget = BasketWidget(self.Controller, self.out_asset_list)
+        self.basket_list_widget.update_gallery = True
+        self.basket_layout.insertWidget(0, self.basket_list_widget)
 
         # connect Ui to functions
         self.search_button.clicked.connect(self.Controller.refresh_ui)
@@ -108,6 +109,8 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
         self.btn_minimize.clicked.connect(self.showMinimized)
         self.btn_maximize.clicked.connect(self.maximize_restore)
         self.font_spinBox.valueChanged.connect(self.set_font_size)
+        self.erase_basket_button.clicked.connect(self.erase_basket)
+        self.export_basket_button.clicked.connect(self.basket_list_widget.export_assets)
 
         self.maximize = False  # application size state
         self.copy_progress_bar.hide() # hide progress bar

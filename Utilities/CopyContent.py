@@ -39,7 +39,9 @@ class ProgBarThread(QtCore.QThread):
 
 
 class ExportInThread(QtCore.QThread):
-  
+    """
+    Class that copies the list of assets to the selected folder
+    """
     def __init__(self, assets, destination_file, in_controller, parent=None):
         QtCore.QThread.__init__(self, parent)
         self.destination_file = destination_file

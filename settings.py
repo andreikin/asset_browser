@@ -1,4 +1,4 @@
-VERSION = "1.02"
+VERSION = "1.04"
 
 """ ui settings"""
 DROP_MENU_WIDTH = 350
