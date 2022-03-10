@@ -6,6 +6,7 @@ from PyQt5 import QtCore
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtTest import QTest
 
+from Utilities.Utilities import get_size
 
 if __name__ == '__main__':
     from Logging import logger
@@ -18,17 +19,44 @@ class ProgBarThread(QtCore.QThread):
     """
     The thread that controls the progress bar.
     """
+
     def __init__(self, file_size, progress_bar, parent=None):
         QtCore.QThread.__init__(self, parent)
         self.file_size = file_size
         self.progress_bar = progress_bar
         self.speed = 1.3
+        logger.debug(" executed")
 
     def run(self):
-        deley = int(self.file_size / 750000 * self.speed)
-        for i in range(1, 101):
-            self.progress_bar.setValue(i)
-            QTest.qWait(deley)
+        try:
+            deley = int(self.file_size / 750000 * self.speed)
+            for i in range(1, 101):
+                self.progress_bar.setValue(i)
+                QTest.qWait(deley)
+            logger.debug(" executed")
+        except Exception as message:
+            logger.error(message)
+
+
+class ExportInThread(QtCore.QThread):
+  
+    def __init__(self, assets, destination_file, in_controller, parent=None):
+        QtCore.QThread.__init__(self, parent)
+        self.destination_file = destination_file
+        self.Controller = in_controller
+        self.assets = assets
+
+    def run(self):
+        try:
+            self.Controller.ui.copy_progress_bar.show()
+            for asset in self.assets:
+                logger.debug("Copying " + asset)
+                name = os.path.basename(asset)
+                if not os.path.exists(self.destination_file + "/" + name):
+                    shutil.copytree(asset, self.destination_file + "/" + name)
+            self.Controller.ui.copy_progress_bar.hide()
+        except Exception as message:
+            logger.error(message)
 
 
 class CopyInThread(QtCore.QThread):
@@ -98,4 +126,3 @@ class CopyInThread(QtCore.QThread):
                             i += 1
         except Exception as message:
             logger.error(message)
-
