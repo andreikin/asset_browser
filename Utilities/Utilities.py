@@ -97,6 +97,29 @@ def get_preview_images(**kwargs):
     return out
 
 
+def get_size(start_path = '.'):
+    total_size = 0
+    for dirpath, dirnames, filenames in os.walk(start_path):
+        for f in filenames:
+            fp = os.path.join(dirpath, f)
+            # skip if it is symbolic link
+            if not os.path.islink(fp):
+                total_size += os.path.getsize(fp)
+
+    return total_size
+
+
+
+
 if __name__ == '__main__':
     name = "apple"
 
+    asset = "U:\AssetStorage\library\characters\girl04_ast\content\girl04_ast.ztl"
+
+    files_size = get_size(asset)
+
+    print(files_size)
+
+    files_size = os.stat(asset).st_size
+
+    print(files_size)
