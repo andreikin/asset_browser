@@ -1,11 +1,14 @@
 import os
+import shutil
 import sys
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QStandardItemModel, QStandardItem, QIcon
-from PyQt5.QtWidgets import QWidget, QHBoxLayout, QPushButton, QListView, QApplication, QAbstractItemView
+from PyQt5.QtWidgets import QWidget, QHBoxLayout, QPushButton, QListView, QApplication, QAbstractItemView, QFileDialog
 
+from Utilities.CopyContent import ExportInThread, ProgBarThread
 from Utilities.Logging import logger
+from Utilities.Utilities import get_size
 
 
 class DeleteItemButton(QWidget):
@@ -29,6 +32,10 @@ class DeleteItemButton(QWidget):
             self.in_widget.model.removeRow(self.item.row())
             self.in_widget.set_height()
 
+            # only for basket widget deselect function
+            if self.in_widget.update_gallery:
+                self.in_widget.deselect_asset_in_gallery(path)
+
         except Exception as message:
             logger.error(message)
 
@@ -38,7 +45,7 @@ class FileListWidget(QListView):
     class creates a list of files with a button to delete each of them
     """
 
-    def __init__(self, files_list, parent=None):
+    def __init__(self, in_controller, files_list, parent=None):
         super(FileListWidget, self).__init__(parent=parent)
         self.setDragDropMode(QAbstractItemView.DragDrop)
         self.item_height = 22
@@ -49,13 +56,27 @@ class FileListWidget(QListView):
         self.setStyleSheet("QListView {padding: 10px 10px 2px 20px;"
                            "border-radius: 5px;"
                            "background-color:#1f232a;}"
-
                            "QListView:item {"
                            "color:#fff;"
                            "height: " + str(self.item_height) + "px;}")
         if files_list:
             self.add_files_list(files_list)
         self.set_height()
+
+        # for basket widget: if del item --> uncheck asset widget
+        self.update_gallery = False
+        self.Controller = in_controller
+
+    def remove_file(self, file_path):
+        try:
+            for index in range(self.model.rowCount()):
+                item = self.model.item(index)
+                path = item.data(role=Qt.ToolTipRole)
+                if file_path == path:
+                    self.model.removeRow(item.row())
+                    self.set_height()
+        except Exception as message:
+            logger.error(message)
 
     def create_item(self, file_path):
         try:
@@ -131,42 +152,47 @@ class FileListWidget(QListView):
 
 
 class BasketWidget(FileListWidget):
-    def __init__(self, files_list=None, parent=None):
-        super(BasketWidget, self).__init__(files_list, parent=parent)
+    """
+    class creates a list of files with a button to delete each of them
+    """
+    def __init__(self, in_controller, files_list=None, parent=None):
+        super(BasketWidget, self).__init__(in_controller, files_list, parent=parent)
         if files_list is None:
             files_list = []
 
+    def export_assets(self):
+        try:
+            logger.debug("\n__________________Export assets button clicked___________________")
+            path_list = self.get_list()
+            target_folder = QFileDialog.getExistingDirectory(self, directory=self.Controller.lib_path)
+            target_folder = target_folder.replace("\\", "/")
 
-if __name__ == "__main__":
-    f_names2 = [
-        'D:/work/_pythonProjects/asset_manager/images/im_08.PNG',
-        'D:/work/_pythonProjects/asset_manager/images/im_09.PNG',
-        'D:/work/_pythonProjects/asset_manager/main.py',
-        'D:/work/_pythonProjects/asset_manager/test.py']
+            if target_folder and path_list:
+                files_size = sum([get_size(x) for x in path_list])
+                logger.debug(files_size)
+                if files_size:
+                    self.Controller.ui.progress_bar_thread2 = ProgBarThread(files_size, self.Controller.ui.copy_progress_bar)
+                    self.Controller.ui.progress_bar_thread2.start()
 
-    import sys
+                self.Controller.ui.export_thread = ExportInThread(path_list, target_folder, self.Controller)
+                self.Controller.ui.export_thread.start()
 
+            for path in path_list:
+                self.deselect_asset_in_gallery(path)
 
-    class SimpleWindow(QWidget):
-        def __init__(self):
-            super(SimpleWindow, self).__init__()
-            self.setWindowFlags(Qt.WindowStaysOnTopHint)
-            ly = QHBoxLayout()
-            self.setLayout(ly)
+            logger.debug(" executed")
+        except Exception as message:
+            logger.error(message)
 
-            g = FileListWidget(f_names2)
-            ly.addWidget(g)
-            # g.setFixedSize(200, 300)
-
-            bt = QPushButton()
-            ly.addWidget(bt)
-            bt.clicked.connect(lambda: print(g.get_list()))
-
-            self.resize(500, 400)
+    def deselect_asset_in_gallery(self, path):
+        for asset in self.Controller.ui.gallery.vidget_list:
+            if path == asset.db_asset.path:
+                asset.deselect_asset()
+                asset.outside_event()
 
 
-    app = QApplication(sys.argv)
-    window = SimpleWindow()
-    window.show()
-
-    app.exec_()
+if __name__ == '__main__':
+    target_folder = "C:/Users/avbeliaev/Desktop/tmp/assss111_ast"
+    asset = "U:/AssetStorage/library/characters/girl04_ast"
+    files_size = get_size(asset)
+    print(files_size)
