@@ -1,0 +1,52 @@
+<RCC>
+  <qresource prefix="icons">
+    <file>icons/check-circle.svg</file>
+    <file>icons/circle.svg</file>
+    <file>icons/shopping-cart.svg</file>
+    <file>icons/normalise.png</file>
+    <file>icons/tree2.png</file>
+    <file>icons/edit.svg</file>
+    <file>icons/camera-off.svg</file>
+    <file>icons/scale.png</file>
+    <file>icons/image.svg</file>
+    <file>icons/file.svg</file>
+    <file>icons/x-square.svg</file>
+    <file>icons/folder-plus.svg</file>
+    <file>icons/mouse-pointer.svg</file>
+    <file>icons/database.svg</file>
+    <file>icons/tree.png</file>
+    <file>icons/logo.png</file>
+    <file>icons/folder.svg</file>
+    <file>icons/chevrons-left.svg</file>
+    <file>icons/chevrons-right.svg</file>
+    <file>icons/search.svg</file>
+    <file>icons/x-circle.svg</file>
+    <file>icons/settings.svg</file>
+    <file>icons/info.svg</file>
+    <file>icons/minus.svg</file>
+    <file>icons/x.svg</file>
+    <file>icons/square.svg</file>
+    <file>icons/file-plus.svg</file>
+  </qresource>
+  <qresource prefix="icons_blue">
+    <file>icon_blue/circle.svg</file>
+    <file>icon_blue/check-circle.svg</file>
+    <file>icon_blue/file.svg</file>
+    <file>icon_blue/shopping-cart.svg</file>
+    <file>icon_blue/edit.svg</file>
+    <file>icon_blue/chevrons-right.svg</file>
+    <file>icon_blue/chevrons-left.svg</file>
+    <file>icon_blue/folder-plus.svg</file>
+    <file>icon_blue/search.svg</file>
+    <file>icon_blue/tree2.png</file>
+    <file>icon_blue/folder.svg</file>
+    <file>icon_blue/x.svg</file>
+    <file>icon_blue/x-circle.svg</file>
+    <file>icon_blue/x-square.svg</file>
+    <file>icon_blue/minus.svg</file>
+    <file>icon_blue/square.svg</file>
+    <file>icon_blue/image.svg</file>
+    <file>icon_blue/file-plus.svg</file>
+    <file>icon_blue/settings.svg</file>
+  </qresource>
+</RCC>
