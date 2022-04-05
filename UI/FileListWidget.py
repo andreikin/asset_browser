@@ -6,9 +6,9 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QStandardItemModel, QStandardItem, QIcon
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QPushButton, QListView, QApplication, QAbstractItemView, QFileDialog
 
-from Utilities.CopyContent import ExportInThread, ProgBarThread
+from Utilities.CopyContent import CopyInThread
 from Utilities.Logging import logger
-from Utilities.Utilities import get_size
+from settings import CONTENT_FOLDER
 
 
 class DeleteItemButton(QWidget):
@@ -168,13 +168,17 @@ class BasketWidget(FileListWidget):
             target_folder = target_folder.replace("\\", "/")
 
             if target_folder and path_list:
-                files_size = sum([get_size(x) for x in path_list])
-                logger.debug(files_size)
-                if files_size:
-                    self.Controller.ui.progress_bar_thread2 = ProgBarThread(files_size, self.Controller.ui.copy_progress_bar)
-                    self.Controller.ui.progress_bar_thread2.start()
-
-                self.Controller.ui.export_thread = ExportInThread(path_list, target_folder, self.Controller)
+                copy_list = []
+                for path in path_list:
+                    folder = os.path.basename(path)
+                    srs_files = os.listdir(path + "/" + CONTENT_FOLDER)
+                    for file in srs_files:
+                        srs = path + "/" + CONTENT_FOLDER + "/" + file
+                        dst = target_folder + "/" + folder + "/" + file
+                        copy_list.append([srs, dst])
+                copy_data = {"copy_list": copy_list,
+                             "progress_bar": self.Controller.ui.copy_progress_bar}
+                self.Controller.ui.export_thread = CopyInThread(**copy_data)
                 self.Controller.ui.export_thread.start()
 
             for path in path_list:
@@ -194,5 +198,4 @@ class BasketWidget(FileListWidget):
 if __name__ == '__main__':
     target_folder = "C:/Users/avbeliaev/Desktop/tmp/assss111_ast"
     asset = "U:/AssetStorage/library/characters/girl04_ast"
-    files_size = get_size(asset)
-    print(files_size)
+

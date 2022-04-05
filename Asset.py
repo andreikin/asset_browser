@@ -8,7 +8,7 @@ import tempfile
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 
-from Utilities.CopyContent import CopyInThread, ProgBarThread
+from Utilities.CopyContent import CreateAssetThread
 from Utilities.Logging import logger
 from Utilities.Utilities import get_library_path, rename_path_list
 from settings import INFO_FOLDER, CONTENT_FOLDER, GALLERY_FOLDER, ICON_WIDTH, DELETED_ASSET_FOLDER, SFX, \
@@ -191,16 +191,9 @@ class Asset:
                 # creating a copy thread
                 copy_data = self.asset_data()
                 copy_data["progress_bar"] = self.Controller.ui.copy_progress_bar
-                self.Controller.ui.copy_thread = CopyInThread(**copy_data)
-
-                # creating a progress bar thread
-                files_size = sum([os.stat(x[0]).st_size for x in copy_list])
-                self.Controller.ui.progress_bar_thread = ProgBarThread(files_size, self.Controller.ui.copy_progress_bar)
+                self.Controller.ui.copy_thread = CreateAssetThread(**copy_data)
                 self.Controller.ui.copy_thread.copy_list = copy_list
-                logger.debug(self.Controller.ui.copy_thread.copy_list)
-
                 self.Controller.ui.copy_thread.start()
-                self.Controller.ui.progress_bar_thread.start()
                 logger.debug(" executed")
         except Exception as message:
             logger.error(message)

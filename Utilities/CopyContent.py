@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
-
 import os
-import shutil
 from PyQt5 import QtCore
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtTest import QTest
-
-from Utilities.Utilities import get_size
+from Utilities.Utilities import copy_file
 
 if __name__ == '__main__':
     from Logging import logger
@@ -15,56 +11,31 @@ else:
 from settings import IMAGE_PREVIEW_SUFFIX, SFX, DROP_MENU_WIDTH
 
 
-class ProgBarThread(QtCore.QThread):
-    """
-    The thread that controls the progress bar.
-    """
-
-    def __init__(self, file_size, progress_bar, parent=None):
-        QtCore.QThread.__init__(self, parent)
-        self.file_size = file_size
-        self.progress_bar = progress_bar
-        self.speed = 1.3
-        logger.debug(" executed")
-
-    def run(self):
-        try:
-            deley = int(self.file_size / 750000 * self.speed)
-            for i in range(1, 101):
-                self.progress_bar.setValue(i)
-                QTest.qWait(deley)
-            logger.debug(" executed")
-        except Exception as message:
-            logger.error(message)
-
-
-class ExportInThread(QtCore.QThread):
+class CopyInThread(QtCore.QThread):
     """
     Class that copies the list of assets to the selected folder
     """
-    def __init__(self, assets, destination_file, in_controller, parent=None):
+
+    def __init__(self, parent=None, **kwargs):
         QtCore.QThread.__init__(self, parent)
-        self.destination_file = destination_file
-        self.Controller = in_controller
-        self.assets = assets
+        self.copy_list = kwargs.setdefault("copy_list", None)
+        self.progress_bar = kwargs.setdefault("progress_bar", None)
 
     def run(self):
         try:
-            self.Controller.ui.copy_progress_bar.show()
-            for asset in self.assets:
-                logger.debug("Copying " + asset)
-                name = os.path.basename(asset)
-                if not os.path.exists(self.destination_file + "/" + name):
-                    shutil.copytree(asset, self.destination_file + "/" + name)
-            self.Controller.ui.copy_progress_bar.hide()
+            self.progress_bar.show()
+            for source_files, destination_files in self.copy_list:
+                copy_file(source_files, destination_files, progress_bar=self.progress_bar)
+            self.progress_bar.hide()
         except Exception as message:
             logger.error(message)
 
 
-class CopyInThread(QtCore.QThread):
+class CreateAssetThread(QtCore.QThread):
     """
     The thread that manages copying files and creating preview images
     """
+
     def __init__(self, parent=None, **kwargs):
         QtCore.QThread.__init__(self, parent)
         logger.debug(" started")
@@ -84,7 +55,7 @@ class CopyInThread(QtCore.QThread):
         try:
             self.progress_bar.show()
             for source_files, destination_files in self.copy_list:
-                shutil.copyfile(source_files, destination_files)
+                copy_file(source_files, destination_files, progress_bar=self.progress_bar)
             self.create_preview_images()
             self.rename_scenes()
             self.progress_bar.hide()

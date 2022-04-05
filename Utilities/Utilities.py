@@ -1,15 +1,40 @@
 import os
 import tempfile
+from PyQt5 import QtWidgets
 from PyQt5.QtCore import QSettings, Qt
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QApplication
-
-# from Utilities.Logging import logger
 from Utilities.Logging import logger
 from settings import IMAGE_PREVIEW_SUFFIX, DROP_MENU_WIDTH, SFX
 
 
+def copy_file(src, dst, progress_bar=None):
+    """
+    copies file by parts with changing the progress bar
+    """
+    try:
+        path_name = os.path.dirname(dst)
+        if not os.path.exists(path_name):
+            os.makedirs(path_name)
+
+        with open(src, 'rb') as src_file, open(dst, 'wb') as dst_file:
+            buffer = os.stat(src).st_size // 100
+            percent = 0
+            while True:
+                buf = src_file.read(buffer)
+                bytes_written = dst_file.write(buf)
+                percent += 1
+                if progress_bar and percent <= 100:
+                    progress_bar.setValue(percent)
+                    #QtWidgets.qApp.processEvents()
+                if bytes_written < len(buf) or bytes_written == 0:
+                    break
+    except Exception as message:
+        print(message)
+
 def get_library_path():
+    """
+    return library path
+    """
     file_path = os.path.join(tempfile.gettempdir(), 'asset_manager_settings.ini')
     settings = QSettings(file_path, QSettings.IniFormat)
     if not settings.contains("db settings") or settings.value("db settings") == "":
@@ -97,29 +122,5 @@ def get_preview_images(**kwargs):
     return out
 
 
-def get_size(start_path = '.'):
-    total_size = 0
-    for dirpath, dirnames, filenames in os.walk(start_path):
-        for f in filenames:
-            fp = os.path.join(dirpath, f)
-            # skip if it is symbolic link
-            if not os.path.islink(fp):
-                total_size += os.path.getsize(fp)
-
-    return total_size
-
-
-
-
 if __name__ == '__main__':
-    name = "apple"
-
-    asset = "U:\AssetStorage\library\characters\girl04_ast\content\girl04_ast.ztl"
-
-    files_size = get_size(asset)
-
-    print(files_size)
-
-    files_size = os.stat(asset).st_size
-
-    print(files_size)
+    pass
