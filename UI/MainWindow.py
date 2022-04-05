@@ -19,7 +19,7 @@ from UI.Ui_MainWindow import Ui_MainWindow
 from UI.Ui_function import UiFunction
 from Utilities.Logging import logger
 from Utilities.Utilities import convert_path_to_global, remove_non_unique_tags
-from settings import COLUMN_WIDTH, SPACING, START_WINDOW_SIZE, SFX, FONT_SIZE, VERSION
+from settings import COLUMN_WIDTH, SPACING, START_WINDOW_SIZE, SFX, FONT_SIZE, VERSION, ICON_FORMATS_PATTERN
 
 
 class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
@@ -113,8 +113,8 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
         self.export_basket_button.clicked.connect(self.basket_list_widget.export_assets)
 
         self.maximize = False  # application size state
-        self.copy_progress_bar.hide() # hide progress bar
-        self.settings = None # object for save settings
+        self.copy_progress_bar.hide()  # hide progress bar
+        self.settings = None  # object for save settings
         self.load_settings()
         self.decorate_icons_color()
 
@@ -146,6 +146,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
                     self.Controller.ui.status_message("Image added successfully")
                 else:
                     self.Controller.ui.status_message("Information on the clipboard is not an image", state="ERROR")
+
     @property
     def asset_menu_mode(self):
         return self.__asset_menu_mode
@@ -226,7 +227,10 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
         if out_dict['name'] and out_dict['path']:
             out_dict['asset_id'] = self.current_asset
             out_dict['path'] = convert_path_to_global(out_dict['path']) + "/" + out_dict['name'] + SFX
-            out_dict['icon'] = self.image_lineEdit.text()
+
+            icon = self.image_lineEdit.text()
+            out_dict['icon'] = icon if re.search(ICON_FORMATS_PATTERN, icon) else ""
+
             out_dict['description'] = self.description_textEdit.toPlainText()
 
             # get a list of tags
@@ -236,8 +240,8 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
             # get a list of scenes paths
             out_dict['scenes'] = self.file_list_widget.get_list()
 
-            # get a list of gallery paths
-            out_dict['gallery'] = self.gallery_list_widget.get_list()
+            # get a list of gallery paths and verify it
+            out_dict['gallery'] = [x for x in self.gallery_list_widget.get_list() if re.search(ICON_FORMATS_PATTERN, x)]
 
             logger.debug(json.dumps(out_dict))
             return out_dict
@@ -290,5 +294,3 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar):
         self.settings.setValue("ui pos", self.pos())
         self.settings.setValue("font size", self.font_spinBox.value())
         logger.debug("Settings saved")
-
-

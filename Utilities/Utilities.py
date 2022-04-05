@@ -1,10 +1,11 @@
 import os
+import re
 import tempfile
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import QSettings, Qt
 from PyQt5.QtGui import QPixmap
 from Utilities.Logging import logger
-from settings import IMAGE_PREVIEW_SUFFIX, DROP_MENU_WIDTH, SFX
+from settings import IMAGE_PREVIEW_SUFFIX, DROP_MENU_WIDTH, SFX, ICON_FORMATS_PATTERN
 
 
 def copy_file(src, dst, progress_bar=None):
@@ -104,8 +105,8 @@ def get_preview_images(**kwargs):
     out = []
     try:
         if os.path.exists(gallery_path):
-            # get gallery content
-            gallery_content = os.listdir(gallery_path)
+            # get gallery content and verify it
+            gallery_content = [x for x in os.listdir(gallery_path) if re.search(ICON_FORMATS_PATTERN, x)]
             for file in gallery_content:
                 filename, file_extension = os.path.splitext(file)
                 icon_path = info_folder + "/" + filename + IMAGE_PREVIEW_SUFFIX + file_extension
