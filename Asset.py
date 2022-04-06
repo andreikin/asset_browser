@@ -188,13 +188,18 @@ class Asset:
         try:
             copy_list = self.prepare_files_for_copy()
             if copy_list:
+                for source_files, destination_files in copy_list:
+                    func = self.Controller.ui.copy_function.copy(source_files, destination_files)
+                    self.Controller.ui.add_task(func)
+
+
                 # creating a copy thread
-                copy_data = self.asset_data()
-                copy_data["progress_bar"] = self.Controller.ui.copy_progress_bar
-                self.Controller.ui.copy_thread = CreateAssetThread(**copy_data)
-                self.Controller.ui.copy_thread.copy_list = copy_list
-                self.Controller.ui.copy_thread.start()
-                logger.debug(" executed")
+                # copy_data = self.asset_data()
+                # copy_data["progress_bar"] = self.Controller.ui.copy_progress_bar
+                # self.Controller.ui.copy_thread = CreateAssetThread(**copy_data)
+                # self.Controller.ui.copy_thread.copy_list = copy_list
+                # self.Controller.ui.copy_thread.start()
+                # logger.debug(" executed")
         except Exception as message:
             logger.error(message)
 
