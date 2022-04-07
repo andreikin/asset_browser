@@ -5,8 +5,6 @@ import sys
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QStandardItemModel, QStandardItem, QIcon
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QPushButton, QListView, QApplication, QAbstractItemView, QFileDialog
-
-from Utilities.CopyContent import CopyInThread
 from Utilities.Logging import logger
 from settings import CONTENT_FOLDER
 
@@ -176,10 +174,11 @@ class BasketWidget(FileListWidget):
                         srs = path + "/" + CONTENT_FOLDER + "/" + file
                         dst = target_folder + "/" + folder + "/" + file
                         copy_list.append([srs, dst])
-                copy_data = {"copy_list": copy_list,
-                             "progress_bar": self.Controller.ui.copy_progress_bar}
-                self.Controller.ui.export_thread = CopyInThread(**copy_data)
-                self.Controller.ui.export_thread.start()
+                self.Controller.ui.copy_progress_bar.show()
+                for source_files, destination_files in copy_list:
+                    func = self.Controller.ui.copy_function.copy(source_files, destination_files)
+                    self.Controller.ui.add_task(func)
+                self.Controller.ui.copy_progress_bar.hide()
 
             for path in path_list:
                 self.deselect_asset_in_gallery(path)

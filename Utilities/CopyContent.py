@@ -2,7 +2,6 @@
 import os
 from PyQt5 import QtCore
 from PyQt5.QtGui import QPixmap
-from Utilities.Utilities import copy_file
 
 if __name__ == '__main__':
     from Logging import logger

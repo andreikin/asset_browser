@@ -38,6 +38,9 @@ class BaseThread(QtCore.QThread):
 
 
 class ThreadQueue:
+    """
+    Creates a separate thread with a queue in which functions are dropped
+    """
     def __init__(self):
         self.queue = queue.Queue()  # Create a queue
         self.threads = []
@@ -56,7 +59,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
 
     UiFunction - functions for customizing the interface, animation, changing icons, etc.
     CustomTitleBar - remove TitleBar, setup user ones
-
+    ThreadQueue - Creates a separate thread with a queue in which functions are dropped
     """
     def __init__(self, in_controller, parent=None):
         super(QMainWindow, self).__init__(parent)
@@ -139,7 +142,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
         self.export_basket_button.clicked.connect(self.basket_list_widget.export_assets)
 
         self.maximize = False  # application size state
-        #self.copy_progress_bar.hide()  # hide progress bar
+        self.copy_progress_bar.hide()  # hide progress bar
         self.settings = None  # object for save settings
         self.load_settings()
         self.decorate_icons_color()

@@ -1,4 +1,4 @@
-VERSION = "1.04"
+VERSION = "1.05"
 
 """ ui settings"""
 DROP_MENU_WIDTH = 350
@@ -20,4 +20,4 @@ DELETED_ASSET_FOLDER = "deleted_assets"
 """over"""
 ICON_FORMATS_PATTERN = ".PNG$|.png$|.jpg$|.JPG$"
 IMAGE_PREVIEW_SUFFIX = "_light"
-LOGGING_TO_fILE = False
+LOGGING_TO_fILE = True

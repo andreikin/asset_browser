@@ -7,34 +7,9 @@ from PyQt5.QtGui import QPixmap
 from Utilities.Logging import logger
 from settings import IMAGE_PREVIEW_SUFFIX, DROP_MENU_WIDTH, SFX, ICON_FORMATS_PATTERN
 
-def copy_file(src, dst, progress_bar=None):
-    """
-    copies file by parts with changing the progress bar
-    """
-    try:
-        path_name = os.path.dirname(dst)
-        if not os.path.exists(path_name):
-            os.makedirs(path_name)
-
-        with open(src, 'rb') as src_file, open(dst, 'wb') as dst_file:
-            buffer = os.stat(src).st_size // 100
-            percent = 0
-            while True:
-                buf = src_file.read(buffer)
-                bytes_written = dst_file.write(buf)
-                percent += 1
-                if progress_bar and percent <= 100:
-                    progress_bar.setValue(percent)
-                    #QtWidgets.qApp.processEvents()
-                if bytes_written < len(buf) or bytes_written == 0:
-                    break
-    except Exception as message:
-        print(message)
-
 
 class CopyWithProgress(QObject):
     progress_bar_signal = QtCore.pyqtSignal(int)
-
     def copy(self, src, dst):
         try:
             path_name = os.path.dirname(dst)
@@ -42,12 +17,12 @@ class CopyWithProgress(QObject):
                 os.makedirs(path_name)
 
             with open(src, 'rb') as src_file, open(dst, 'wb') as dst_file:
-                buffer = os.stat(src).st_size // 25
+                buffer = os.stat(src).st_size // 100
                 percent = 0
                 while True:
                     buf = src_file.read(buffer)
                     bytes_written = dst_file.write(buf)
-                    percent += 4
+                    percent += 1
                     self.progress_bar_signal.emit(percent)
                     QtWidgets.qApp.processEvents()
                     if bytes_written < len(buf) or bytes_written == 0:

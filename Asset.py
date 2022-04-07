@@ -5,14 +5,14 @@ import os
 import shutil
 import tempfile
 
+from PyQt5 import QtCore
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 
-from Utilities.CopyContent import CreateAssetThread
 from Utilities.Logging import logger
 from Utilities.Utilities import get_library_path, rename_path_list
 from settings import INFO_FOLDER, CONTENT_FOLDER, GALLERY_FOLDER, ICON_WIDTH, DELETED_ASSET_FOLDER, SFX, \
-    IMAGE_PREVIEW_SUFFIX
+    IMAGE_PREVIEW_SUFFIX, DROP_MENU_WIDTH
 
 
 class Asset:
@@ -24,9 +24,9 @@ class Asset:
         try:
             self.Controller = in_controller
 
+            self.asset_id = kwargs.setdefault("asset_id", None)
             self.name = kwargs["name"]
             self.path = kwargs["path"]
-            self.asset_id = kwargs.setdefault("asset_id", None)
             self.tags = kwargs.setdefault("tags", None)
             self.icon = kwargs.setdefault("icon", None)
             self.scenes = kwargs.setdefault("scenes", None)
@@ -41,7 +41,6 @@ class Asset:
             # if old asset data exist set edit mod
             self.old_asset_data = self.get_old_asset_data() if self.asset_id else None
             self.rename_content = self.Controller.ui.rename_checkBox.isChecked()
-
             logger.debug(" executed")
 
         except Exception as message:
@@ -70,25 +69,12 @@ class Asset:
 
                 # copy files
                 self.copy_files()
+
+                # # edit content names
+                self.rename_scenes()
                 logger.debug(" executed")
             else:
                 self.Controller.ui.status_message("Asset with " + self.name + " name already exists!", state="ERROR")
-        except Exception as message:
-            logger.error(message)
-
-    def create_icon(self, name, seurce, width):
-        """
-        Creating the main asset icon
-        """
-        try:
-            if seurce:
-                icon = QPixmap(seurce).scaledToWidth(width, mode=Qt.SmoothTransformation)
-                asset_icon_path = self.path + "/" + INFO_FOLDER + "/" + name
-                icon.save(asset_icon_path)
-                # if image from temp folder remove it
-                if tempfile.gettempdir().replace("\\", "/") in seurce:
-                    os.remove(seurce)
-                return asset_icon_path
         except Exception as message:
             logger.error(message)
 
@@ -112,7 +98,27 @@ class Asset:
 
                 # copy files
                 self.copy_files()
+
+                # # edit content names
+                self.rename_scenes()
+
                 logger.debug(" executed")
+        except Exception as message:
+            logger.error(message)
+
+    def create_icon(self, name, seurce, width):
+        """
+        Creating the main asset icon
+        """
+        try:
+            if seurce:
+                icon = QPixmap(seurce).scaledToWidth(width, mode=Qt.SmoothTransformation)
+                asset_icon_path = self.path + "/" + INFO_FOLDER + "/" + name
+                icon.save(asset_icon_path)
+                # if image from temp folder remove it
+                if tempfile.gettempdir().replace("\\", "/") in seurce:
+                    os.remove(seurce)
+                return asset_icon_path
         except Exception as message:
             logger.error(message)
 
@@ -188,18 +194,13 @@ class Asset:
         try:
             copy_list = self.prepare_files_for_copy()
             if copy_list:
+                self.Controller.ui.copy_progress_bar.show()
                 for source_files, destination_files in copy_list:
                     func = self.Controller.ui.copy_function.copy(source_files, destination_files)
                     self.Controller.ui.add_task(func)
-
-
-                # creating a copy thread
-                # copy_data = self.asset_data()
-                # copy_data["progress_bar"] = self.Controller.ui.copy_progress_bar
-                # self.Controller.ui.copy_thread = CreateAssetThread(**copy_data)
-                # self.Controller.ui.copy_thread.copy_list = copy_list
-                # self.Controller.ui.copy_thread.start()
-                # logger.debug(" executed")
+                self.Controller.ui.add_task(self.create_preview_images)
+                self.Controller.ui.copy_progress_bar.hide()
+                logger.debug(" executed")
         except Exception as message:
             logger.error(message)
 
@@ -212,7 +213,6 @@ class Asset:
             for source_files, destination_folder in [(self.scenes, self.content_folder),
                                                      (self.gallery, self.gallery_folder)]:
                 destination_files = [destination_folder + "/" + x for x in os.listdir(destination_folder)]
-
                 while source_files:
                     curent_file = source_files.pop()
                     if curent_file in destination_files:
@@ -362,3 +362,41 @@ class Asset:
         except Exception as message:
             logger.error(message)
             return False
+
+    def create_preview_images(self):
+        try:
+            if os.path.exists(self.gallery_folder):
+                # get gallery content
+                gallery_content = os.listdir(self.gallery_folder)
+                for file in gallery_content:
+                    filename, file_extension = os.path.splitext(file)
+                    icon_path = self.asset_info_folder + "/" + filename + IMAGE_PREVIEW_SUFFIX + file_extension
+                    image_path = self.gallery_folder + "/" + filename + file_extension
+                    if not os.path.exists(icon_path):
+                        image_light = QPixmap(self.gallery_folder + "/" + file)
+                        image_light = image_light.scaledToWidth(DROP_MENU_WIDTH - 45,
+                                                                mode=QtCore.Qt.SmoothTransformation)
+                        image_light.save(icon_path)
+        except Exception as message:
+            logger.error(message)
+
+    def rename_scenes(self):
+        try:
+            if self.rename_content:
+                scenes_list = os.listdir(self.content_folder)
+                numbers = {os.path.splitext(x)[-1]: 0 for x in scenes_list}
+                name = self.name + SFX
+                self.content_folder += "/"
+                for ext in numbers:
+                    files = [x for x in scenes_list if ext == os.path.splitext(x)[-1]]
+                    if len(files) == 1:
+                        os.rename(self.content_folder + files[0], self.content_folder + name + ext)
+                    else:
+                        i = 1
+                        for file in files:
+                            num = '_v{0:02d}'.format(i)
+                            os.rename(self.content_folder + file, self.content_folder + name + num + ext)
+                            i += 1
+            logger.debug(" executed")
+        except Exception as message:
+            logger.error(message)
