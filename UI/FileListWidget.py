@@ -185,10 +185,10 @@ class BasketWidget(FileListWidget):
             logger.error(message)
 
     def export_files(self, copy_list):
-        self.Controller.ui.copy_progress_bar.show()
+        self.Controller.ui.copy_progress_bar.hide()
         for source_files, destination_files in copy_list:
             self.Controller.ui.copy_function.copy(source_files, destination_files)
-            self.Controller.ui.copy_progress_bar.hide()
+        self.Controller.ui.copy_progress_bar.hide()
 
     def deselect_asset_in_gallery(self, path):
         for asset in self.Controller.ui.gallery.vidget_list:
