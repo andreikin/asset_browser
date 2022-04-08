@@ -56,6 +56,7 @@ class AssetWidget(QWidget):
         self.frame_shadow.installEventFilter(self)
 
         self.ast_label = QLabel(self.db_asset.name, parent=self.frame_shadow)
+        self.ast_label.setToolTip(self.db_asset.name)
         self.ast_label.setGeometry(10, 10, self.width - 20, 22)
         self.ast_label.setStyleSheet("background-color: #16191d;"
                                      "border-radius: 10px;"
