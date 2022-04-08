@@ -64,8 +64,9 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
     def __init__(self, in_controller, parent=None):
         super(QMainWindow, self).__init__(parent)
 
-        # set custom titleBar
+        # set custom titleBar and thread
         CustomTitleBar.__init__(self)
+        ThreadQueue.__init__(self)
 
         # there are two states of the assets menu
         self.__asset_menu_mode = "Add"
@@ -153,7 +154,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
         
         self.copy_function = CopyWithProgress()
         self.copy_function.progress_bar_signal.connect(self.progress_bar_slot)
-        self.thread.start() 
+        self.thread.start()
 
         if not self.Controller.connect_db:
             self.status_message("Problems connecting to the database.", state="ERROR")

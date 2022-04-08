@@ -1,3 +1,4 @@
+import datetime
 import os
 import re
 import tempfile
@@ -10,6 +11,7 @@ from settings import IMAGE_PREVIEW_SUFFIX, DROP_MENU_WIDTH, SFX, ICON_FORMATS_PA
 
 class CopyWithProgress(QObject):
     progress_bar_signal = QtCore.pyqtSignal(int)
+
     def copy(self, src, dst):
         try:
             path_name = os.path.dirname(dst)
@@ -24,7 +26,7 @@ class CopyWithProgress(QObject):
                     bytes_written = dst_file.write(buf)
                     percent += 1
                     self.progress_bar_signal.emit(percent)
-                    QtWidgets.qApp.processEvents()
+                    #QtWidgets.qApp.processEvents()
                     if bytes_written < len(buf) or bytes_written == 0:
                         break
         except Exception as message:

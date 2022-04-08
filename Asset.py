@@ -65,13 +65,13 @@ class Asset:
                 self.asset_id = self.Controller.Models.add_asset_to_db(**self.asset_data())
                 self.write_info_file(self.asset_json, self.asset_data())
 
-                self.refresh_ui_after_edit()
-
                 # copy files
-                self.copy_files()
+                self.Controller.ui.add_task(self.copy_files)
 
                 # # edit content names
                 self.rename_scenes()
+
+                self.refresh_ui_after_edit()
                 logger.debug(" executed")
             else:
                 self.Controller.ui.status_message("Asset with " + self.name + " name already exists!", state="ERROR")
@@ -94,14 +94,13 @@ class Asset:
                 self.write_info_file(self.asset_json, self.asset_data())
                 self.Controller.Models.edit_db_asset(**self.asset_data())
 
-                self.refresh_ui_after_edit(mode=" edited")
-
                 # copy files
-                self.copy_files()
+                self.Controller.ui.add_task(self.copy_files)
 
                 # # edit content names
                 self.rename_scenes()
 
+                self.refresh_ui_after_edit(mode=" edited")
                 logger.debug(" executed")
         except Exception as message:
             logger.error(message)
@@ -196,9 +195,8 @@ class Asset:
             if copy_list:
                 self.Controller.ui.copy_progress_bar.show()
                 for source_files, destination_files in copy_list:
-                    func = self.Controller.ui.copy_function.copy(source_files, destination_files)
-                    self.Controller.ui.add_task(func)
-                self.Controller.ui.add_task(self.create_preview_images)
+                    self.Controller.ui.copy_function.copy(source_files, destination_files)
+                self.create_preview_images()
                 self.Controller.ui.copy_progress_bar.hide()
                 logger.debug(" executed")
         except Exception as message:
