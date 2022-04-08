@@ -185,7 +185,7 @@ class BasketWidget(FileListWidget):
             logger.error(message)
 
     def export_files(self, copy_list):
-        self.Controller.ui.copy_progress_bar.hide()
+        self.Controller.ui.copy_progress_bar.show()
         for source_files, destination_files in copy_list:
             self.Controller.ui.copy_function.copy(source_files, destination_files)
         self.Controller.ui.copy_progress_bar.hide()
