@@ -381,27 +381,28 @@ class Asset:
 
     def rename_scenes(self):
         try:
-            if self.content_folder[-1] != '/':
-                self.content_folder = self.content_folder + '/'
+            if self.rename_content:
+                if self.content_folder[-1] != '/':
+                    self.content_folder = self.content_folder + '/'
 
-            scenes_list = os.listdir(self.content_folder)
-            type_dict = {}
-            for i in scenes_list:
-                file, ext = i.split('.')
-                if ext.lower() in type_dict:
-                    type_dict[ext.lower()].append(file)
-                else:
-                    type_dict[ext.lower()] = [file]
+                scenes_list = os.listdir(self.content_folder)
+                type_dict = {}
+                for i in scenes_list:
+                    file, ext = i.split('.')
+                    if ext.lower() in type_dict:
+                        type_dict[ext.lower()].append(file)
+                    else:
+                        type_dict[ext.lower()] = [file]
 
-            for key in type_dict.keys():
-                n = len(type_dict[key])
-                if n == 1:
-                    os.rename(self.content_folder + type_dict[key][0] + '.' + key,
-                              self.content_folder + self.name + '.' + key)
-                else:
-                    for i in range(1, len(type_dict[key]) + 1):
-                        os.rename(self.content_folder + type_dict[key][i - 1] + '.' + key,
-                                  self.content_folder + self.name + '_{0:02d}.'.format(i) + key)
-            logger.debug(" executed")
+                for key in type_dict.keys():
+                    n = len(type_dict[key])
+                    if n == 1:
+                        os.rename(self.content_folder + type_dict[key][0] + '.' + key,
+                                  self.content_folder + self.name + '.' + key)
+                    else:
+                        for i in range(1, len(type_dict[key]) + 1):
+                            os.rename(self.content_folder + type_dict[key][i - 1] + '.' + key,
+                                      self.content_folder + self.name + '_{0:02d}.'.format(i) + key)
+                logger.debug(" executed")
         except Exception as message:
             logger.error(message)
