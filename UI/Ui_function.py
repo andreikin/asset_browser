@@ -14,6 +14,7 @@ class UiFunction(QWidget):
     """
     Functions for customizing the interface, animation, changing icons, etc.
     """
+
     def add_db_path_btn(self):
         lib_path = QFileDialog.getExistingDirectory(self, directory=self.Controller.lib_path)
         lib_path = lib_path.replace("\\", "/")
@@ -41,7 +42,8 @@ class UiFunction(QWidget):
         self.drop_stackedWidget.setCurrentIndex(page)
 
     def decorate_buttons_background(self, page, color="#343b47"):
-        buttons = {0: self.expand_button, 1: self.tree_button, 3: self.gallery_button, 2: self.settings_button, 4: self.cart_button}
+        buttons = {0: self.expand_button, 1: self.tree_button, 3: self.gallery_button, 2: self.settings_button,
+                   4: self.cart_button}
         for i in [0, 1, 3, 2, 4]:
             buttons[i].setStyleSheet("background-color: #16191d;")
             if i == page:
@@ -89,10 +91,10 @@ class UiFunction(QWidget):
     def expand_close_animation(self, action="expand"):
         if action == "expand":
             start, end = 0, DROP_MENU_WIDTH
-            self.setMinimumWidth(DROP_MENU_WIDTH+COLUMN_WIDTH+100)
+            self.setMinimumWidth(DROP_MENU_WIDTH + COLUMN_WIDTH + 100)
         else:
             start, end = DROP_MENU_WIDTH, 0
-            self.setMinimumWidth(COLUMN_WIDTH+100)
+            self.setMinimumWidth(COLUMN_WIDTH + 100)
         self.ani = QVariantAnimation()
         self.ani.setStartValue(start)
         self.ani.setEndValue(end)
@@ -138,7 +140,7 @@ class UiFunction(QWidget):
         """
         Clears the menu for adding or modifying assets
         """
-        for form in [self.name_lineEdit, self.path_lineEdit, self.image_lineEdit, self.tag_lineEdit,
+        for form in [self.name_lineEdit, self.image_lineEdit, self.tag_lineEdit,  # self.path_lineEdit,
                      self.description_textEdit, self.file_list_widget, self.gallery_list_widget]:
             form.clear()
 
