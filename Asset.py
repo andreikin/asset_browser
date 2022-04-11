@@ -20,6 +20,7 @@ class Asset:
     The class defines an asset as a structure of folders and files.
     Contains methods for creating, modifying, and deleting assets
     """
+
     def __init__(self, in_controller, **kwargs):
         try:
             self.Controller = in_controller
@@ -68,8 +69,8 @@ class Asset:
                 # copy files
                 self.Controller.ui.add_task(self.copy_files)
 
-                # # edit content names
-                self.rename_scenes()
+                # edit content names
+                self.Controller.ui.add_task(self.rename_scenes)
 
                 self.refresh_ui_after_edit()
                 logger.debug(" executed")
@@ -97,8 +98,8 @@ class Asset:
                 # copy files
                 self.Controller.ui.add_task(self.copy_files)
 
-                # # edit content names
-                self.rename_scenes()
+                # edit content names
+                self.Controller.ui.add_task(self.rename_scenes)
 
                 self.refresh_ui_after_edit(mode=" edited")
                 logger.debug(" executed")
@@ -304,7 +305,7 @@ class Asset:
         self.Controller.ui.search_lineEdit.setText("")
         self.Controller.ui.clear_form()
         self.Controller.ui.status_message("Asset " + self.name + mode + " successfully!", )
-        
+
     @staticmethod
     def delete_asset(name, path):
         """
@@ -380,21 +381,27 @@ class Asset:
 
     def rename_scenes(self):
         try:
-            if self.rename_content:
-                scenes_list = os.listdir(self.content_folder)
-                numbers = {os.path.splitext(x)[-1]: 0 for x in scenes_list}
-                name = self.name + SFX
-                self.content_folder += "/"
-                for ext in numbers:
-                    files = [x for x in scenes_list if ext == os.path.splitext(x)[-1]]
-                    if len(files) == 1:
-                        os.rename(self.content_folder + files[0], self.content_folder + name + ext)
-                    else:
-                        i = 1
-                        for file in files:
-                            num = '_v{0:02d}'.format(i)
-                            os.rename(self.content_folder + file, self.content_folder + name + num + ext)
-                            i += 1
+            if self.content_folder[-1] != '/':
+                self.content_folder = self.content_folder + '/'
+
+            scenes_list = os.listdir(self.content_folder)
+            type_dict = {}
+            for i in scenes_list:
+                file, ext = i.split('.')
+                if ext.lower() in type_dict:
+                    type_dict[ext.lower()].append(file)
+                else:
+                    type_dict[ext.lower()] = [file]
+
+            for key in type_dict.keys():
+                n = len(type_dict[key])
+                if n == 1:
+                    os.rename(self.content_folder + type_dict[key][0] + '.' + key,
+                              self.content_folder + self.name + '.' + key)
+                else:
+                    for i in range(1, len(type_dict[key]) + 1):
+                        os.rename(self.content_folder + type_dict[key][i - 1] + '.' + key,
+                                  self.content_folder + self.name + '_{0:02d}.'.format(i) + key)
             logger.debug(" executed")
         except Exception as message:
             logger.error(message)
