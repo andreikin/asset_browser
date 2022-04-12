@@ -2,7 +2,7 @@ import datetime
 import os
 import re
 import tempfile
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtCore
 from PyQt5.QtCore import QSettings, Qt, QObject
 from PyQt5.QtGui import QPixmap
 from Utilities.Logging import logger

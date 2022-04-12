@@ -21,7 +21,8 @@ from UI.Ui_MainWindow import Ui_MainWindow
 from UI.Ui_function import UiFunction
 from Utilities.Logging import logger
 from Utilities.Utilities import convert_path_to_global, remove_non_unique_tags, CopyWithProgress
-from settings import COLUMN_WIDTH, SPACING, START_WINDOW_SIZE, SFX, FONT_SIZE, VERSION, ICON_FORMATS_PATTERN
+from settings import COLUMN_WIDTH, SPACING, START_WINDOW_SIZE, SFX, FONT_SIZE, VERSION, ICON_FORMATS_PATTERN, \
+    ASSETS_IN_ONE_STEP
 
 
 class BaseThread(QtCore.QThread):
@@ -141,6 +142,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
         self.font_spinBox.valueChanged.connect(self.set_font_size)
         self.erase_basket_button.clicked.connect(self.erase_basket)
         self.export_basket_button.clicked.connect(self.basket_list_widget.export_assets)
+        self.gallery.scroll_bar_signal.connect(self.loading_assets_on_scroll)
 
         self.maximize = False  # application size state
         self.copy_progress_bar.hide()  # hide progress bar
@@ -240,9 +242,24 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
         """
         self.gallery.clear()
         if self.Controller.found_assets:
-            for asset in self.Controller.found_assets:
+            for asset in self.Controller.found_assets[:ASSETS_IN_ONE_STEP]:
                 asset_widget = AssetWidget(asset, self.Controller, width=COLUMN_WIDTH)
                 self.gallery.add_widget(asset_widget)
+
+    def loading_assets_on_scroll(self):
+        """
+        Staged loading of assets function
+        """
+        try:
+            found_assets_num = len(self.Controller.found_assets)
+            widget_num = len(self.gallery.vidget_list)
+            for i in range(widget_num, widget_num+ASSETS_IN_ONE_STEP):
+                if len(self.gallery.vidget_list)<found_assets_num:
+                    asset = self.Controller.found_assets[i]
+                    asset_widget = AssetWidget(asset, self.Controller, width=COLUMN_WIDTH)
+                    self.gallery.add_widget(asset_widget)
+        except Exception as message:
+            logger.error(message)
 
     def update_tags_widgets(self):
         """

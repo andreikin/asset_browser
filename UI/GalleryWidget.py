@@ -1,15 +1,19 @@
 # -*- coding: utf-8 -*-
 from random import randint
 from itertools import cycle
+
+from PyQt5 import QtCore
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QFrame, QApplication, QPushButton, QVBoxLayout, QHBoxLayout, QSizePolicy, QWidget, \
     QScrollArea
 
 
 class GalleryWidget(QWidget):
+    scroll_bar_signal = QtCore.pyqtSignal()
+
     def __init__(self, parent=None, icons_width=50, spacing=5):
         QWidget.__init__(self, parent)
-        
+
         self.icons_width = icons_width
         self.spacing = spacing
         self.vidget_list = []
@@ -41,6 +45,16 @@ class GalleryWidget(QWidget):
         self.__layout.addWidget(self.__scroll_area)
         self.__scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
+        self.scroll_bar = self.__scroll_area.verticalScrollBar()
+        self.scroll_bar.valueChanged.connect(self.scroll_bar_handler)
+
+    def scroll_bar_handler(self):
+        try:
+            if (self.scroll_bar.maximum() - 150) < self.scroll_bar.value():
+                self.scroll_bar_signal.emit()
+        except Exception as message:
+            print(message)
+
     def add_widget(self, widget):
         self.vidget_list.append(widget)
         self.refresh()
@@ -68,10 +82,9 @@ class GalleryWidget(QWidget):
             self.refresh(event)
 
 
-
-
 if __name__ == "__main__":
     import sys
+
 
     class MyWindow(QWidget):
         def __init__(self, parent=None):
