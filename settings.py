@@ -8,7 +8,7 @@ SPACING = 10  # space between asset icons
 ICON_WIDTH = 150  # asset icons width
 START_WINDOW_SIZE = [1300, 800]
 FONT_SIZE = 9
-ASSETS_IN_ONE_STEP = 50
+ASSETS_IN_ONE_STEP = 50 # number of assets loaded at a time
 
 """ name of assets folders"""
 INFO_FOLDER = "info"

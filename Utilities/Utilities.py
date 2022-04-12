@@ -26,11 +26,12 @@ class CopyWithProgress(QObject):
                     bytes_written = dst_file.write(buf)
                     percent += 1
                     self.progress_bar_signal.emit(percent)
-                    #QtWidgets.qApp.processEvents()
+                    # QtWidgets.qApp.processEvents()
                     if bytes_written < len(buf) or bytes_written == 0:
                         break
         except Exception as message:
             print(message)
+
 
 def get_library_path():
     """

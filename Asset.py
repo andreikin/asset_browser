@@ -5,7 +5,6 @@ import os
 import shutil
 import tempfile
 
-from PyQt5 import QtCore
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 
@@ -363,6 +362,9 @@ class Asset:
             return False
 
     def create_preview_images(self):
+        """
+        Create icons for widget gallery
+        """
         try:
             if os.path.exists(self.gallery_folder):
                 # get gallery content
@@ -374,12 +376,15 @@ class Asset:
                     if not os.path.exists(icon_path):
                         image_light = QPixmap(self.gallery_folder + "/" + file)
                         image_light = image_light.scaledToWidth(DROP_MENU_WIDTH - 45,
-                                                                mode=QtCore.Qt.SmoothTransformation)
+                                                                mode=Qt.SmoothTransformation)
                         image_light.save(icon_path)
         except Exception as message:
             logger.error(message)
 
     def rename_scenes(self):
+        """
+        Rename asset content if necessary
+        """
         try:
             if self.rename_content:
                 if self.content_folder[-1] != '/':

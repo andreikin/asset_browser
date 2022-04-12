@@ -191,7 +191,7 @@ class BasketWidget(FileListWidget):
         self.Controller.ui.copy_progress_bar.hide()
 
     def deselect_asset_in_gallery(self, path):
-        for asset in self.Controller.ui.gallery.vidget_list:
+        for asset in self.Controller.ui.gallery.widget_list:
             if path == asset.db_asset.path:
                 asset.deselect_asset()
                 asset.outside_event()
