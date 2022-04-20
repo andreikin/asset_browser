@@ -215,7 +215,8 @@ class AssetWidget(QWidget):
         """
         Opens a preview of the asset in the default Windows application
         """
-        os.system(path)
+        subprocess.call(path, shell=True)
+        #os.system(path)
         logger.debug(" Image opened" + "\n")
 
     def places_buttons_by_x(self, offset=0.05):
