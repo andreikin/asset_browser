@@ -14,6 +14,7 @@ from UI.AssetWidget import AssetWidget
 from UI.CustomTitleBar import CustomTitleBar
 from UI.FileListWidget import FileListWidget, BasketWidget
 from UI.GalleryWidget import GalleryWidget
+from UI.IconLineEdit import IconLineEdit
 from UI.TagButton import TagButton
 from UI.TagsWidget import TagsWidget
 from UI.TreeAssetsWidget import MenuTreeWidget
@@ -96,6 +97,9 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
         self.tag_widget = TagsWidget()
         self.tags_verticalLayout.addWidget(self.tag_widget)
 
+        self.image_lineEdit = IconLineEdit()
+        self.iconLE_Layout.insertWidget(1, self.image_lineEdit)
+
         # insert tree widget
         self.tree_widget = MenuTreeWidget(self.Controller)
         self.tree_body_VLayout.addWidget(self.tree_widget)
@@ -150,10 +154,6 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
         self.load_settings()
         self.decorate_icons_color()
 
-        # add contrext menu
-        self.image_lineEdit.setContextMenuPolicy(Qt.CustomContextMenu)
-        self.image_lineEdit.customContextMenuRequested.connect(self.icon_line_edit_context_menu)
-        
         self.copy_function = CopyWithProgress()
         self.copy_function.progress_bar_signal.connect(self.progress_bar_slot)
         self.thread.start()
@@ -165,27 +165,6 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
     def progress_bar_slot(self, percent):
         if percent <= 100:
             self.copy_progress_bar.setValue(percent)
-            
-    def icon_line_edit_context_menu(self):
-        """
-        creates a context menu that allows you to insert an image from a clipboard
-        """
-        menu = QMenu()
-        menu.setStyleSheet("""background-color: #16191d; color: #fff;""")
-        menu.addAction(QAction("Paste from clipboard", self))
-        action = menu.exec_(QCursor().pos())
-        if action and action.text() == "Paste from clipboard":
-            clipboard = QApplication.clipboard()
-            icon = clipboard.image()
-            if icon:
-                file_path = os.path.join(tempfile.gettempdir(), 'tmp_image.png')
-                result = icon.save(file_path)
-                if result:
-                    file_path = file_path.replace("\\", "/")
-                    self.image_lineEdit.setText(file_path)
-                    self.Controller.ui.status_message("Image added successfully")
-                else:
-                    self.Controller.ui.status_message("Information on the clipboard is not an image", state="ERROR")
 
     @property
     def asset_menu_mode(self):

@@ -873,7 +873,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                        <property name="frameShadow">
                         <enum>QFrame::Raised</enum>
                        </property>
-                       <layout class="QHBoxLayout" name="horizontalLayout_11">
+                       <layout class="QHBoxLayout" name="iconLE_Layout">
                         <property name="leftMargin">
                          <number>0</number>
                         </property>
@@ -896,28 +896,6 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                           </property>
                           <property name="text">
                            <string>Icon:</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item>
-                         <widget class="QLineEdit" name="image_lineEdit">
-                          <property name="minimumSize">
-                           <size>
-                            <width>0</width>
-                            <height>22</height>
-                           </size>
-                          </property>
-                          <property name="maximumSize">
-                           <size>
-                            <width>16777215</width>
-                            <height>22</height>
-                           </size>
-                          </property>
-                          <property name="placeholderText">
-                           <string>Add path to icon here</string>
-                          </property>
-                          <property name="clearButtonEnabled">
-                           <bool>true</bool>
                           </property>
                          </widget>
                         </item>
