@@ -27,10 +27,31 @@ class MenuTreeWidget(QTreeWidget):
 
         self.setItemsExpandable(True)
         self.setRootIsDecorated(False)
-        self.setStyleSheet("QTreeView {\n"
-                           "border-radius: 10px;}\n"
-                           "QTreeWidget::item{ height:20px;"
-                           "margin: 0px 0px 4px 0px;} ")
+        self.setStyleSheet("""
+            QTreeView::branch:has-siblings:!adjoins-item {
+                border-image: url(:/icons/icons/vline.png) 0;
+            }
+
+            QTreeView::branch:has-siblings:adjoins-item {
+                border-image: url(:/icons/icons/branch-more.png) 0;
+            }
+
+            QTreeView::branch:!has-children:!has-siblings:adjoins-item {
+                border-image: url(:/icons/icons/branch-end.png) 0;
+            }
+
+            QTreeView::branch:has-children:!has-siblings:closed,
+            QTreeView::branch:closed:has-children:has-siblings {
+                    border-image: none;
+                    image: url(:/icons/icons/branch-closed.png);
+            }
+
+            QTreeView::branch:open:has-children:!has-siblings,
+            QTreeView::branch:open:has-children:has-siblings  {
+                    border-image: none;
+                    image: url(:/icons/icons/branch-open.png);
+            }
+        """)
 
         self.itemDoubleClicked.connect(self.double_click_handler)
         # connect Context Menu

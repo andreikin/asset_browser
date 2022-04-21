@@ -1,5 +1,10 @@
 <RCC>
   <qresource prefix="icons">
+    <file>icons/vline.png</file>
+    <file>icons/branch-open.png</file>
+    <file>icons/branch-more.png</file>
+    <file>icons/branch-end.png</file>
+    <file>icons/branch-closed.png</file>
     <file>icons/check-circle.svg</file>
     <file>icons/circle.svg</file>
     <file>icons/shopping-cart.svg</file>
