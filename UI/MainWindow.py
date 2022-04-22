@@ -232,7 +232,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
         try:
             found_assets_num = len(self.Controller.found_assets)
             widget_num = len(self.gallery.widget_list)
-            for i in range(widget_num, widget_num+ASSETS_IN_ONE_STEP):
+            for i in range(widget_num, widget_num+10):
                 if len(self.gallery.widget_list)<found_assets_num:
                     asset = self.Controller.found_assets[i]
                     asset_widget = AssetWidget(asset, self.Controller, width=COLUMN_WIDTH)
