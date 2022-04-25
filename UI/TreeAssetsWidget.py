@@ -2,21 +2,21 @@ import os
 import re
 import shutil
 import subprocess
-import sys
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QCursor
-from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QMenu, QAction, QInputDialog, QMessageBox
+from PyQt5.QtGui import QCursor, QColor
+from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QMenu, QAction, QInputDialog, QMessageBox, QAbstractItemView
 
 from Asset import Asset
 from Utilities.Logging import logger
-from Utilities.Utilities import convert_path_to_local, get_library_path
+from Utilities.Utilities import convert_path_to_local
 from settings import DELETED_ASSET_FOLDER
 
 
 class MenuTreeWidget(QTreeWidget):
     def __init__(self, in_controller, parent=None, ):
         QTreeWidget.__init__(self, parent)
+        self.setDragDropMode(QAbstractItemView.DropOnly)
 
         self.Controller = in_controller
         self.path = in_controller.lib_path
@@ -65,7 +65,7 @@ class MenuTreeWidget(QTreeWidget):
         if not root:
             root = self.path
         for f in os.listdir(root):
-            filepath = os.path.join(root, f)
+            filepath = "/".join([root, f])
             pattern = r"_ast$"
             if os.path.isdir(filepath) and not re.search(pattern, filepath) \
                     and not re.search(DELETED_ASSET_FOLDER, filepath):
@@ -102,7 +102,7 @@ class MenuTreeWidget(QTreeWidget):
 
     def double_click_handler(self, item):
         logger.debug("\n\n__________________Find asset in folder clicked___________________")
-        path = item.data(0, 32).replace("\\", "/") + "/"
+        path = item.data(0, 32) + "/"
         self.Controller.ui.search_lineEdit.setText(item.data(0, 0).lower())
         self.Controller.get_from_folder(path)
 
@@ -115,7 +115,7 @@ class MenuTreeWidget(QTreeWidget):
         menu.addAction(QAction("Delete folder", self))
         action = menu.exec_(QCursor().pos())
         try:
-            path = self.selectedItems()[0].data(0, 32).replace("\\", "/") + "/"
+            path = self.selectedItems()[0].data(0, 32) + "/"
             name = self.selectedItems()[0].data(0, 0)
             if action:
                 if action.text() == "Open in explorer":
@@ -180,9 +180,77 @@ class MenuTreeWidget(QTreeWidget):
             self.selectedItems()[0].setText(0, new_name)
             self.selectedItems()[0].setData(0, 32, new_path)
 
+    def replace_asset(self, srs, dst):
+        """
+        Function moves the specified asset to another directory
+        """
+        try:
+            name = os.path.basename(srs)
+            args = self.Controller.Models.find_asset(path=srs)
+            keys = ("asset_id", "name", "path")
+            kwargs = dict(zip(keys, args))
+            kwargs["path"]= dst + "/" + name
+            self.Controller.Models.edit_db_asset(**kwargs)
+            if not os.path.exists(dst + "/" + name):
+                shutil.move(srs, dst + "/" + name)
 
-if __name__ == '__main__':
-    path = "U:/AssetStorage/library/super_food"
+            for i in range(len(self.Controller.ui.gallery.widget_list)):
+                asset_widget = self.Controller.ui.gallery.widget_list[i]
+                if asset_widget.ast_label.text() == kwargs["name"]:
+                    asset_widget.deleteLater()
+                    self.Controller.ui.gallery.widget_list.pop(i)
+        except Exception as message:
+            logger.error(message)
 
+    def dropEvent(self, event):
+        to_index = self.indexAt(event.pos())
+        dst = to_index.data(32) if to_index.isValid() else None
+        mimedata = event.mimeData()
+        if mimedata.hasUrls() and dst:
+            for f in mimedata.urls():
+                self.replace_asset(f.path()[1:], dst)
+        self.colorize_items()
+
+    def dragEnterEvent(self, event):
+        if event.source() is self:
+            event.ignore()
+        else:
+            mimedata = event.mimeData()
+            if mimedata.hasUrls():
+                event.accept()
+            else:
+                event.ignore()
+
+    def dragMoveEvent(self, event):
+        try:
+            if event.source() is self:
+                event.ignore()
+            else:
+                mimedata = event.mimeData()
+                if mimedata.hasUrls():
+                    event.accept()
+                    self.colorize_items()
+                    item = self.itemAt(event.pos())
+                    item.setBackground(0, QColor("#16191d"))
+                else:
+                    event.ignore()
+        except Exception as message:
+            logger.error(message)
+
+    def dragLeaveEvent(self, event):
+        self.colorize_items()
+
+    def colorize_items(self, root=None):
+        """
+        Paint all elements except the one over which the mouse pointer
+        """
+        if not root:
+            root = self.invisibleRootItem()
+        child_count = root.childCount()
+        for i in range(child_count):
+            item = root.child(i)
+            item.setBackground(0, QColor("#1f232a"))
+            if item.childCount():
+                self.colorize_items(root=item)
 
 
