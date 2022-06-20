@@ -27,6 +27,8 @@ class UiFunction(QWidget):
         settings = QSettings(file_path, QSettings.IniFormat)
         settings.setValue("db settings", lib_path)
         logger.debug("New lib path : " + self.Controller.lib_path)
+        self.tree_widget.update_ui()
+
 
     def switch_pages(self, page):
         """

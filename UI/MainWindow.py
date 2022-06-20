@@ -210,7 +210,6 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
             self.asset_menu_mode = "Add"
             self.update_assets_widgets()
             self.update_tags_widgets()
-            self.tree_widget.update_ui()
             self.status_message(f"In the database were found {len(self.Controller.found_assets)} items ")
         except Exception as message:
             logger.error(message)
@@ -312,6 +311,8 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
             self.move(self.settings.value("ui pos"))
         if self.settings.contains("font size"):
             self.font_spinBox.setValue(int(self.settings.value("font size")))
+        if self.settings.contains("tree settings"):
+            self.tree_widget.get_settings(self.settings.value("tree settings"))
         else:
             self.font_spinBox.setValue(FONT_SIZE)
 
@@ -327,4 +328,5 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
         self.settings.setValue("db settings", self.db_path_lineEdit.text())
         self.settings.setValue("ui pos", self.pos())
         self.settings.setValue("font size", self.font_spinBox.value())
+        self.settings.setValue("tree settings", self.tree_widget.save_setting())
         logger.debug("Settings saved")

@@ -20,12 +20,14 @@ class MenuTreeWidget(QTreeWidget):
 
         self.Controller = in_controller
         self.path = in_controller.lib_path
+        self.items_list = []
         self.setHeaderHidden(True)
 
         if self.Controller.connect_db:
             self.update_ui()
 
         self.setItemsExpandable(True)
+        self.setExpandsOnDoubleClick(False)
         self.setRootIsDecorated(False)
         self.setStyleSheet("""
             QTreeView::branch:has-siblings:!adjoins-item {
@@ -59,6 +61,19 @@ class MenuTreeWidget(QTreeWidget):
         self.customContextMenuRequested.connect(self.right_click_handler)
         logger.debug(" executed")
 
+    def get_settings(self, settings):
+        for item in self.items_list:
+            if item.data(0, 32) in settings:
+                val = settings[item.data(0, 32)]
+                item.setExpanded(val)
+
+    def save_setting(self):
+        settings = dict()
+        for i in self.items_list:
+            logger.debug(i.isExpanded())
+            settings[i.data(0, 32)] = i.isExpanded()
+        return settings
+
     def get_tree(self, parent=None, root=None):
         if not parent:
             parent = self.invisibleRootItem()
@@ -70,9 +85,12 @@ class MenuTreeWidget(QTreeWidget):
             if os.path.isdir(filepath) and not re.search(pattern, filepath) \
                     and not re.search(DELETED_ASSET_FOLDER, filepath):
                 item = QTreeWidgetItem()
+                self.items_list.append(item)
                 parent.addChild(item)
                 item.setText(0, f)
                 item.setData(0, 32, filepath)
+                if root == self.path:
+                    item.setExpanded(True)
                 self.get_tree(item, filepath)
 
     def update_ui(self):
@@ -81,7 +99,6 @@ class MenuTreeWidget(QTreeWidget):
             self.path = self.Controller.lib_path
             if self.Controller.lib_path:
                 self.get_tree()
-                self.expandAll()
         except Exception as message:
             logger.error(message)
 
@@ -189,7 +206,7 @@ class MenuTreeWidget(QTreeWidget):
             args = self.Controller.Models.find_asset(path=srs)
             keys = ("asset_id", "name", "path")
             kwargs = dict(zip(keys, args))
-            kwargs["path"]= dst + "/" + name
+            kwargs["path"] = dst + "/" + name
             self.Controller.Models.edit_db_asset(**kwargs)
             if not os.path.exists(dst + "/" + name):
                 shutil.move(srs, dst + "/" + name)
@@ -252,5 +269,3 @@ class MenuTreeWidget(QTreeWidget):
             item.setBackground(0, QColor("#1f232a"))
             if item.childCount():
                 self.colorize_items(root=item)
-
-

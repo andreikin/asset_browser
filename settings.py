@@ -21,4 +21,4 @@ DELETED_ASSET_FOLDER = "deleted_assets"
 """over"""
 ICON_FORMATS_PATTERN = ".PNG$|.png$|.jpg$|.JPG$"
 IMAGE_PREVIEW_SUFFIX = "_light"
-LOGGING_TO_fILE = True
+LOGGING_TO_fILE = False
