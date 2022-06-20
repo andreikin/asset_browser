@@ -100,6 +100,9 @@ def find_assets_by_tag_list(tag_list):
 
 def find_tags_by_asset_list(asset_list):
     out = []
+    # limiting the number of assets for the normal operation of the recursive tag search
+    asset_list = asset_list[:20] if len(asset_list) > 20 else asset_list
+
     tag_quest_string = ['(Tag.asset_id == "' + str(x.id) + '")' for x in asset_list]
     tag_quest_string = " | ".join(tag_quest_string)
     quest = 'Tag.select().where(' + tag_quest_string + ')'
@@ -115,7 +118,7 @@ def find_tags_by_asset_list(asset_list):
 
 def find_asset(id=None, name=None, path=None):
     try:
-        asset=None
+        asset = None
         if id:
             asset = Asset.select().where(Asset.id == id).get()
         if name:
@@ -202,6 +205,5 @@ if __name__ == '__main__':
 
     db_path = get_library_path()
     initialize(db_path)
-
 
     edit_db_asset(**{"name": "name", "asset_id": 17})
