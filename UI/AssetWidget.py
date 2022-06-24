@@ -216,7 +216,6 @@ class AssetWidget(QWidget):
         Opens a preview of the asset in the default Windows application
         """
         subprocess.call(path, shell=True)
-        #os.system(path)
         logger.debug(" Image opened" + "\n")
 
     def places_buttons_by_x(self, offset=0.05):
@@ -285,7 +284,10 @@ class AssetWidget(QWidget):
         asset_data['name'] = re.sub(pattern, "", asset_data['name'])
 
         self.Controller.ui.name_lineEdit.setText(asset_data['name'])
-        self.Controller.ui.tag_lineEdit.setText(" ".join(asset_data['tags']))
+
+        self.Controller.ui.tag_flow_widget.clear()
+        self.Controller.ui.tag_flow_widget.add_tags(asset_data['tags'])
+
         self.Controller.ui.path_lineEdit.setText(convert_path_to_local(asset_data['path']))
         self.Controller.ui.image_lineEdit.setText(asset_data['icon'])
         self.Controller.ui.description_textEdit.setPlainText(asset_data['description'])

@@ -73,6 +73,7 @@ class UiFunction(QWidget):
                     self.tag_widget.left_button: "chevrons-left.svg",
                     self.tag_widget.right_button: "chevrons-right.svg",
                     self.erase_basket_button: "x-square.svg",
+                    self.add_tag_Button: "plus-circle.svg",
                     self.export_basket_button: "file.svg",
                     }
         for button in btn_dict:
@@ -142,7 +143,7 @@ class UiFunction(QWidget):
         """
         Clears the menu for adding or modifying assets
         """
-        for form in [self.name_lineEdit, self.image_lineEdit, self.tag_lineEdit,  # self.path_lineEdit,
+        for form in [self.name_lineEdit, self.image_lineEdit, self.tag_lineEdit, self.tag_flow_widget,
                      self.description_textEdit, self.file_list_widget, self.gallery_list_widget]:
             form.clear()
 

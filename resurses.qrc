@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="icons">
+    <file>icons/plus-circle.svg</file>
     <file>icons/vline.png</file>
     <file>icons/branch-open.png</file>
     <file>icons/branch-more.png</file>
@@ -34,6 +35,7 @@
     <file>icons/file-plus.svg</file>
   </qresource>
   <qresource prefix="icons_blue">
+    <file>icon_blue/plus-circle.svg</file>
     <file>icon_blue/circle.svg</file>
     <file>icon_blue/check-circle.svg</file>
     <file>icon_blue/file.svg</file>

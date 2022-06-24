@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>962</width>
-    <height>674</height>
+    <width>1123</width>
+    <height>746</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -646,7 +646,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                       <x>0</x>
                       <y>0</y>
                       <width>317</width>
-                      <height>490</height>
+                      <height>562</height>
                      </rect>
                     </property>
                     <layout class="QVBoxLayout" name="verticalLayout">
@@ -807,6 +807,60 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                       </widget>
                      </item>
                      <item>
+                      <widget class="QFrame" name="images_frame">
+                       <property name="frameShape">
+                        <enum>QFrame::StyledPanel</enum>
+                       </property>
+                       <property name="frameShadow">
+                        <enum>QFrame::Raised</enum>
+                       </property>
+                       <layout class="QHBoxLayout" name="iconLE_Layout">
+                        <property name="leftMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="topMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="rightMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="bottomMargin">
+                         <number>10</number>
+                        </property>
+                        <item>
+                         <widget class="QLabel" name="image_label">
+                          <property name="minimumSize">
+                           <size>
+                            <width>80</width>
+                            <height>0</height>
+                           </size>
+                          </property>
+                          <property name="text">
+                           <string>Icon:</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QPushButton" name="image_Button">
+                          <property name="text">
+                           <string/>
+                          </property>
+                          <property name="icon">
+                           <iconset resource="../resurses.qrc">
+                            <normaloff>:/icons/icons/folder.svg</normaloff>:/icons/icons/folder.svg</iconset>
+                          </property>
+                          <property name="iconSize">
+                           <size>
+                            <width>22</width>
+                            <height>22</height>
+                           </size>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </widget>
+                     </item>
+                     <item>
                       <widget class="QFrame" name="tag_frame">
                        <property name="frameShape">
                         <enum>QFrame::StyledPanel</enum>
@@ -862,51 +916,14 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                           </property>
                          </widget>
                         </item>
-                       </layout>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QFrame" name="images_frame">
-                       <property name="frameShape">
-                        <enum>QFrame::StyledPanel</enum>
-                       </property>
-                       <property name="frameShadow">
-                        <enum>QFrame::Raised</enum>
-                       </property>
-                       <layout class="QHBoxLayout" name="iconLE_Layout">
-                        <property name="leftMargin">
-                         <number>0</number>
-                        </property>
-                        <property name="topMargin">
-                         <number>0</number>
-                        </property>
-                        <property name="rightMargin">
-                         <number>0</number>
-                        </property>
-                        <property name="bottomMargin">
-                         <number>10</number>
-                        </property>
                         <item>
-                         <widget class="QLabel" name="image_label">
-                          <property name="minimumSize">
-                           <size>
-                            <width>80</width>
-                            <height>0</height>
-                           </size>
-                          </property>
-                          <property name="text">
-                           <string>Icon:</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item>
-                         <widget class="QPushButton" name="image_Button">
+                         <widget class="QPushButton" name="add_tag_Button">
                           <property name="text">
                            <string/>
                           </property>
                           <property name="icon">
                            <iconset resource="../resurses.qrc">
-                            <normaloff>:/icons/icons/folder.svg</normaloff>:/icons/icons/folder.svg</iconset>
+                            <normaloff>:/icons/icons/plus-circle.svg</normaloff>:/icons/icons/plus-circle.svg</iconset>
                           </property>
                           <property name="iconSize">
                            <size>
@@ -941,7 +958,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                          <number>0</number>
                         </property>
                         <property name="topMargin">
-                         <number>0</number>
+                         <number>15</number>
                         </property>
                         <property name="rightMargin">
                          <number>0</number>

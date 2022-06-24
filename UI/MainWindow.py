@@ -8,7 +8,7 @@ import tempfile
 from PyQt5 import QtCore
 from PyQt5.QtCore import QSettings, QRegExp, Qt
 from PyQt5.QtGui import QRegExpValidator, QCursor
-from PyQt5.QtWidgets import QMainWindow, QMenu, QAction, QApplication
+from PyQt5.QtWidgets import QMainWindow, QMenu, QAction, QApplication, QPushButton
 
 from UI.AssetWidget import AssetWidget
 from UI.CustomTitleBar import CustomTitleBar
@@ -16,6 +16,7 @@ from UI.FileListWidget import FileListWidget, BasketWidget
 from UI.GalleryWidget import GalleryWidget
 from UI.IconLineEdit import IconLineEdit
 from UI.TagButton import TagButton
+from UI.TagFlowWidget import TagFlowWidget
 from UI.TagsWidget import TagsWidget
 from UI.TreeAssetsWidget import MenuTreeWidget
 from UI.Ui_MainWindow import Ui_MainWindow
@@ -100,6 +101,10 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
         self.image_lineEdit = IconLineEdit()
         self.iconLE_Layout.insertWidget(1, self.image_lineEdit)
 
+        # # insert Tag Flow Widget
+        self.tag_flow_widget = TagFlowWidget()
+        self.verticalLayout.insertWidget(4, self.tag_flow_widget)
+
         # insert tree widget
         self.tree_widget = MenuTreeWidget(self.Controller)
         self.tree_body_VLayout.addWidget(self.tree_widget)
@@ -147,6 +152,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
         self.erase_basket_button.clicked.connect(self.erase_basket)
         self.export_basket_button.clicked.connect(self.basket_list_widget.export_assets)
         self.gallery.scroll_bar_signal.connect(self.loading_assets_on_scroll)
+        self.add_tag_Button.clicked.connect(self.add_tags_to_asset)
 
         self.maximize = False  # application size state
         self.copy_progress_bar.hide()  # hide progress bar
@@ -161,7 +167,13 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
         if not self.Controller.connect_db:
             self.status_message("Problems connecting to the database.", state="ERROR")
         logger.debug("Ui loaded successfully.\n")
-        
+
+    def add_tags_to_asset(self):
+        tag_list = re.findall(r'[-0-9A-z_]+', self.tag_lineEdit.text())
+        tag_list = remove_non_unique_tags(tag_list)
+        self.tag_flow_widget.add_tags(tag_list)
+        self.tag_lineEdit.clear()
+
     def progress_bar_slot(self, percent):
         if percent <= 100:
             self.copy_progress_bar.setValue(percent)
@@ -267,8 +279,8 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
             out_dict['description'] = self.description_textEdit.toPlainText()
 
             # get a list of tags
-            out_dict['tags'] = re.findall(r'[-0-9A-z_]+', self.tag_lineEdit.text())
-            out_dict['tags'] = remove_non_unique_tags(out_dict['tags'])  # make tags uniqueness
+            out_dict['tags'] = self.tag_flow_widget.tags()
+            self.tag_flow_widget.clear()
 
             # get a list of scenes paths
             out_dict['scenes'] = self.file_list_widget.get_list()
