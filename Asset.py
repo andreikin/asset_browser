@@ -53,7 +53,7 @@ class Asset:
         try:
             if not self.Controller.Models.find_asset(name=self.name):
 
-                # mack folders
+                # making folders
                 for each_path in [self.path, self.asset_info_folder, self.content_folder, self.gallery_folder]:
                     if not os.path.exists(each_path):
                         os.makedirs(each_path)
