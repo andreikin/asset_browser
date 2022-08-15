@@ -282,7 +282,6 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
 
             # get a list of tags
             out_dict['tags'] = self.tag_flow_widget.tags()
-            self.tag_flow_widget.clear()
 
             # get a list of scenes paths
             out_dict['scenes'] = self.file_list_widget.get_list()
