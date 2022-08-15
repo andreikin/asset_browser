@@ -8,7 +8,7 @@ SPACING = 10  # space between asset icons
 ICON_WIDTH = 150  # asset icons width
 START_WINDOW_SIZE = [1300, 800]
 FONT_SIZE = 9
-ASSETS_IN_ONE_STEP = 50 # number of assets loaded at a time
+ASSETS_IN_ONE_STEP = 50  # number of assets loaded at a time
 
 """ name of assets folders"""
 INFO_FOLDER = "info"
@@ -25,4 +25,4 @@ LOGGING_TO_fILE = False
 
 """help pdf url"""
 URL = 'https://docs.yandex.ru/docs/view?url=ya-disk-public%3A%2F%2F55Vw4e8HmjdDD9QK6tXu8KCtm6HsILLZWg7JuwU' \
-              '%2B2daXO6D6zqBO9YueM6AiSkliq%2FJ6bpmRyOJonT3VoXnDag%3D%3D&name=Asset_Browser_User_manual.pdf '
+      '%2B2daXO6D6zqBO9YueM6AiSkliq%2FJ6bpmRyOJonT3VoXnDag%3D%3D&name=Asset_Browser_User_manual.pdf '
