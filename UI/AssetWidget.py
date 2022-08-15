@@ -193,7 +193,7 @@ class AssetWidget(QWidget):
 
             # create new images if necessary
             asset_folders = Asset.dir_names(self.db_asset.path)
-            preview_images = get_preview_images(**asset_folders)
+            preview_images = sorted(get_preview_images(**asset_folders), reverse=True)
 
             for icon_path, image_path in preview_images:
                 image_preview_btn = QPushButton()
