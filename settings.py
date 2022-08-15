@@ -1,4 +1,4 @@
-VERSION = "1.06"
+VERSION = "1.07"
 #
 """ ui settings"""
 DROP_MENU_WIDTH = 350
@@ -22,3 +22,7 @@ DELETED_ASSET_FOLDER = "deleted_assets"
 ICON_FORMATS_PATTERN = ".PNG$|.png$|.jpg$|.JPG$"
 IMAGE_PREVIEW_SUFFIX = "_light"
 LOGGING_TO_fILE = False
+
+"""help pdf url"""
+URL = 'https://docs.yandex.ru/docs/view?url=ya-disk-public%3A%2F%2F55Vw4e8HmjdDD9QK6tXu8KCtm6HsILLZWg7JuwU' \
+              '%2B2daXO6D6zqBO9YueM6AiSkliq%2FJ6bpmRyOJonT3VoXnDag%3D%3D&name=Asset_Browser_User_manual.pdf '

@@ -25,7 +25,7 @@ from UI.Ui_function import UiFunction
 from Utilities.Logging import logger
 from Utilities.Utilities import convert_path_to_global, remove_non_unique_tags, CopyWithProgress
 from settings import COLUMN_WIDTH, SPACING, START_WINDOW_SIZE, SFX, FONT_SIZE, VERSION, ICON_FORMATS_PATTERN, \
-    ASSETS_IN_ONE_STEP
+    ASSETS_IN_ONE_STEP, URL
 
 
 class BaseThread(QtCore.QThread):
@@ -154,7 +154,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
         self.export_basket_button.clicked.connect(self.basket_list_widget.export_assets)
         self.gallery.scroll_bar_signal.connect(self.loading_assets_on_scroll)
         self.add_tag_Button.clicked.connect(self.add_tags_to_asset)
-        self.help_button.clicked.connect(self.open_help_in_explorer)
+        self.help_button.clicked.connect(lambda: webbrowser.open_new(URL))
 
         self.maximize = False  # application size state
         self.copy_progress_bar.hide()  # hide progress bar
@@ -169,12 +169,6 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
         if not self.Controller.connect_db:
             self.status_message("Problems connecting to the database.", state="ERROR")
         logger.debug("Ui loaded successfully.\n")
-
-    @staticmethod
-    def open_help_in_explorer(self):
-        url = 'https://docs.yandex.ru/docs/view?url=ya-disk-public%3A%2F%2F55Vw4e8HmjdDD9QK6tXu8KCtm6HsILLZWg7JuwU' \
-              '%2B2daXO6D6zqBO9YueM6AiSkliq%2FJ6bpmRyOJonT3VoXnDag%3D%3D&name=Asset_Browser_User_manual.pdf '
-        webbrowser.open_new(url)
 
     def add_tags_to_asset(self):
         tag_list = re.findall(r'[-0-9A-z_]+', self.tag_lineEdit.text())
