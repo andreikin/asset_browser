@@ -3,6 +3,7 @@
     <file>icons/plus-circle.svg</file>
     <file>icons/vline.png</file>
     <file>icons/branch-open.png</file>
+    <file>icons/help-circle.svg</file>
     <file>icons/branch-more.png</file>
     <file>icons/branch-end.png</file>
     <file>icons/branch-closed.png</file>
@@ -35,6 +36,7 @@
     <file>icons/file-plus.svg</file>
   </qresource>
   <qresource prefix="icons_blue">
+    <file>icon_blue/help-circle.svg</file>
     <file>icon_blue/plus-circle.svg</file>
     <file>icon_blue/circle.svg</file>
     <file>icon_blue/check-circle.svg</file>

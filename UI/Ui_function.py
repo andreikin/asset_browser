@@ -74,6 +74,7 @@ class UiFunction(QWidget):
                     self.tag_widget.right_button: "chevrons-right.svg",
                     self.erase_basket_button: "x-square.svg",
                     self.add_tag_Button: "plus-circle.svg",
+                    self.help_button: "help-circle.svg",
                     self.export_basket_button: "file.svg",
                     }
         for button in btn_dict:
