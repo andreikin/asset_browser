@@ -3,6 +3,7 @@ import re
 import shutil
 import subprocess
 
+from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QCursor, QColor
 from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QMenu, QAction, QInputDialog, QMessageBox, QAbstractItemView
@@ -17,6 +18,9 @@ class MenuTreeWidget(QTreeWidget):
     def __init__(self, in_controller, parent=None, ):
         QTreeWidget.__init__(self, parent)
         self.setDragDropMode(QAbstractItemView.DropOnly)
+
+        # enabling the ability to deselect an item
+        self.setSelectionMode(QtWidgets.QAbstractItemView.ContiguousSelection)
 
         self.Controller = in_controller
         self.path = in_controller.lib_path
@@ -103,9 +107,21 @@ class MenuTreeWidget(QTreeWidget):
             logger.error(message)
 
     def add_directory(self):
+        dir_name = None
         if self.Controller.ui.add_dir_line_edit.text():
             dir_name = self.Controller.ui.add_dir_line_edit.text()
-            """ if item not select"""
+        else:
+            # folder name dialog
+            dialog = QInputDialog(self)
+            dialog.setLabelText("Add folder :")
+            dialog.setOkButtonText("   Add  ")
+            dialog.setCancelButtonText("   Cancel  ")
+            dialog.setInputMode(QInputDialog.TextInput)
+            dialog_result = dialog.exec()
+            if dialog_result == 1 and dialog.textValue():
+                dir_name = dialog.textValue()
+        if dir_name:
+            # if item not select
             if not self.selectedItems():
                 path = os.path.abspath(self.Controller.lib_path + "/" + dir_name)
             else:
@@ -128,12 +144,15 @@ class MenuTreeWidget(QTreeWidget):
         menu.setStyleSheet("""background-color: #16191d; color: #fff;""")
         menu.addAction(QAction("Open in explorer", self))
         menu.addAction(QAction("Add asset", self))
+        menu.addAction(QAction("Add folder", self))
         menu.addAction(QAction("Rename folder", self))
         menu.addAction(QAction("Delete folder", self))
         action = menu.exec_(QCursor().pos())
         try:
-            path = self.selectedItems()[0].data(0, 32) + "/"
-            name = self.selectedItems()[0].data(0, 0)
+            path, name = None, None
+            if self.selectedItems():
+                path = self.selectedItems()[0].data(0, 32) + "/"
+                name = self.selectedItems()[0].data(0, 0)
             if action:
                 if action.text() == "Open in explorer":
                     subprocess.run(['explorer', os.path.realpath(path)])
@@ -146,6 +165,8 @@ class MenuTreeWidget(QTreeWidget):
                     self.rename_path(path)
                 if action.text() == "Delete folder":
                     self.delete_folder(name, path)
+                if action.text() == "Add folder":
+                    self.add_directory()
 
         except Exception as message:
             logger.error(message)
