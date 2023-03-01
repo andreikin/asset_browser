@@ -9,6 +9,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 
 from Utilities.Logging import logger
+from Utilities.telegramm_bot import send_message_to_bot
 from Utilities.Utilities import get_library_path, rename_path_list
 from settings import INFO_FOLDER, CONTENT_FOLDER, GALLERY_FOLDER, ICON_WIDTH, DELETED_ASSET_FOLDER, SFX, \
     IMAGE_PREVIEW_SUFFIX, DROP_MENU_WIDTH
@@ -19,7 +20,6 @@ class Asset:
     The class defines an asset as a structure of folders and files.
     Contains methods for creating, modifying, and deleting assets
     """
-
     def __init__(self, in_controller, **kwargs):
         try:
             self.Controller = in_controller
@@ -72,6 +72,9 @@ class Asset:
                 self.Controller.ui.add_task(self.rename_scenes)
 
                 self.refresh_ui_after_edit()
+
+                send_message_to_bot(self.name, self.icon, self.path)
+
                 logger.debug(" executed")
             else:
                 self.Controller.ui.status_message("Asset with " + self.name + " name already exists!", state="ERROR")
