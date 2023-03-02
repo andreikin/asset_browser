@@ -9,7 +9,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 
 from Utilities.Logging import logger
-from Utilities.telegramm_bot import send_message_to_bot
+from Utilities.telegram_bot import send_message_to_bot
 from Utilities.Utilities import get_library_path, rename_path_list
 from settings import INFO_FOLDER, CONTENT_FOLDER, GALLERY_FOLDER, ICON_WIDTH, DELETED_ASSET_FOLDER, SFX, \
     IMAGE_PREVIEW_SUFFIX, DROP_MENU_WIDTH

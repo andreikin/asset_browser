@@ -15,6 +15,7 @@ from Asset import Asset
 from Models import Models
 from UI.Ui_function import UiFunction
 from Utilities.Logging import logger
+from Utilities.telegram_bot import send_message_to_bot
 from Utilities.Utilities import get_library_path, convert_path_to_local, set_font_size, get_preview_images
 from settings import COLUMN_WIDTH, DROP_MENU_WIDTH, DATABASE_NAME
 
@@ -143,10 +144,13 @@ class AssetWidget(QWidget):
         menu = QMenu()
         menu.setStyleSheet("""background-color: #16191d; color: #fff; border-radius: 10px;""")
         menu.addAction(QAction("Delete asset", self))
+        menu.addAction(QAction("Send to telegram", self))
         action = menu.exec_(QCursor().pos())
         if action:
             if action.text() == "Delete asset":
                 self.delete_asset()
+            if action.text() == "Send to telegram":
+                send_message_to_bot(self.db_asset.name, self.icon_path, self.db_asset.path)
 
     def decorate_icons_color(self):
         """
