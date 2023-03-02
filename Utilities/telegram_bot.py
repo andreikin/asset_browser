@@ -3,7 +3,7 @@
 import telepot
 import os
 
-TESTING = 1
+TESTING = False
 
 if TESTING:
     CHAT_ID = 476369950
