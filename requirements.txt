@@ -1,13 +1,24 @@
 # pip install -r requirements.txt
 # pip freeze > requirements.txt
 
+aiogram==2.25.1
+aiohttp==3.8.4
+aiosignal==1.3.1
 altgraph==0.17.2
+async-timeout==4.0.2
+asynctest==0.13.0
+attrs==22.2.0
+Babel==2.9.1
 certifi==2022.12.7
+chardet==5.1.0
 charset-normalizer==3.0.1
 decorator==5.1.1
+frozenlist==1.3.3
 future==0.18.2
 idna==3.4
 importlib-metadata==4.11.1
+magic-filter==1.0.9
+multidict==6.0.4
 peewee==3.14.8
 pefile==2021.9.3
 psycopg2==2.9.3
@@ -17,11 +28,13 @@ PyQt5==5.15.2
 PyQt5-sip==12.8.1
 PyQt5-stubs==5.15.2.0
 pyTelegramBotAPI==4.10.0
+pytz==2022.7.1
 pywin32-ctypes==0.2.0
 requests==2.28.2
 self==2020.12.3
 shiboken2==5.15.2
-telebot==0.0.5
+telepot==12.7
 typing_extensions==4.1.1
 urllib3==1.26.14
+yarl==1.8.2
 zipp==3.7.0
