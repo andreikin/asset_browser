@@ -1,4 +1,5 @@
-VERSION = "1.09"
+# add Messages to telegram checkbox, fix no icon error
+VERSION = "1.1.0"
 
 """ ui settings"""
 DROP_MENU_WIDTH = 350
