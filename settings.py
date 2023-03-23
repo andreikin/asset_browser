@@ -1,5 +1,5 @@
-# add Messages to telegram checkbox, fix no icon error
-VERSION = "1.1.0"
+# fix db exist error
+VERSION = "1.1.1"
 
 """ ui settings"""
 DROP_MENU_WIDTH = 350

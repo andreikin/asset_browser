@@ -41,18 +41,15 @@ def initialize(lib_path):
         return False
     else:
         db_path = lib_path + "/" + DATABASE_NAME
-        if not os.path.exists(db_path):
-            logger.error("Database path " + db_path + " not exists")
+        try:
+            data_base.init(db_path)
+            data_base.connect()
+            data_base.create_tables([Asset, Tag])
+            logger.debug("Database " + db_path + "  initialized successfully!")
+            return True
+        except Exception as message:
+            logger.error(message)
             return False
-        else:
-            try:
-                data_base.init(db_path)
-                data_base.create_tables([Asset, Tag])
-                logger.debug("Database " + db_path + "  initialized successfully!")
-                return True
-            except Exception as message:
-                logger.error(message)
-                return False
 
 
 def add_asset_to_db(**kwargs):
@@ -203,7 +200,12 @@ def get_all_from_folder(path):
 if __name__ == '__main__':
     from settings import DATABASE_NAME
 
-    db_path = get_library_path()
-    initialize(db_path)
+    data_base.connect()
+    #db_path = get_library_path()
+    #print(os.path.join(db_path, "data.db"))
 
-    edit_db_asset(**{"name": "name", "asset_id": 17})
+
+    #data_base.init(db_path)
+    data_base.create_tables([Asset, Tag])
+
+    #edit_db_asset(**{"name": "name", "asset_id": 17})
