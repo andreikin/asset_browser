@@ -73,7 +73,8 @@ class Asset:
 
                 self.refresh_ui_after_edit()
 
-                send_message_to_bot(self.name, self.icon, self.path)
+                if self.Controller.ui.message_to_bot.isChecked():
+                    send_message_to_bot(self.name, self.icon, self.path)
 
                 logger.debug(" executed")
             else:

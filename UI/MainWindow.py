@@ -326,6 +326,9 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
             self.font_spinBox.setValue(int(self.settings.value("font size")))
         if self.settings.contains("tree settings"):
             self.tree_widget.get_settings(self.settings.value("tree settings"))
+        if self.settings.contains("Messages to telegram"):
+            val = True if self.settings.value("Messages to telegram") == "true" else False
+            self.message_to_bot.setChecked(val)
         else:
             self.font_spinBox.setValue(FONT_SIZE)
 
@@ -336,10 +339,14 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
         """
         When window closed it save fields settings
         """
-        logger.debug("\n\n__________________Close button clicked___________________")
-        self.settings.setValue("ui settings", self.search_lineEdit.text())
-        self.settings.setValue("db settings", self.db_path_lineEdit.text())
-        self.settings.setValue("ui pos", self.pos())
-        self.settings.setValue("font size", self.font_spinBox.value())
-        self.settings.setValue("tree settings", self.tree_widget.save_setting())
-        logger.debug("Settings saved")
+        try:
+            logger.debug("\n\n__________________Close button clicked___________________")
+            self.settings.setValue("ui settings", self.search_lineEdit.text())
+            self.settings.setValue("db settings", self.db_path_lineEdit.text())
+            self.settings.setValue("ui pos", self.pos())
+            self.settings.setValue("font size", self.font_spinBox.value())
+            self.settings.setValue("tree settings", self.tree_widget.save_setting())
+            self.settings.setValue("Messages to telegram", self.message_to_bot.isChecked())
+            logger.debug("Settings saved")
+        except Exception as e:
+            print(e)
