@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="icons">
+    <file>icons/table.svg</file>
     <file>icons/plus-circle.svg</file>
     <file>icons/vline.png</file>
     <file>icons/branch-open.png</file>
