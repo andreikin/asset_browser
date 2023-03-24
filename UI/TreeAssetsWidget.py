@@ -74,7 +74,6 @@ class MenuTreeWidget(QTreeWidget):
     def save_setting(self):
         settings = dict()
         for i in self.items_list:
-            logger.debug(i.isExpanded())
             settings[i.data(0, 32)] = i.isExpanded()
         return settings
 
