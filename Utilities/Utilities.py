@@ -6,7 +6,7 @@ from PyQt5 import QtCore
 from PyQt5.QtCore import QSettings, Qt, QObject
 from PyQt5.QtGui import QPixmap
 from Utilities.Logging import logger
-from settings import IMAGE_PREVIEW_SUFFIX, DROP_MENU_WIDTH, SFX, ICON_FORMATS_PATTERN
+from settings import IMAGE_PREVIEW_SUFFIX, DROP_MENU_WIDTH, SFX, ICON_FORMATS_PATTERN, DATABASE_PATH
 
 
 class CopyWithProgress(QObject):
@@ -40,7 +40,7 @@ def get_library_path():
     file_path = os.path.join(tempfile.gettempdir(), 'asset_manager_settings.ini')
     settings = QSettings(file_path, QSettings.IniFormat)
     if not settings.contains("db settings") or settings.value("db settings") == "":
-        settings.setValue("db settings", "")
+        settings.setValue("db settings", DATABASE_PATH)
 
     return settings.value("db settings")
 

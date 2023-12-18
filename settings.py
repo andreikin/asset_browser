@@ -1,4 +1,8 @@
 # fix db exist error
+import subprocess
+import tempfile
+from pathlib import Path
+
 VERSION = "1.1.1"
 
 """ ui settings"""
@@ -18,6 +22,7 @@ GALLERY_FOLDER = "gallery"
 SFX = "_ast"  # suffix for base asset folders
 DATABASE_NAME = "database.db"
 DELETED_ASSET_FOLDER = "deleted_assets"
+DATABASE_PATH = 'U:/AssetStorage/asset_browser'
 
 """over"""
 ICON_FORMATS_PATTERN = ".PNG$|.png$|.jpg$|.JPG$"
@@ -27,3 +32,6 @@ LOGGING_TO_fILE = False
 """help pdf url"""
 URL = 'https://docs.yandex.ru/docs/view?url=ya-disk-public%3A%2F%2F55Vw4e8HmjdDD9QK6tXu8KCtm6HsILLZWg7JuwU' \
       '%2B2daXO6D6zqBO9YueM6AiSkliq%2FJ6bpmRyOJonT3VoXnDag%3D%3D&name=Asset_Browser_User_manual.pdf '
+
+if __name__ == '__main__':
+    subprocess.Popen(f'explorer "{Path(tempfile.gettempdir())}"')

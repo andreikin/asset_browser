@@ -170,6 +170,8 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
             self.status_message("Problems connecting to the database.", state="ERROR")
         logger.debug("Ui loaded successfully.\n")
 
+        self.exel_button.hide()
+
     def add_tags_to_asset(self):
         tag_list = re.findall(r'[-0-9A-z_]+', self.tag_lineEdit.text())
         tag_list = remove_non_unique_tags(tag_list)
