@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import (QApplication, QLayout, QPushButton, QSizePolicy,
                              QWidget, QVBoxLayout, QLabel)
 
 from UI.Ui_function import UiFunction
-
+import resurses_rc
 
 class FlowLayout(QLayout):
     """
@@ -13,6 +13,8 @@ class FlowLayout(QLayout):
         super(FlowLayout, self).__init__(parent)
         if parent is not None:
             self.setContentsMargins(margin, margin, margin, margin)
+        self.space = spacing
+ 
         self.setSpacing(spacing)
         self.itemList = []
 
@@ -72,9 +74,9 @@ class FlowLayout(QLayout):
 
         for item in self.itemList:
             wid = item.widget()
-            spaceX = self.spacing() + wid.style().layoutSpacing(QSizePolicy.PushButton, QSizePolicy.PushButton,
+            spaceX = self.space + self.spacing() + wid.style().layoutSpacing(QSizePolicy.PushButton, QSizePolicy.PushButton,
                                                                 Qt.Horizontal)
-            spaceY = self.spacing() + wid.style().layoutSpacing(QSizePolicy.PushButton, QSizePolicy.PushButton,
+            spaceY = self.space + self.spacing() + wid.style().layoutSpacing(QSizePolicy.PushButton, QSizePolicy.PushButton,
                                                                 Qt.Vertical)
             nextX = x + item.sizeHint().width() + spaceX
             if nextX - spaceX > rect.right() and lineHeight > 0:
@@ -110,8 +112,11 @@ class TagLabel(QLabel):
                            "color: #fff;")
 
         button = QPushButton("", parent=self)
-        button.setFixedSize(15, 15)
-        button.setGeometry(width + 15, 4, -20, 20)
+        button.setFixedSize(11, 11)
+        button.setGeometry(width + 15, 6, -20, 20)
+        # button.setStyleSheet("background-color: #1f232a;"
+        #                      "border: 0px solid #8f8f91;")
+
         UiFunction.decorate_icon(button, "x-circle.svg")
         button.clicked.connect(self.delete)
 
@@ -119,8 +124,6 @@ class TagLabel(QLabel):
         for item in self.items_list:
             if item.tag == self.tag:
                 self.items_list.remove(item)
-
-        print([x.tag for x in self.items_list])
         self.deleteLater()
 
 

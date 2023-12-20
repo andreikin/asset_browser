@@ -172,6 +172,7 @@ class UiFunction(QWidget):
             self.btn_maximize.setIcon(QIcon(":/icons/icons/normalise.png"))
             self.maximize = True
 
+
     def set_font_size(self):
         """
         sets the font size of the entire application

@@ -3,17 +3,17 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-VERSION = "1.1.1"
+VERSION = "1.1.4"
 
 """ ui settings"""
 DROP_MENU_WIDTH = 350
-
 COLUMN_WIDTH = 140  # asset WIDGET width
 SPACING = 10  # space between asset icons
 ICON_WIDTH = 150  # asset icons width
-START_WINDOW_SIZE = [1300, 800]
+START_WINDOW_SIZE = [1700, 900]
 FONT_SIZE = 9
-ASSETS_IN_ONE_STEP = 50  # number of assets loaded at a time
+
+ASSETS_IN_ONE_STEP = 10  # number of assets loaded at a time
 
 """ name of assets folders"""
 INFO_FOLDER = "info"

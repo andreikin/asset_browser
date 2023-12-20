@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
-from random import randint
-from itertools import cycle
-
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QFrame, QApplication, QPushButton, QVBoxLayout, QHBoxLayout, QSizePolicy, QWidget, \
     QScrollArea
+
+from UI.AssetWidget import AssetWidget
+from UI.TagFlowWidget import FlowLayout
+from Utilities.Logging import logger
+from settings import SPACING, COLUMN_WIDTH
 
 
 class GalleryWidget(QWidget):
@@ -13,43 +15,64 @@ class GalleryWidget(QWidget):
     """
     scroll_bar_signal = QtCore.pyqtSignal()
 
-    def __init__(self, parent=None, icons_width=50, spacing=5):
+    def __init__(self, parent=None, icons_width=50, spacing=SPACING, mine_window=None):
         QWidget.__init__(self, parent)
 
         self.widget_list = []
         self.icons_width = icons_width
+        self.mine_window = mine_window
         self.spacing = spacing
+        self.gallery_old_size = None
+
         self.setMinimumWidth(self.icons_width+30)
 
-        self.__layout = QHBoxLayout()
-        self.__layout.setContentsMargins(0, 0, 0, 0)
-        self.__layout.setSpacing(self.spacing)
-        self.__layout.setAlignment(QtCore.Qt.AlignLeft)
-        self.setLayout(self.__layout)
+        self.layout = QHBoxLayout()
+        self.layout.setAlignment(QtCore.Qt.AlignLeft)
+        self.setLayout(self.layout)
 
-        self.__background = QFrame()
-        self.__background.setContentsMargins(0, 0, 0, 0)
-        self.__background_layout = QHBoxLayout(self.__background)
-        self.__background_layout.setSpacing(self.spacing)
-        self.__background_layout.setAlignment(QtCore.Qt.AlignTop)
+        self.background = QFrame()
+        self.background_layout = QHBoxLayout(self.background)
 
-        self.__columns_layout_list = []
-        for i in range(int(4000 / icons_width)):
-            v_layout = QVBoxLayout()
-            v_layout.setAlignment(QtCore.Qt.AlignTop)
-            v_layout.setContentsMargins(0, 0, 0, 0)
-            v_layout.setSpacing(self.spacing)
-            self.__background_layout.addLayout(v_layout)
-            self.__columns_layout_list.append(v_layout)
+        self.flow_layout = FlowLayout(spacing=self.spacing)
+        self.background_layout.addLayout(self.flow_layout)
 
-        self.__scroll_area = QScrollArea()
-        self.__scroll_area.setWidgetResizable(True)
-        self.__scroll_area.setWidget(self.__background)
-        self.__layout.addWidget(self.__scroll_area)
-        self.__scroll_area.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.scroll_area = QScrollArea()
+        self.scroll_area.setWidgetResizable(True)
+        self.scroll_area.setWidget(self.background)
+        self.layout.addWidget(self.scroll_area)
+        self.scroll_area.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
 
-        self.scroll_bar = self.__scroll_area.verticalScrollBar()
+        self.scroll_bar = self.scroll_area.verticalScrollBar()
         self.scroll_bar.valueChanged.connect(self.scroll_bar_handler)
+
+    def add_assets(self, number_to_add=10):
+        """
+        Staged loading of assets function
+        """
+
+        try:
+            found_assets_num = len(self.mine_window.Controller.found_assets)
+            widget_num = len(self.widget_list)
+            for i in range(widget_num, widget_num+number_to_add):
+                if len(self.widget_list)<found_assets_num:
+                    asset = self.mine_window.Controller.found_assets[i]
+                    asset_widget = AssetWidget(asset, self.mine_window.Controller, width=COLUMN_WIDTH)
+                    self.add_widget(asset_widget)
+
+        except Exception as message:
+            logger.error(message)
+
+    def resizeEvent(self, event):
+        """
+        When changing the widget size, adds more asset buttons if necessary
+        """
+        super().resizeEvent(event)
+        cur_asset_num = len(self.widget_list)
+        des_assets_in_row = self.size().width()//(self.spacing + COLUMN_WIDTH)
+        des_assets_in_col = self.size().height() // (self.spacing + int(COLUMN_WIDTH * 1.5))+1
+
+        if des_assets_in_row*des_assets_in_col > cur_asset_num:
+            self.add_assets(des_assets_in_row*des_assets_in_col-cur_asset_num)
 
     def scroll_bar_handler(self):
         """
@@ -57,38 +80,18 @@ class GalleryWidget(QWidget):
         """
         try:
             if (self.scroll_bar.maximum() - 150) < self.scroll_bar.value():
-                self.scroll_bar_signal.emit()
+                self.add_assets()
         except Exception as message:
             print(message)
 
     def add_widget(self, widget):
+        self.flow_layout.addWidget(widget)
         self.widget_list.append(widget)
-        self.refresh()
 
     def clear(self):
-        for layout in self.__columns_layout_list:
-            if layout.count():
-                for i in range(layout.count()):
-                    layout.itemAt(i).widget().deleteLater()
+        for i in range(self.flow_layout.count()):
+            self.flow_layout.itemAt(i).widget().deleteLater()
         self.widget_list = []
-
-    def refresh(self, event=None):
-        """
-        reposition assets on window resize
-        """
-        win_width = self.width() if not event else event.size().width()
-        columns_num = win_width / (self.icons_width + self.spacing)
-        if not columns_num:
-            columns_num = 1
-        tmp_image_list = self.widget_list[::-1]
-        cycler = cycle(range(int(columns_num)))
-        while tmp_image_list:
-            current_image = tmp_image_list.pop()
-            self.__columns_layout_list[next(cycler)].addWidget(current_image)
-
-    def resizeEvent(self, event):
-        if self.widget_list:
-            self.refresh(event)
 
 
 if __name__ == "__main__":
@@ -103,12 +106,12 @@ if __name__ == "__main__":
             self.vbox.addWidget(self.gallery)
             for x in range(135):
                 but = QPushButton()
-                but.setFixedHeight(randint(50, 150))
+                but.setFixedSize(140, 210)
                 self.gallery.add_widget(but)
             style_sheet = """
                        QPushButton {
                            border-radius: 4px;
-                           background-color: rgb(200, 200, 200); }
+                           background-color: rgb(100, 100, 100); }
                        """
             self.setStyleSheet(style_sheet)
             self.setLayout(self.vbox)
@@ -116,6 +119,6 @@ if __name__ == "__main__":
 
     app = QApplication(sys.argv)
     window = MyWindow()
-    window.resize(500, 300)
+    window.resize(1000, 600)
     window.show()
     sys.exit(app.exec_())

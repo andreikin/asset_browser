@@ -26,7 +26,7 @@ from Utilities.Logging import logger
 from Utilities.Utilities import convert_path_to_global, remove_non_unique_tags, CopyWithProgress
 from settings import COLUMN_WIDTH, SPACING, START_WINDOW_SIZE, SFX, FONT_SIZE, VERSION, ICON_FORMATS_PATTERN, \
     ASSETS_IN_ONE_STEP, URL
-
+import resurses_rc
 
 class BaseThread(QtCore.QThread):
     def __init__(self, queue, parent=None):
@@ -72,6 +72,8 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
         CustomTitleBar.__init__(self)
         ThreadQueue.__init__(self)
 
+        # self.resize(*START_WINDOW_SIZE)
+
         # there are two states of the assets menu
         self.__asset_menu_mode = "Add"
 
@@ -85,15 +87,17 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
         # window scale setup
         self.add_window_scale()
 
+        self.resize(*START_WINDOW_SIZE)
+
         # name verification
         self.name_lineEdit.setValidator(QRegExpValidator(QRegExp("[-A-z0-9]+")))
         self.path_lineEdit.setValidator(QRegExpValidator(QRegExp("[-/A-z0-9]+")))
         self.add_dir_line_edit.setValidator(QRegExpValidator(QRegExp("[-/A-z0-9]+")))
 
         # insert Gallery widget
-        self.gallery = GalleryWidget(icons_width=COLUMN_WIDTH, spacing=SPACING)
+        self.gallery = GalleryWidget(icons_width=COLUMN_WIDTH, spacing=SPACING, mine_window=self)
         self.galery_VLayout.addWidget(self.gallery)
-        self.update_assets_widgets()
+        #self.update_assets_widgets()
 
         # insert tags widget
         self.tag_widget = TagsWidget()
@@ -152,7 +156,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
         self.font_spinBox.valueChanged.connect(self.set_font_size)
         self.erase_basket_button.clicked.connect(self.erase_basket)
         self.export_basket_button.clicked.connect(self.basket_list_widget.export_assets)
-        self.gallery.scroll_bar_signal.connect(self.loading_assets_on_scroll)
+        #self.gallery.scroll_bar_signal.connect(self.loading_assets_on_scroll)
         self.add_tag_Button.clicked.connect(self.add_tags_to_asset)
         self.help_button.clicked.connect(lambda: webbrowser.open_new(URL))
 
@@ -171,6 +175,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
         logger.debug("Ui loaded successfully.\n")
 
         self.exel_button.hide()
+
 
     def add_tags_to_asset(self):
         tag_list = re.findall(r'[-0-9A-z_]+', self.tag_lineEdit.text())
@@ -235,25 +240,8 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
         Updates rendered assets after searching
         """
         self.gallery.clear()
-        if self.Controller.found_assets:
-            for asset in self.Controller.found_assets[:ASSETS_IN_ONE_STEP]:
-                asset_widget = AssetWidget(asset, self.Controller, width=COLUMN_WIDTH)
-                self.gallery.add_widget(asset_widget)
-
-    def loading_assets_on_scroll(self):
-        """
-        Staged loading of assets function
-        """
-        try:
-            found_assets_num = len(self.Controller.found_assets)
-            widget_num = len(self.gallery.widget_list)
-            for i in range(widget_num, widget_num+10):
-                if len(self.gallery.widget_list)<found_assets_num:
-                    asset = self.Controller.found_assets[i]
-                    asset_widget = AssetWidget(asset, self.Controller, width=COLUMN_WIDTH)
-                    self.gallery.add_widget(asset_widget)
-        except Exception as message:
-            logger.error(message)
+        width, height = self.width(), self.height()
+        self.resize(width, height+1)
 
     def update_tags_widgets(self):
         """
@@ -312,7 +300,6 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
         """
         # set default settings
         self.drop_menu.setFixedWidth(0)
-        self.resize(*START_WINDOW_SIZE)
 
         file_path = os.path.join(tempfile.gettempdir(), 'asset_manager_settings.ini')
         has_settings = os.path.exists(file_path)
