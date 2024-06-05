@@ -93,20 +93,6 @@ class UiFunction(QWidget):
         button.leaveEvent = leaveEvent
         button.setIcon(QIcon(":/icons/icons/" + icon))
 
-    def expand_close_animation(self, action="expand"):
-        if action == "expand":
-            start, end = 0, DROP_MENU_WIDTH
-            self.setMinimumWidth(DROP_MENU_WIDTH + COLUMN_WIDTH + 100)
-        else:
-            start, end = DROP_MENU_WIDTH, 0
-            self.setMinimumWidth(COLUMN_WIDTH + 100)
-        self.ani = QVariantAnimation()
-        self.ani.setStartValue(start)
-        self.ani.setEndValue(end)
-        self.ani.setDuration(300)
-        self.ani.valueChanged.connect(lambda value: self.drop_menu.setFixedWidth(value))
-        self.ani.start()
-
     def add_path_btn(self):
         """
         Add path to ui

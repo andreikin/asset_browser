@@ -7,7 +7,7 @@ import tempfile
 import webbrowser
 
 from PyQt5 import QtCore
-from PyQt5.QtCore import QSettings, QRegExp, Qt
+from PyQt5.QtCore import QSettings, QRegExp, Qt, QSize, QVariantAnimation
 from PyQt5.QtGui import QRegExpValidator, QCursor
 from PyQt5.QtWidgets import QMainWindow, QMenu, QAction, QApplication, QPushButton
 
@@ -24,8 +24,8 @@ from UI.Ui_MainWindow import Ui_MainWindow
 from UI.Ui_function import UiFunction
 from Utilities.Logging import logger
 from Utilities.Utilities import convert_path_to_global, remove_non_unique_tags, CopyWithProgress
-from settings import COLUMN_WIDTH, SPACING, START_WINDOW_SIZE, SFX, FONT_SIZE, VERSION, ICON_FORMATS_PATTERN, \
-    ASSETS_IN_ONE_STEP, URL
+from settings import COLUMN_WIDTH, SPACING, START_WINDOW_SIZE, SFX, FONT_SIZE, VERSION, ICON_FORMATS_PATTERN, URL, \
+    DROP_MENU_WIDTH
 import resurses_rc
 
 class BaseThread(QtCore.QThread):
@@ -72,7 +72,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
         CustomTitleBar.__init__(self)
         ThreadQueue.__init__(self)
 
-        # self.resize(*START_WINDOW_SIZE)
+        self.resolution_factor = 1
 
         # there are two states of the assets menu
         self.__asset_menu_mode = "Add"
@@ -86,7 +86,6 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
 
         # window scale setup
         self.add_window_scale()
-
         self.resize(*START_WINDOW_SIZE)
 
         # name verification
@@ -103,6 +102,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
         self.tag_widget = TagsWidget()
         self.tags_verticalLayout.addWidget(self.tag_widget)
 
+        # insert icon iine idit
         self.image_lineEdit = IconLineEdit()
         self.iconLE_Layout.insertWidget(1, self.image_lineEdit)
 
@@ -156,7 +156,6 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
         self.font_spinBox.valueChanged.connect(self.set_font_size)
         self.erase_basket_button.clicked.connect(self.erase_basket)
         self.export_basket_button.clicked.connect(self.basket_list_widget.export_assets)
-        #self.gallery.scroll_bar_signal.connect(self.loading_assets_on_scroll)
         self.add_tag_Button.clicked.connect(self.add_tags_to_asset)
         self.help_button.clicked.connect(lambda: webbrowser.open_new(URL))
 
@@ -176,6 +175,87 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
 
         self.exel_button.hide()
 
+    def get_resolution_factor(self):
+        """
+        Depending on the monitor resolution, calculates the resolution factor
+        """
+        screen = self.windowHandle().screen()
+        logicalDpi = screen.logicalDotsPerInch()
+        resolution_factor = logicalDpi / 96.0  # Основной монитор часто имеет DPI 96
+        return resolution_factor
+
+    def resizeEvent(self, event):
+        """
+        Resizes controls when monitor resolution changes
+        """
+        try:
+            resolution_factor = self.get_resolution_factor()
+
+            if resolution_factor != self.resolution_factor:
+                logger.info(f'\n\n_______________ The screen resolution and element sizes have changed {resolution_factor}.________________')
+                self.resolution_factor = resolution_factor
+
+                # vertical elements
+                for elem in (self.left_panel, self.drop_menu):
+                    self.set_item_size(elem, height=False)
+
+                # horizontal elements
+                for elem in (self.header_widget, self.footer_widget, self.search_lineEdit, self.name_lineEdit,
+                             self.path_lineEdit, self.tag_lineEdit, self.image_lineEdit):
+                    self.set_item_size(elem, width=False)
+
+                for btn in [self.expand_button, self.tree_button, self.gallery_button, self.cart_button,
+                            self.help_button, self.settings_button, self.btn_maximize, self.btn_close,
+                            self.btn_minimize]:
+                    self.set_item_size(btn)
+
+        except Exception as e:
+            print(e)
+
+
+
+    def set_item_size(self, item, width=True, height=True):
+        """
+        Sets the size of elements corresponding to the screen resolution
+        """
+        try:
+            if not hasattr(item, 'start_width'):
+                item.start_width = item.width()
+            if not hasattr(item, 'start_height'):
+                item.start_height = item.height()
+            if not hasattr(item, 'start_icon_size') and hasattr(item, 'iconSize'):
+                item.start_icon_size = item.iconSize().width(), item.iconSize().height()
+
+            if width:
+                item.setFixedWidth(item.start_width * self.resolution_factor)
+                item.setMaximumWidth(item.start_width * self.resolution_factor)
+                item.setMinimumWidth(item.start_width * self.resolution_factor)
+            if height:
+                item.setFixedHeight(item.start_height * self.resolution_factor)
+                item.setMaximumHeight(item.start_height * self.resolution_factor)
+                item.setMinimumHeight(item.start_height * self.resolution_factor)
+
+            if hasattr(item, 'start_icon_size'):
+                new_size = QSize(int(item.start_icon_size[0] * self.resolution_factor),
+                                 int(item.start_icon_size[1] * self.resolution_factor))
+                item.setIconSize(new_size)
+
+        except Exception as e:
+            print(e)
+
+    def expand_close_animation(self, action="expand"):
+        if action == "expand":
+            start, end = 0, int(DROP_MENU_WIDTH * self.resolution_factor)
+            self.setMinimumWidth(int(DROP_MENU_WIDTH * self.resolution_factor) + COLUMN_WIDTH + 100)
+        else:
+            start, end = int(DROP_MENU_WIDTH * self.resolution_factor), 0
+            self.setMinimumWidth(COLUMN_WIDTH + 100)
+        self.ani = QVariantAnimation()
+        self.ani.setStartValue(start)
+        self.ani.setEndValue(end)
+        self.ani.setDuration(300)
+        self.ani.valueChanged.connect(lambda value: self.drop_menu.setFixedWidth(value))
+        self.ani.start()
 
     def add_tags_to_asset(self):
         tag_list = re.findall(r'[-0-9A-z_]+', self.tag_lineEdit.text())

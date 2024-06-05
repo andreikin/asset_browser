@@ -13,8 +13,6 @@ ICON_WIDTH = 150  # asset icons width
 START_WINDOW_SIZE = [1700, 900]
 FONT_SIZE = 9
 
-ASSETS_IN_ONE_STEP = 10  # number of assets loaded at a time
-
 """ name of assets folders"""
 INFO_FOLDER = "info"
 CONTENT_FOLDER = "content"

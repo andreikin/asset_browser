@@ -16,7 +16,7 @@ class IconLineEdit(QLineEdit):    # image_lineEdit
         self.setPlaceholderText("Add path to icon here")
         self.setClearButtonEnabled(True)
         self.setDragEnabled(True)
-        self.setMinimumHeight(22)
+        self.setFixedHeight(22)
 
     def dragEnterEvent(self, event):
         data = event.mimeData()
@@ -46,7 +46,7 @@ class IconLineEdit(QLineEdit):    # image_lineEdit
         menu.setStyleSheet("""background-color: #16191d; color: #fff;""")
         menu.addAction(QAction("Paste from clipboard", self))
         action = menu.exec_(QCursor().pos())
-        if action and action.text() == "Paste from clipboard":
+        if action and action.text() == "Add from clipboard":
             clipboard = QApplication.clipboard()
             icon = clipboard.image()
             if icon:
