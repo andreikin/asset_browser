@@ -144,7 +144,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
         self.callaps_btn_b.clicked.connect(lambda: self.expand_close_animation("close"))
         self.callaps_btn_c.clicked.connect(lambda: self.expand_close_animation("close"))
         self.callaps_btn_d.clicked.connect(lambda: self.expand_close_animation("close"))
-        self.callaps_btn_e.clicked.connect(lambda: self.expand_close_animation("close"))
+        self.callaps_btn_f.clicked.connect(lambda: self.expand_close_animation("close"))
         self.path_Button.clicked.connect(self.add_path_btn)
         self.image_Button.clicked.connect(self.add_image_btn)
         self.scens_Button.clicked.connect(self.add_scenes_btn)
@@ -201,12 +201,18 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
 
                 # horizontal elements
                 for elem in (self.header_widget, self.footer_widget, self.search_lineEdit, self.name_lineEdit,
-                             self.path_lineEdit, self.tag_lineEdit, self.image_lineEdit):
+                             self.path_lineEdit, self.tag_lineEdit, self.image_lineEdit, self.add_asset_heder,
+                             self.galery_subframe, self.galery_subframe_2, self.tree_title_frame, self.basket_frame,
+                             self.add_dir_line_edit, self.Settingf_frame, self.db_path_lineEdit, self.info_frame):
                     self.set_item_size(elem, width=False)
 
                 for btn in [self.expand_button, self.tree_button, self.gallery_button, self.cart_button,
                             self.help_button, self.settings_button, self.btn_maximize, self.btn_close,
-                            self.btn_minimize]:
+                            self.btn_minimize, self.path_Button, self.callaps_btn_a, self.add_tag_Button,
+                            self.galery_button, self.scens_Button, self.image_Button, self.erase_button,
+                            self.add_asset_button, self.add_dir_button, self.callaps_btn_d, self.callaps_btn_b,
+                            self.callaps_btn_c, self.erase_basket_button, self.export_basket_button,
+                            self.callaps_btn_f]:
                     self.set_item_size(btn)
 
         except Exception as e:

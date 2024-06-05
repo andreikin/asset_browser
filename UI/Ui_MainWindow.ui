@@ -42,11 +42,11 @@ Text2:#838ea2
 QProgressBar {
     background-color: #16191d;
     border-radius: 5px;
- 	border-radius: 3px;
+    border-radius: 3px;
 }
 
 QProgressBar::chunk {
-    background-color: #343b47;
+     background-color: #343b47;
 	border: 2px solid #1f232a;
      border-radius: 5px;
  
@@ -64,7 +64,7 @@ QLineEdit, QTextEdit, #tree_body, #galery_list_frame, #scens_list_frame  {
 	border-radius: 5px;
 	padding-right: 15px;
 	background-color: #1f232a;
-    padding: 3px 3px;
+     padding: 3px 3px;
 	width: 70px;
 }
 #centralwidget{
@@ -98,15 +98,13 @@ QLineEdit, QTextEdit, #tree_body, #galery_list_frame, #scens_list_frame  {
 /* gallery scroll Area */
 QScrollBar:vertical {
  	border: none;
-    width: 10px;
-    margin: 0px 0 0px 0;
+     width: 10px;
+     margin: 0px 0 0px 0;
 	border-radius: 0px;
  }
 QScrollBar::handle:vertical {	
 	border: 3px solid #16191d;
 	background: #959aa2;
-	/*background:#838ea2;*/
-
 	min-height: 30px;
 	border-radius: 5px;
 }
@@ -495,8 +493,8 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
             </property>
             <property name="iconSize">
              <size>
-              <width>20</width>
-              <height>20</height>
+              <width>26</width>
+              <height>26</height>
              </size>
             </property>
            </widget>
@@ -698,7 +696,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
              <item>
               <widget class="QStackedWidget" name="drop_stackedWidget">
                <property name="currentIndex">
-                <number>0</number>
+                <number>4</number>
                </property>
                <widget class="QWidget" name="page_1">
                 <layout class="QVBoxLayout" name="verticalLayout_17">
@@ -725,6 +723,12 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                      <verstretch>0</verstretch>
                     </sizepolicy>
                    </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>40</height>
+                    </size>
+                   </property>
                    <property name="maximumSize">
                     <size>
                      <width>16777215</width>
@@ -738,6 +742,12 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                     <enum>QFrame::Raised</enum>
                    </property>
                    <layout class="QHBoxLayout" name="horizontalLayout_6">
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
                     <item>
                      <widget class="QLabel" name="asset_menu_label">
                       <property name="text">
@@ -750,6 +760,18 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                     </item>
                     <item alignment="Qt::AlignRight">
                      <widget class="QPushButton" name="callaps_btn_a">
+                      <property name="minimumSize">
+                       <size>
+                        <width>24</width>
+                        <height>24</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>24</width>
+                        <height>24</height>
+                       </size>
+                      </property>
                       <property name="text">
                        <string/>
                       </property>
@@ -779,7 +801,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                       <x>0</x>
                       <y>0</y>
                       <width>323</width>
-                      <height>618</height>
+                      <height>614</height>
                      </rect>
                     </property>
                     <layout class="QVBoxLayout" name="verticalLayout">
@@ -1561,6 +1583,12 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                  </property>
                  <item>
                   <widget class="QFrame" name="tree_title_frame">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>40</height>
+                    </size>
+                   </property>
                    <property name="maximumSize">
                     <size>
                      <width>16777215</width>
@@ -1574,6 +1602,12 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                     <enum>QFrame::Raised</enum>
                    </property>
                    <layout class="QHBoxLayout" name="horizontalLayout_15">
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
                     <item>
                      <widget class="QLabel" name="lib_tree_label">
                       <property name="text">
@@ -1586,6 +1620,18 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                     </item>
                     <item alignment="Qt::AlignRight">
                      <widget class="QPushButton" name="callaps_btn_d">
+                      <property name="minimumSize">
+                       <size>
+                        <width>24</width>
+                        <height>24</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>24</width>
+                        <height>24</height>
+                       </size>
+                      </property>
                       <property name="text">
                        <string/>
                       </property>
@@ -1681,8 +1727,14 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                      <widget class="QPushButton" name="add_dir_button">
                       <property name="minimumSize">
                        <size>
-                        <width>0</width>
-                        <height>0</height>
+                        <width>24</width>
+                        <height>24</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>24</width>
+                        <height>24</height>
                        </size>
                       </property>
                       <property name="text">
@@ -1721,6 +1773,12 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                  </property>
                  <item>
                   <widget class="QFrame" name="Settingf_frame">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>40</height>
+                    </size>
+                   </property>
                    <property name="maximumSize">
                     <size>
                      <width>16777215</width>
@@ -1734,6 +1792,12 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                     <enum>QFrame::Raised</enum>
                    </property>
                    <layout class="QHBoxLayout" name="horizontalLayout_7">
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
                     <item>
                      <widget class="QLabel" name="settings_label">
                       <property name="text">
@@ -1746,6 +1810,18 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                     </item>
                     <item alignment="Qt::AlignRight">
                      <widget class="QPushButton" name="callaps_btn_b">
+                      <property name="minimumSize">
+                       <size>
+                        <width>24</width>
+                        <height>24</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>24</width>
+                        <height>24</height>
+                       </size>
+                      </property>
                       <property name="text">
                        <string/>
                       </property>
@@ -2040,6 +2116,12 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                  </property>
                  <item>
                   <widget class="QFrame" name="info_frame">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>40</height>
+                    </size>
+                   </property>
                    <property name="maximumSize">
                     <size>
                      <width>16777215</width>
@@ -2053,6 +2135,12 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                     <enum>QFrame::Raised</enum>
                    </property>
                    <layout class="QHBoxLayout" name="horizontalLayout_8">
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
                     <item>
                      <widget class="QLabel" name="asset_overview_label">
                       <property name="text">
@@ -2065,6 +2153,18 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                     </item>
                     <item alignment="Qt::AlignRight">
                      <widget class="QPushButton" name="callaps_btn_c">
+                      <property name="minimumSize">
+                       <size>
+                        <width>24</width>
+                        <height>24</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>24</width>
+                        <height>24</height>
+                       </size>
+                      </property>
                       <property name="text">
                        <string/>
                       </property>
@@ -2097,7 +2197,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                       <x>0</x>
                       <y>0</y>
                       <width>323</width>
-                      <height>600</height>
+                      <height>664</height>
                      </rect>
                     </property>
                     <layout class="QVBoxLayout" name="gallery_VLayout">
@@ -2171,6 +2271,12 @@ p, li { white-space: pre-wrap; }
                  </property>
                  <item>
                   <widget class="QFrame" name="basket_frame">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>40</height>
+                    </size>
+                   </property>
                    <property name="maximumSize">
                     <size>
                      <width>16777215</width>
@@ -2184,6 +2290,12 @@ p, li { white-space: pre-wrap; }
                     <enum>QFrame::Raised</enum>
                    </property>
                    <layout class="QHBoxLayout" name="horizontalLayout_19">
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
                     <item>
                      <widget class="QLabel" name="basket_label">
                       <property name="text">
@@ -2195,7 +2307,19 @@ p, li { white-space: pre-wrap; }
                      </widget>
                     </item>
                     <item alignment="Qt::AlignRight">
-                     <widget class="QPushButton" name="callaps_btn_e">
+                     <widget class="QPushButton" name="callaps_btn_f">
+                      <property name="minimumSize">
+                       <size>
+                        <width>24</width>
+                        <height>24</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>24</width>
+                        <height>24</height>
+                       </size>
+                      </property>
                       <property name="text">
                        <string/>
                       </property>

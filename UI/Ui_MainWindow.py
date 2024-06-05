@@ -38,11 +38,11 @@ class Ui_MainWindow(object):
 "QProgressBar {\n"
 "    background-color: #16191d;\n"
 "    border-radius: 5px;\n"
-"     border-radius: 3px;\n"
+"    border-radius: 3px;\n"
 "}\n"
 "\n"
 "QProgressBar::chunk {\n"
-"    background-color: #343b47;\n"
+"     background-color: #343b47;\n"
 "    border: 2px solid #1f232a;\n"
 "     border-radius: 5px;\n"
 " \n"
@@ -60,7 +60,7 @@ class Ui_MainWindow(object):
 "    border-radius: 5px;\n"
 "    padding-right: 15px;\n"
 "    background-color: #1f232a;\n"
-"    padding: 3px 3px;\n"
+"     padding: 3px 3px;\n"
 "    width: 70px;\n"
 "}\n"
 "#centralwidget{\n"
@@ -94,15 +94,13 @@ class Ui_MainWindow(object):
 "/* gallery scroll Area */\n"
 "QScrollBar:vertical {\n"
 "     border: none;\n"
-"    width: 10px;\n"
-"    margin: 0px 0 0px 0;\n"
+"     width: 10px;\n"
+"     margin: 0px 0 0px 0;\n"
 "    border-radius: 0px;\n"
 " }\n"
 "QScrollBar::handle:vertical {    \n"
 "    border: 3px solid #16191d;\n"
 "    background: #959aa2;\n"
-"    /*background:#838ea2;*/\n"
-"\n"
 "    min-height: 30px;\n"
 "    border-radius: 5px;\n"
 "}\n"
@@ -245,7 +243,7 @@ class Ui_MainWindow(object):
         icon5 = QtGui.QIcon()
         icon5.addPixmap(QtGui.QPixmap(":/icons/icons/tree2.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.tree_button.setIcon(icon5)
-        self.tree_button.setIconSize(QtCore.QSize(20, 20))
+        self.tree_button.setIconSize(QtCore.QSize(26, 26))
         self.tree_button.setObjectName("tree_button")
         self.verticalLayout_2.addWidget(self.tree_button)
         self.gallery_button = QtWidgets.QPushButton(self.left_panel)
@@ -329,17 +327,21 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.add_asset_heder.sizePolicy().hasHeightForWidth())
         self.add_asset_heder.setSizePolicy(sizePolicy)
+        self.add_asset_heder.setMinimumSize(QtCore.QSize(0, 40))
         self.add_asset_heder.setMaximumSize(QtCore.QSize(16777215, 40))
         self.add_asset_heder.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.add_asset_heder.setFrameShadow(QtWidgets.QFrame.Raised)
         self.add_asset_heder.setObjectName("add_asset_heder")
         self.horizontalLayout_6 = QtWidgets.QHBoxLayout(self.add_asset_heder)
+        self.horizontalLayout_6.setContentsMargins(-1, 0, -1, 0)
         self.horizontalLayout_6.setObjectName("horizontalLayout_6")
         self.asset_menu_label = QtWidgets.QLabel(self.add_asset_heder)
         self.asset_menu_label.setAlignment(QtCore.Qt.AlignCenter)
         self.asset_menu_label.setObjectName("asset_menu_label")
         self.horizontalLayout_6.addWidget(self.asset_menu_label)
         self.callaps_btn_a = QtWidgets.QPushButton(self.add_asset_heder)
+        self.callaps_btn_a.setMinimumSize(QtCore.QSize(24, 24))
+        self.callaps_btn_a.setMaximumSize(QtCore.QSize(24, 24))
         self.callaps_btn_a.setText("")
         icon11 = QtGui.QIcon()
         icon11.addPixmap(QtGui.QPixmap(":/icons/icons/x-circle.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -352,7 +354,7 @@ class Ui_MainWindow(object):
         self.add_assetscrollArea.setWidgetResizable(True)
         self.add_assetscrollArea.setObjectName("add_assetscrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 323, 618))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 323, 614))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setContentsMargins(0, 0, 6, 0)
@@ -594,17 +596,21 @@ class Ui_MainWindow(object):
         self.verticalLayout_14.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_14.setObjectName("verticalLayout_14")
         self.tree_title_frame = QtWidgets.QFrame(self.page_2)
+        self.tree_title_frame.setMinimumSize(QtCore.QSize(0, 40))
         self.tree_title_frame.setMaximumSize(QtCore.QSize(16777215, 40))
         self.tree_title_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.tree_title_frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.tree_title_frame.setObjectName("tree_title_frame")
         self.horizontalLayout_15 = QtWidgets.QHBoxLayout(self.tree_title_frame)
+        self.horizontalLayout_15.setContentsMargins(-1, 0, -1, 0)
         self.horizontalLayout_15.setObjectName("horizontalLayout_15")
         self.lib_tree_label = QtWidgets.QLabel(self.tree_title_frame)
         self.lib_tree_label.setAlignment(QtCore.Qt.AlignCenter)
         self.lib_tree_label.setObjectName("lib_tree_label")
         self.horizontalLayout_15.addWidget(self.lib_tree_label)
         self.callaps_btn_d = QtWidgets.QPushButton(self.tree_title_frame)
+        self.callaps_btn_d.setMinimumSize(QtCore.QSize(24, 24))
+        self.callaps_btn_d.setMaximumSize(QtCore.QSize(24, 24))
         self.callaps_btn_d.setText("")
         self.callaps_btn_d.setIcon(icon11)
         self.callaps_btn_d.setIconSize(QtCore.QSize(24, 24))
@@ -636,7 +642,8 @@ class Ui_MainWindow(object):
         self.add_dir_line_edit.setObjectName("add_dir_line_edit")
         self.horizontalLayout_13.addWidget(self.add_dir_line_edit)
         self.add_dir_button = QtWidgets.QPushButton(self.add_dir_widget)
-        self.add_dir_button.setMinimumSize(QtCore.QSize(0, 0))
+        self.add_dir_button.setMinimumSize(QtCore.QSize(24, 24))
+        self.add_dir_button.setMaximumSize(QtCore.QSize(24, 24))
         self.add_dir_button.setText("")
         icon15 = QtGui.QIcon()
         icon15.addPixmap(QtGui.QPixmap(":/icons/icons/folder-plus.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -652,17 +659,21 @@ class Ui_MainWindow(object):
         self.verticalLayout_7.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_7.setObjectName("verticalLayout_7")
         self.Settingf_frame = QtWidgets.QFrame(self.page_3)
+        self.Settingf_frame.setMinimumSize(QtCore.QSize(0, 40))
         self.Settingf_frame.setMaximumSize(QtCore.QSize(16777215, 40))
         self.Settingf_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.Settingf_frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.Settingf_frame.setObjectName("Settingf_frame")
         self.horizontalLayout_7 = QtWidgets.QHBoxLayout(self.Settingf_frame)
+        self.horizontalLayout_7.setContentsMargins(-1, 0, -1, 0)
         self.horizontalLayout_7.setObjectName("horizontalLayout_7")
         self.settings_label = QtWidgets.QLabel(self.Settingf_frame)
         self.settings_label.setAlignment(QtCore.Qt.AlignCenter)
         self.settings_label.setObjectName("settings_label")
         self.horizontalLayout_7.addWidget(self.settings_label)
         self.callaps_btn_b = QtWidgets.QPushButton(self.Settingf_frame)
+        self.callaps_btn_b.setMinimumSize(QtCore.QSize(24, 24))
+        self.callaps_btn_b.setMaximumSize(QtCore.QSize(24, 24))
         self.callaps_btn_b.setText("")
         self.callaps_btn_b.setIcon(icon11)
         self.callaps_btn_b.setIconSize(QtCore.QSize(24, 24))
@@ -755,17 +766,21 @@ class Ui_MainWindow(object):
         self.verticalLayout_8.setSpacing(0)
         self.verticalLayout_8.setObjectName("verticalLayout_8")
         self.info_frame = QtWidgets.QFrame(self.page_4)
+        self.info_frame.setMinimumSize(QtCore.QSize(0, 40))
         self.info_frame.setMaximumSize(QtCore.QSize(16777215, 40))
         self.info_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.info_frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.info_frame.setObjectName("info_frame")
         self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.info_frame)
+        self.horizontalLayout_8.setContentsMargins(-1, 0, -1, 0)
         self.horizontalLayout_8.setObjectName("horizontalLayout_8")
         self.asset_overview_label = QtWidgets.QLabel(self.info_frame)
         self.asset_overview_label.setAlignment(QtCore.Qt.AlignCenter)
         self.asset_overview_label.setObjectName("asset_overview_label")
         self.horizontalLayout_8.addWidget(self.asset_overview_label)
         self.callaps_btn_c = QtWidgets.QPushButton(self.info_frame)
+        self.callaps_btn_c.setMinimumSize(QtCore.QSize(24, 24))
+        self.callaps_btn_c.setMaximumSize(QtCore.QSize(24, 24))
         self.callaps_btn_c.setText("")
         self.callaps_btn_c.setIcon(icon11)
         self.callaps_btn_c.setIconSize(QtCore.QSize(24, 24))
@@ -777,7 +792,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents_2 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 323, 600))
+        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 323, 664))
         self.scrollAreaWidgetContents_2.setObjectName("scrollAreaWidgetContents_2")
         self.gallery_VLayout = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents_2)
         self.gallery_VLayout.setContentsMargins(0, -1, 0, -1)
@@ -801,22 +816,26 @@ class Ui_MainWindow(object):
         self.verticalLayout_9.setSpacing(0)
         self.verticalLayout_9.setObjectName("verticalLayout_9")
         self.basket_frame = QtWidgets.QFrame(self.page_5)
+        self.basket_frame.setMinimumSize(QtCore.QSize(0, 40))
         self.basket_frame.setMaximumSize(QtCore.QSize(16777215, 40))
         self.basket_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.basket_frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.basket_frame.setObjectName("basket_frame")
         self.horizontalLayout_19 = QtWidgets.QHBoxLayout(self.basket_frame)
+        self.horizontalLayout_19.setContentsMargins(-1, 0, -1, 0)
         self.horizontalLayout_19.setObjectName("horizontalLayout_19")
         self.basket_label = QtWidgets.QLabel(self.basket_frame)
         self.basket_label.setAlignment(QtCore.Qt.AlignCenter)
         self.basket_label.setObjectName("basket_label")
         self.horizontalLayout_19.addWidget(self.basket_label)
-        self.callaps_btn_e = QtWidgets.QPushButton(self.basket_frame)
-        self.callaps_btn_e.setText("")
-        self.callaps_btn_e.setIcon(icon11)
-        self.callaps_btn_e.setIconSize(QtCore.QSize(24, 24))
-        self.callaps_btn_e.setObjectName("callaps_btn_e")
-        self.horizontalLayout_19.addWidget(self.callaps_btn_e, 0, QtCore.Qt.AlignRight)
+        self.callaps_btn_f = QtWidgets.QPushButton(self.basket_frame)
+        self.callaps_btn_f.setMinimumSize(QtCore.QSize(24, 24))
+        self.callaps_btn_f.setMaximumSize(QtCore.QSize(24, 24))
+        self.callaps_btn_f.setText("")
+        self.callaps_btn_f.setIcon(icon11)
+        self.callaps_btn_f.setIconSize(QtCore.QSize(24, 24))
+        self.callaps_btn_f.setObjectName("callaps_btn_f")
+        self.horizontalLayout_19.addWidget(self.callaps_btn_f, 0, QtCore.Qt.AlignRight)
         self.verticalLayout_9.addWidget(self.basket_frame)
         self.frame = QtWidgets.QFrame(self.page_5)
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -934,7 +953,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.drop_stackedWidget.setCurrentIndex(0)
+        self.drop_stackedWidget.setCurrentIndex(4)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):

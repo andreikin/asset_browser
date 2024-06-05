@@ -69,6 +69,7 @@ class UiFunction(QWidget):
                     self.callaps_btn_b: "x-circle.svg",
                     self.callaps_btn_c: "x-circle.svg",
                     self.callaps_btn_d: "x-circle.svg",
+                    self.callaps_btn_f: "x-circle.svg",
                     self.add_dir_button: "folder-plus.svg",
                     self.tag_widget.left_button: "chevrons-left.svg",
                     self.tag_widget.right_button: "chevrons-right.svg",
