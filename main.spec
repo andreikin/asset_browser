@@ -4,7 +4,7 @@
 block_cipher = None
 
 
-a = Analysis(['D:\\work\\_pythonProjects\\asset_brouser\\main.py'],
+a = Analysis(['D:\\Projects\\Python\\asset_browser\\main.py'],
              pathex=[],
              binaries=[],
              datas=[],
