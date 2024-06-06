@@ -1,9 +1,10 @@
-# fix db exist error
+# optimized the process of loading assets for resolution
+
 import subprocess
 import tempfile
 from pathlib import Path
 
-VERSION = "1.1.4"
+VERSION = "1.1.8"
 
 """ ui settings"""
 DROP_MENU_WIDTH = 350

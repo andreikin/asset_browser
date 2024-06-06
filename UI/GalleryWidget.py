@@ -61,7 +61,7 @@ class GalleryWidget(QWidget):
             for i in range(widget_num, widget_num+number_to_add):
                 if len(self.widget_list)<found_assets_num:
                     asset = self.mine_window.Controller.found_assets[i]
-                    asset_widget = AssetWidget(asset, self.mine_window.Controller, width=COLUMN_WIDTH)
+                    asset_widget = AssetWidget(asset, self.mine_window.Controller)
                     self.add_widget(asset_widget)
 
         except Exception as message:
@@ -73,8 +73,10 @@ class GalleryWidget(QWidget):
         """
         super().resizeEvent(event)
         cur_asset_num = len(self.widget_list)
-        des_assets_in_row = self.size().width()//(self.spacing + COLUMN_WIDTH)
-        des_assets_in_col = self.size().height() // (self.spacing + int(COLUMN_WIDTH * 1.5))+1
+
+        width = int(COLUMN_WIDTH * self.mine_window.resolution_factor)
+        des_assets_in_row = self.size().width()//(self.spacing + width)
+        des_assets_in_col = self.size().height() // (self.spacing + int(width * 1.5))+1
 
         if des_assets_in_row*des_assets_in_col > cur_asset_num:
             self.add_assets(des_assets_in_row*des_assets_in_col-cur_asset_num)
