@@ -195,8 +195,13 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
                 logger.info(f'\n\n_______________ The screen resolution and element sizes have changed {resolution_factor}.________________')
                 self.resolution_factor = resolution_factor
 
+                self.gallery.set_size()
+
+                if self.drop_menu.width():
+                    self.drop_menu.setFixedWidth(DROP_MENU_WIDTH * self.resolution_factor)
+
                 # vertical elements
-                for elem in (self.left_panel, self.drop_menu):
+                for elem in (self.left_panel,):
                     self.set_item_size(elem, height=False)
 
                 # horizontal elements

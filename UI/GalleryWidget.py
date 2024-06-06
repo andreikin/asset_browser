@@ -45,6 +45,11 @@ class GalleryWidget(QWidget):
         self.scroll_bar = self.scroll_area.verticalScrollBar()
         self.scroll_bar.valueChanged.connect(self.scroll_bar_handler)
 
+    def set_size(self):
+        resolution_factor = self.mine_window.resolution_factor if self.mine_window else 1
+        for widget in self.widget_list:
+            widget.set_size(resolution_factor)
+
     def add_assets(self, number_to_add=10):
         """
         Staged loading of assets function
@@ -95,30 +100,31 @@ class GalleryWidget(QWidget):
 
 
 if __name__ == "__main__":
-    import sys
+    pass
+    # import sys
 
-
-    class MyWindow(QWidget):
-        def __init__(self, parent=None):
-            QWidget.__init__(self, parent)
-            self.vbox = QVBoxLayout()
-            self.gallery = GalleryWidget(icons_width=100, spacing=8)
-            self.vbox.addWidget(self.gallery)
-            for x in range(135):
-                but = QPushButton()
-                but.setFixedSize(140, 210)
-                self.gallery.add_widget(but)
-            style_sheet = """
-                       QPushButton {
-                           border-radius: 4px;
-                           background-color: rgb(100, 100, 100); }
-                       """
-            self.setStyleSheet(style_sheet)
-            self.setLayout(self.vbox)
-
-
-    app = QApplication(sys.argv)
-    window = MyWindow()
-    window.resize(1000, 600)
-    window.show()
-    sys.exit(app.exec_())
+    #
+    # class MyWindow(QWidget):
+    #     def __init__(self, parent=None):
+    #         QWidget.__init__(self, parent)
+    #         self.vbox = QVBoxLayout()
+    #         self.gallery = GalleryWidget(icons_width=100, spacing=8)
+    #         self.vbox.addWidget(self.gallery)
+    #         for x in range(135):
+    #             but = QPushButton()
+    #             but.setFixedSize(140, 210)
+    #             self.gallery.add_widget(but)
+    #         style_sheet = """
+    #                    QPushButton {
+    #                        border-radius: 4px;
+    #                        background-color: rgb(100, 100, 100); }
+    #                    """
+    #         self.setStyleSheet(style_sheet)
+    #         self.setLayout(self.vbox)
+    #
+    #
+    # app = QApplication(sys.argv)
+    # window = MyWindow()
+    # window.resize(1000, 600)
+    # window.show()
+    # sys.exit(app.exec_())

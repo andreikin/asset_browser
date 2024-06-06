@@ -32,12 +32,7 @@ class AssetWidget(QWidget):
         QWidget.__init__(self, parent)
         self.db_asset = db_asset  # asset object from database
         self.Controller = in_controller
-        self.width = width
         self.icon_path = Asset.dir_names(self.db_asset.path)["icon"]
-        self.height = QPixmap(self.icon_path).scaledToWidth(self.width).height()
-
-        if not self.height:
-            self.height = self.width * 1.5
 
         self.layout = QVBoxLayout()
         self.layout.setContentsMargins(0, 0, 0, 0)
@@ -45,7 +40,7 @@ class AssetWidget(QWidget):
 
         self.frame_image = QFrame()
         self.frame_image.setObjectName("frame_image")
-        self.frame_image.setFixedSize(self.width, self.height)
+
         self.layout.addWidget(self.frame_image)
         self.frame_image.setStyleSheet("border-radius: 12px;"
                                        "background-color: #2c313c;"
@@ -53,12 +48,10 @@ class AssetWidget(QWidget):
 
         self.frame_shadow = QPushButton(parent=self)
         self.frame_shadow.setObjectName("frame_shadow")
-        self.frame_shadow.setGeometry(0, 0, self.width, self.height)
         self.frame_shadow.installEventFilter(self)
 
         self.ast_label = QLabel(self.db_asset.name, parent=self.frame_shadow)
         self.ast_label.setToolTip(self.db_asset.name)
-        self.ast_label.setGeometry(10, 10, self.width - 20, 22)
         self.ast_label.setStyleSheet("background-color: #16191d;"
                                      "border-radius: 10px;"
                                      "font: bold;"
@@ -66,26 +59,12 @@ class AssetWidget(QWidget):
                                      "color: #fff;")
 
         self.open_button = QPushButton("", parent=self.frame_shadow)
-        self.open_button.setGeometry(self.places_buttons_by_x()[0], self.height - 35, BTN_WIDTH, BTN_WIDTH)
-        self.open_button.setIconSize(QtCore.QSize(ICON_SIZE, ICON_SIZE))
-        self.open_button.setStyleSheet("background-color: #16191d;"
-                                       "border-radius: " + str(BTN_WIDTH / 2) + "px;")
-
         self.edit_button = QPushButton("", parent=self.frame_shadow)
-        self.edit_button.setGeometry(self.places_buttons_by_x()[1], self.height - 35, BTN_WIDTH, BTN_WIDTH)
-        self.edit_button.setIconSize(QtCore.QSize(ICON_SIZE, ICON_SIZE))
-        self.edit_button.setStyleSheet("background-color: #16191d;"
-                                       "border-radius: " + str(BTN_WIDTH / 2) + "px;")
-
         self.check_box = QPushButton("", parent=self.frame_shadow)
-        self.check_box.setGeometry(self.places_buttons_by_x()[2], self.height - 35, BTN_WIDTH, BTN_WIDTH)
-        self.check_box.setIconSize(QtCore.QSize(ICON_SIZE, ICON_SIZE))
-        self.check_box.setStyleSheet("background-color: #16191d;"
-                                     "padding: 9px;"
-                                     "border-radius: " + str(BTN_WIDTH / 2) + "px;")
+
+        self.set_size(self.Controller.ui.resolution_factor)
 
         self.hidden_list = [self.ast_label, self.edit_button, self.check_box, self.open_button]
-
         if self.db_asset.path in self.Controller.ui.basket_list_widget.get_list():
             self.select_asset()
         else:
@@ -119,6 +98,42 @@ class AssetWidget(QWidget):
         set_font_size(self.ast_label, size)
 
         self.decorate_icons_color()
+
+    def set_size(self, resolution_factor):
+        self.width = int(COLUMN_WIDTH * resolution_factor)
+
+        self.height = QPixmap(self.icon_path).scaledToWidth(self.width).height()
+
+        if not self.height:
+            self.height = self.width * 1.5
+
+        self.frame_image.setFixedSize(self.width, self.height)
+        self.frame_shadow.setGeometry(0, 0, self.width, self.height)
+        self.ast_label.setGeometry(10, 10, self.width - 20, 22 * resolution_factor)
+
+        button_width = int(BTN_WIDTH * resolution_factor)
+        button_radius = int(button_width / 2)
+        y_pos = self.height - 40 * resolution_factor
+
+        open_button_x = button_radius
+        edit_button_x = self.width//2-button_radius
+        check_box_x = self.width-button_radius*3
+
+        self.open_button.setGeometry(open_button_x, y_pos, button_width, button_width)
+        self.open_button.setIconSize(QtCore.QSize(ICON_SIZE* resolution_factor, ICON_SIZE* resolution_factor))
+        self.open_button.setStyleSheet("background-color: #16191d;"
+                                       "border-radius: " + str(button_radius) + "px;")
+
+        self.edit_button.setGeometry(edit_button_x,  y_pos, button_width, button_width)
+        self.edit_button.setIconSize(QtCore.QSize(ICON_SIZE* resolution_factor, ICON_SIZE* resolution_factor))
+        self.edit_button.setStyleSheet("background-color: #16191d;"
+                                       "border-radius: " + str(button_radius) + "px;")
+
+        self.check_box.setGeometry(check_box_x, y_pos, button_width, button_width)
+        self.check_box.setIconSize(QtCore.QSize(ICON_SIZE* resolution_factor, ICON_SIZE* resolution_factor))
+        self.check_box.setStyleSheet("background-color: #16191d;"
+                                     "padding: 9px;"
+                                     "border-radius: " + str(button_radius) + "px;")
 
     def check_box_state_changed(self):
         if self.check_box.state:
@@ -222,15 +237,6 @@ class AssetWidget(QWidget):
         subprocess.call(path, shell=True)
         logger.debug(" Image opened" + "\n")
 
-    def places_buttons_by_x(self, offset=0.05):
-        """
-        places three buttons on the x-axis
-        """
-        dist = COLUMN_WIDTH * offset
-        widget_centre = COLUMN_WIDTH / 2
-        return [widget_centre - BTN_WIDTH - BTN_WIDTH / 2 - dist,
-                widget_centre - BTN_WIDTH / 2,
-                widget_centre + BTN_WIDTH / 2 + dist]
 
     def mouseMoveEvent(self, e):
         """
