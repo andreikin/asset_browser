@@ -4,7 +4,7 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-VERSION = "1.1.8"
+VERSION = "1.1.9"
 
 """ ui settings"""
 DROP_MENU_WIDTH = 350
@@ -22,6 +22,7 @@ SFX = "_ast"  # suffix for base asset folders
 DATABASE_NAME = "database.db"
 DELETED_ASSET_FOLDER = "deleted_assets"
 DATABASE_PATH = 'U:/AssetStorage/asset_browser'
+OTHER_DATABASE_PATH = 'D:/tmp/test_lib/database.db'
 
 """over"""
 ICON_FORMATS_PATTERN = ".PNG$|.png$|.jpg$|.JPG$"

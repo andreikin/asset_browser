@@ -156,6 +156,9 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
         self.font_spinBox.valueChanged.connect(self.set_font_size)
         self.erase_basket_button.clicked.connect(self.erase_basket)
         self.export_basket_button.clicked.connect(self.basket_list_widget.export_assets)
+
+        self.export_to_lib_button.clicked.connect(lambda: self.basket_list_widget.export_assets(to_library=True))
+
         self.add_tag_Button.clicked.connect(self.add_tags_to_asset)
         self.help_button.clicked.connect(lambda: webbrowser.open_new(URL))
 
@@ -217,7 +220,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
                             self.galery_button, self.scens_Button, self.image_Button, self.erase_button,
                             self.add_asset_button, self.add_dir_button, self.callaps_btn_d, self.callaps_btn_b,
                             self.callaps_btn_c, self.erase_basket_button, self.export_basket_button,
-                            self.callaps_btn_f]:
+                            self.export_to_lib_button, self.callaps_btn_f]:
                     self.set_item_size(btn)
 
         except Exception as e:

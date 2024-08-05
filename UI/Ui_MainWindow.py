@@ -48,7 +48,7 @@ class Ui_MainWindow(object):
 " \n"
 "}\n"
 "\n"
-"#add_asset_button:hover,  #erase_button:hover, #export_basket_button:hover, #erase_basket_button:hover{\n"
+"#add_asset_button:hover,  #erase_button:hover, #export_basket_button:hover, #erase_basket_button:hover, #export_to_lib_button:hover {\n"
 "    color:#9bc2ff;\n"
 "}\n"
 "QLineEdit, QTextEdit, #tree_body, #galery_list_frame, #scens_list_frame  {\n"
@@ -854,10 +854,15 @@ class Ui_MainWindow(object):
         self.erase_basket_button.setIconSize(QtCore.QSize(24, 24))
         self.erase_basket_button.setObjectName("erase_basket_button")
         self.horizontalLayout_20.addWidget(self.erase_basket_button)
-        self.export_basket_button = QtWidgets.QPushButton(self.add_asset_btn_contaner_2)
-        self.export_basket_button.setMinimumSize(QtCore.QSize(0, 0))
+        self.export_to_lib_button = QtWidgets.QPushButton(self.add_asset_btn_contaner_2)
         icon16 = QtGui.QIcon()
         icon16.addPixmap(QtGui.QPixmap(":/icons/icons/file.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.export_to_lib_button.setIcon(icon16)
+        self.export_to_lib_button.setIconSize(QtCore.QSize(24, 24))
+        self.export_to_lib_button.setObjectName("export_to_lib_button")
+        self.horizontalLayout_20.addWidget(self.export_to_lib_button)
+        self.export_basket_button = QtWidgets.QPushButton(self.add_asset_btn_contaner_2)
+        self.export_basket_button.setMinimumSize(QtCore.QSize(0, 0))
         self.export_basket_button.setIcon(icon16)
         self.export_basket_button.setIconSize(QtCore.QSize(24, 24))
         self.export_basket_button.setObjectName("export_basket_button")
@@ -993,6 +998,7 @@ class Ui_MainWindow(object):
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8.25pt;\"><br /></p></body></html>"))
         self.basket_label.setText(_translate("MainWindow", "Assets basket"))
         self.erase_basket_button.setText(_translate("MainWindow", "Cancel"))
+        self.export_to_lib_button.setText(_translate("MainWindow", "To library"))
         self.export_basket_button.setText(_translate("MainWindow", "Export assets"))
         self.search_lineEdit.setPlaceholderText(_translate("MainWindow", "Type tag or tags here"))
         self.status_label.setText(_translate("MainWindow", "In the database were found 0 items "))

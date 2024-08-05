@@ -77,6 +77,7 @@ class UiFunction(QWidget):
                     self.add_tag_Button: "plus-circle.svg",
                     self.help_button: "help-circle.svg",
                     self.export_basket_button: "file.svg",
+                    self.export_to_lib_button: "file.svg",
                     self.exel_button: "table.svg",
                     }
         for button in btn_dict:

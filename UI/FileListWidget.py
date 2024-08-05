@@ -5,8 +5,10 @@ import sys
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QStandardItemModel, QStandardItem, QIcon
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QPushButton, QListView, QApplication, QAbstractItemView, QFileDialog
+
+from Asset import Asset
 from Utilities.Logging import logger
-from settings import CONTENT_FOLDER
+from settings import CONTENT_FOLDER, GALLERY_FOLDER, INFO_FOLDER, OTHER_DATABASE_PATH
 
 
 class DeleteItemButton(QWidget):
@@ -65,7 +67,7 @@ class FileListWidget(QListView):
         self.update_gallery = False
         self.Controller = in_controller
 
-    def remove_file(self, file_path):
+    def remove_item(self, file_path):
         try:
             for index in range(self.model.rowCount()):
                 item = self.model.item(index)
@@ -158,24 +160,48 @@ class BasketWidget(FileListWidget):
         if files_list is None:
             files_list = []
 
-    def export_assets(self):
+    def export_assets(self, to_library=False):
         try:
             logger.debug("\n__________________Export assets button clicked___________________")
             path_list = self.get_list()
-            target_folder = QFileDialog.getExistingDirectory(self, directory=self.Controller.lib_path)
-            target_folder = target_folder.replace("\\", "/")
 
+            dir = self.Controller.lib_path if not to_library else OTHER_DATABASE_PATH
+            target_folder = QFileDialog.getExistingDirectory(self, directory=dir)
+            target_folder = target_folder.replace("\\", "/")
             if target_folder and path_list:
                 copy_list = []
+
                 for path in path_list:
-                    folder = os.path.basename(path)
-                    srs_files = os.listdir(path + "/" + CONTENT_FOLDER)
-                    for file in srs_files:
-                        srs = path + "/" + CONTENT_FOLDER + "/" + file
-                        dst = target_folder + "/" + folder + "/" + file
-                        copy_list.append([srs, dst])
+                    asset_name = os.path.basename(path)
+
+
+                    if not to_library:
+                        srs_files = os.listdir(path + "/" + CONTENT_FOLDER)
+                        for file in srs_files:
+                            srs = path + "/" + CONTENT_FOLDER + "/" + file
+                            dst = target_folder + "/" + asset_name + "/" + file
+                            copy_list.append([srs, dst])
+                    else:
+
+                        path_json = Asset.dir_names(path)["asset_json"]
+                        data = Asset.get_info_file(path_json)
+
+
+                        for folder in (CONTENT_FOLDER, GALLERY_FOLDER, INFO_FOLDER):
+                            srs_files = os.listdir(path + "/" + folder)
+                            for file in srs_files:
+                                srs = path + "/" + folder + "/" + file
+                                dst = target_folder + "/" + asset_name + "/" + folder + "/" + file
+                                copy_list.append([srs, dst])
+
+                        data['path'] = target_folder + "/" + asset_name
+
+                        asset_id = self.Controller.Models.add_asset_to_other_db(data, OTHER_DATABASE_PATH)
+                        data['asset_id'] = asset_id
+                        Asset.write_info_file(path_json, data)
 
                 self.Controller.ui.add_task(lambda: self.export_files(copy_list))
+
 
             for path in path_list:
                 self.deselect_asset_in_gallery(path)

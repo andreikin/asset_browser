@@ -153,7 +153,7 @@ class AssetWidget(QWidget):
         self.check_box.state = False
         if self.check_box not in self.hidden_list:
             self.hidden_list.append(self.check_box)
-        self.Controller.ui.basket_list_widget.remove_file(self.db_asset.path)
+        self.Controller.ui.basket_list_widget.remove_item(self.db_asset.path)
 
     def right_click_handler(self):
         menu = QMenu()

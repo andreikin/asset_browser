@@ -196,6 +196,37 @@ def get_all_from_folder(path):
         logger.error(message)
         return False
 
+def add_asset_to_other_db(data, db_path):
+    data_base_new = SqliteDatabase(db_path)
+
+    class BaseModel_new(Model):
+        id = PrimaryKeyField(unique=True)
+
+        class Meta:
+            database = data_base_new  # model will use the database 'assets.db'
+
+    class Asset(BaseModel_new):
+        name = CharField()
+        path = CharField()
+        icon = TextField()
+
+    class Tag(BaseModel_new):
+        name = CharField()
+        asset_id = ForeignKeyField(Asset)
+
+    Asset.create_table()
+    Tag.create_table()
+
+    tags = data['tags']
+    data['icon'] = ""
+    try:
+        db_asset = Asset.create(**data)
+        for tag in tags:
+            Tag.create(name=tag, asset_id=db_asset)
+
+        return db_asset.id
+    except Exception as e:
+        print(e)
 
 if __name__ == '__main__':
     from settings import DATABASE_NAME
