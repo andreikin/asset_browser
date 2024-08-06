@@ -25,7 +25,7 @@ from UI.Ui_function import UiFunction
 from Utilities.Logging import logger
 from Utilities.Utilities import convert_path_to_global, remove_non_unique_tags, CopyWithProgress
 from settings import COLUMN_WIDTH, SPACING, START_WINDOW_SIZE, SFX, FONT_SIZE, VERSION, ICON_FORMATS_PATTERN, URL, \
-    DROP_MENU_WIDTH
+    DROP_MENU_WIDTH, CLIENT_MODE
 import resurses_rc
 
 class BaseThread(QtCore.QThread):
@@ -82,7 +82,9 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
 
         self.Controller = in_controller
         self.setupUi(self)
-        self.window_label.setText("Asset browser  " + VERSION)
+
+        client_label = '' if not CLIENT_MODE else 'client  '
+        self.window_label.setText("Asset browser " + client_label + VERSION)
 
         # window scale setup
         self.add_window_scale()
@@ -176,7 +178,17 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
             self.status_message("Problems connecting to the database.", state="ERROR")
         logger.debug("Ui loaded successfully.\n")
 
+        if CLIENT_MODE:
+            self.set_client_mod()
+
         self.exel_button.hide()
+
+    def set_client_mod(self):
+        logger.info('\n\n_______________ CLIENT_MODE ________________')
+        self.expand_button.hide()
+        self.export_to_lib_button.hide()
+        self.help_button.hide()
+        self.send_to_telegramm_widget.hide()
 
     def get_resolution_factor(self):
         """

@@ -220,13 +220,17 @@ def add_asset_to_other_db(data, db_path):
     tags = data['tags']
     data['icon'] = ""
     try:
+        if data['name'] in [x.name for x in Asset.select()]:
+            logger.error(f'Asset named {data["name"]} already exists in the database and cannot be added.')
+            return False
+
         db_asset = Asset.create(**data)
         for tag in tags:
             Tag.create(name=tag, asset_id=db_asset)
 
         return db_asset.id
-    except Exception as e:
-        print(e)
+    except Exception as message:
+        logger.error(message)
 
 if __name__ == '__main__':
     from settings import DATABASE_NAME

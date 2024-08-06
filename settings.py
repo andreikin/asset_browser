@@ -13,6 +13,7 @@ SPACING = 10  # space between asset icons
 ICON_WIDTH = 150  # asset icons width
 START_WINDOW_SIZE = [1700, 900]
 FONT_SIZE = 9
+CLIENT_MODE = False
 
 """ name of assets folders"""
 INFO_FOLDER = "info"
@@ -22,7 +23,7 @@ SFX = "_ast"  # suffix for base asset folders
 DATABASE_NAME = "database.db"
 DELETED_ASSET_FOLDER = "deleted_assets"
 DATABASE_PATH = 'U:/AssetStorage/asset_browser'
-OTHER_DATABASE_PATH = 'D:/tmp/test_lib/database.db'
+CLIENT_DATABASE_PATH = 'U:/Asset_Library/database.db'
 
 """over"""
 ICON_FORMATS_PATTERN = ".PNG$|.png$|.jpg$|.JPG$"

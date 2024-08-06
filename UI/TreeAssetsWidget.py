@@ -11,7 +11,7 @@ from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QMenu, QAction, QInput
 from Asset import Asset
 from Utilities.Logging import logger
 from Utilities.Utilities import convert_path_to_local
-from settings import DELETED_ASSET_FOLDER
+from settings import DELETED_ASSET_FOLDER, CLIENT_MODE
 
 
 class MenuTreeWidget(QTreeWidget):
@@ -62,7 +62,8 @@ class MenuTreeWidget(QTreeWidget):
         self.itemDoubleClicked.connect(self.double_click_handler)
         # connect Context Menu
         self.setContextMenuPolicy(Qt.CustomContextMenu)
-        self.customContextMenuRequested.connect(self.right_click_handler)
+        if not CLIENT_MODE:
+            self.customContextMenuRequested.connect(self.right_click_handler)
         logger.debug(" executed")
 
     def get_settings(self, settings):

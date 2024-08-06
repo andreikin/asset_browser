@@ -696,7 +696,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
              <item>
               <widget class="QStackedWidget" name="drop_stackedWidget">
                <property name="currentIndex">
-                <number>4</number>
+                <number>2</number>
                </property>
                <widget class="QWidget" name="page_1">
                 <layout class="QVBoxLayout" name="verticalLayout_17">
@@ -2027,7 +2027,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                      </widget>
                     </item>
                     <item>
-                     <widget class="QWidget" name="widget_4" native="true">
+                     <widget class="QWidget" name="send_to_telegramm_widget" native="true">
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
@@ -2196,8 +2196,8 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>323</width>
-                      <height>664</height>
+                      <width>100</width>
+                      <height>84</height>
                      </rect>
                     </property>
                     <layout class="QVBoxLayout" name="gallery_VLayout">

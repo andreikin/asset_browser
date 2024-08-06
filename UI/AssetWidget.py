@@ -17,7 +17,7 @@ from UI.Ui_function import UiFunction
 from Utilities.Logging import logger
 from Utilities.telegram_bot import send_message_to_bot
 from Utilities.Utilities import get_library_path, convert_path_to_local, set_font_size, get_preview_images
-from settings import COLUMN_WIDTH, DROP_MENU_WIDTH, DATABASE_NAME
+from settings import COLUMN_WIDTH, DROP_MENU_WIDTH, DATABASE_NAME, CLIENT_MODE
 
 BTN_WIDTH = 30  # The size of the buttons inside the widget
 ICON_SIZE = 22  # The size of the icon in it
@@ -64,7 +64,12 @@ class AssetWidget(QWidget):
 
         self.set_size(self.Controller.ui.resolution_factor)
 
-        self.hidden_list = [self.ast_label, self.edit_button, self.check_box, self.open_button]
+        self.hidden_list = [self.ast_label, self.check_box, self.open_button, self.edit_button]
+        if CLIENT_MODE:
+            self.hidden_list = [self.ast_label, self.check_box]
+            self.edit_button.hide()
+            self.open_button.hide()
+
         if self.db_asset.path in self.Controller.ui.basket_list_widget.get_list():
             self.select_asset()
         else:
@@ -91,7 +96,8 @@ class AssetWidget(QWidget):
 
         # connect Context Menu
         self.setContextMenuPolicy(Qt.CustomContextMenu)
-        self.customContextMenuRequested.connect(self.right_click_handler)
+        if not CLIENT_MODE:
+            self.customContextMenuRequested.connect(self.right_click_handler)
 
         # set font size
         size = self.Controller.ui.font_spinBox.value()
