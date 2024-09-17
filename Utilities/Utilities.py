@@ -38,11 +38,12 @@ def get_library_path():
     """
     return library path
     """
+    if CLIENT_MODE:
+        return CLIENT_DATABASE_PATH
     file_path = os.path.join(tempfile.gettempdir(), 'asset_manager_settings.ini')
     settings = QSettings(file_path, QSettings.IniFormat)
     if not settings.contains("db settings") or settings.value("db settings") == "":
-        path = DATABASE_PATH if not CLIENT_MODE else CLIENT_DATABASE_PATH
-        settings.setValue("db settings", path)
+        settings.setValue("db settings", DATABASE_PATH)
     return settings.value("db settings")
 
 

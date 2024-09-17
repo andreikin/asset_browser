@@ -4,7 +4,7 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-VERSION = "1.1.9"
+VERSION = "1.2.0"
 
 """ ui settings"""
 DROP_MENU_WIDTH = 350
@@ -13,7 +13,7 @@ SPACING = 10  # space between asset icons
 ICON_WIDTH = 150  # asset icons width
 START_WINDOW_SIZE = [1700, 900]
 FONT_SIZE = 9
-CLIENT_MODE = False
+CLIENT_MODE = True
 
 """ name of assets folders"""
 INFO_FOLDER = "info"
@@ -23,7 +23,7 @@ SFX = "_ast"  # suffix for base asset folders
 DATABASE_NAME = "database.db"
 DELETED_ASSET_FOLDER = "deleted_assets"
 DATABASE_PATH = 'U:/AssetStorage/asset_browser'
-CLIENT_DATABASE_PATH = 'U:/Asset_Library/database.db'
+CLIENT_DATABASE_PATH = 'U:/Asset_Library'
 
 """over"""
 ICON_FORMATS_PATTERN = ".PNG$|.png$|.jpg$|.JPG$"

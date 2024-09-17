@@ -189,6 +189,9 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
         self.export_to_lib_button.hide()
         self.help_button.hide()
         self.send_to_telegramm_widget.hide()
+        self.add_dir_widget.hide()
+        self.widget_2.hide()
+        self.db_path_label.hide()
 
     def get_resolution_factor(self):
         """
