@@ -64,9 +64,8 @@ class Controller(QMainWindow):
         """
         Getting tags from linEdit and refresh_ui
         """
-        self.current_tags = re.findall(r'[0-9A-z_]+', self.ui.search_lineEdit.text())
+        self.current_tags = re.findall(r'[0-9A-z_&\+]+', self.ui.search_lineEdit.text())
         self.current_tags = [x.lower() for x in self.current_tags]
-        self.current_tags += [x.capitalize() for x in self.current_tags]
         logger.debug(self.current_tags)
         if self.connect_db:
             self.notify_observers()

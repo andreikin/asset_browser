@@ -158,9 +158,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
         self.font_spinBox.valueChanged.connect(self.set_font_size)
         self.erase_basket_button.clicked.connect(self.erase_basket)
         self.export_basket_button.clicked.connect(self.basket_list_widget.export_assets)
-
         self.export_to_lib_button.clicked.connect(lambda: self.basket_list_widget.export_assets(to_library=True))
-
         self.add_tag_Button.clicked.connect(self.add_tags_to_asset)
         self.help_button.clicked.connect(lambda: webbrowser.open_new(URL))
 

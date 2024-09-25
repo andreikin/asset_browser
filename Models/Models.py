@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-
+from settings import COMPLEX_SEARCH_SIGNS
 from peewee import *
 from Utilities.Logging import logger
 from Utilities.Utilities import get_library_path
@@ -24,10 +24,6 @@ class Asset(BaseModel):
     name = CharField()
     path = CharField()
     icon = TextField()
-    # description = TextField()
-    # scenes = TextField()
-    # tags = TextField()  # test:
-
 
 class Tag(BaseModel):
     name = CharField()
@@ -68,28 +64,30 @@ def add_asset_to_db(**kwargs):
 
 def find_assets_by_tag_list(tag_list):
     out = []
-    # get all assets matching by name
-    quest_string = ['(Asset.name == "' + x + '")' for x in tag_list]
-    quest_string = " | ".join(quest_string)
-    quest = 'Asset.select().where(' + quest_string + ')'
     try:
-        found_assets = eval(quest)
-        if found_assets:
-            for asset in found_assets:
-                out.append(asset)
-    except Exception as message:
-        logger.error(message)
-    # get all assets matching by tag
-    tag_quest_string = ['(Tag.name == "' + x + '")' for x in tag_list]
-    tag_quest_string = " | ".join(tag_quest_string)
-    quest = 'Tag.select().where(' + tag_quest_string + ')'
-    try:
-        assets_id = eval(quest)
-        logger.debug("Set quest to db : " + quest)
-        for id in assets_id:
-            asset = Asset.get(Asset.id == id.asset_id)
-            if asset not in out:
-                out.append(asset)
+        has_and_attr = any([x in tag_list for x in COMPLEX_SEARCH_SIGNS])
+        # if the asset you are looking for must include all tags
+        if has_and_attr:
+            tag_list = [x for x in tag_list if x not in COMPLEX_SEARCH_SIGNS]
+            res_set = set()
+            for i, tag in enumerate(tag_list):
+                quest_rez = Tag.select().where(Tag.name == tag)
+                if not i:
+                    res_set = set([x.asset_id for x in quest_rez])
+                else:
+                    res_set = res_set & set([x.asset_id for x in quest_rez])
+            out = list(res_set)
+        else:
+            # if the asset you are looking for must include one of the tags
+            tag_quest_string = ['(Tag.name == "' + x + '")' for x in tag_list]
+            tag_quest_string = " | ".join(tag_quest_string)
+            quest = 'Tag.select().where(' + tag_quest_string + ')'
+            assets_id = eval(quest)
+            logger.debug("Set quest to db : " + quest)
+            for id in assets_id:
+                asset = Asset.get(Asset.id == id.asset_id)
+                if asset not in out:
+                    out.append(asset)
     except Exception as message:
         logger.error(message)
     return out
@@ -234,13 +232,21 @@ def add_asset_to_other_db(data, db_path):
 
 if __name__ == '__main__':
     from settings import DATABASE_NAME
+    db_path = get_library_path()
+    data_base.init(os.path.join(db_path, "database.db"))
 
-    data_base.connect()
-    #db_path = get_library_path()
-    #print(os.path.join(db_path, "data.db"))
+    tag_list = ["head", "mgs"]
+    super_list = []
 
 
-    #data_base.init(db_path)
-    data_base.create_tables([Asset, Tag])
+    assets_with_tags = Asset.select(Asset).join(Tag).where(Tag.name=="head")
 
-    #edit_db_asset(**{"name": "name", "asset_id": 17})
+    # for tag in tag_list:
+    #     quest_rez = Tag.select().where(Tag.name == tag)
+    #     super_list.append([x.asset_id.id for x in quest_rez])
+    #     print(len([x.asset_id.id for x in quest_rez]))
+
+    # assets_with_tags = (Asset.select(Asset).join(Tag, on=(Tag.asset_id == Asset.id))
+    # )
+    print(len(assets_with_tags))
+    print([x.name for x in assets_with_tags])
