@@ -792,7 +792,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents_2 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 100, 84))
+        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 323, 664))
         self.scrollAreaWidgetContents_2.setObjectName("scrollAreaWidgetContents_2")
         self.gallery_VLayout = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents_2)
         self.gallery_VLayout.setContentsMargins(0, -1, 0, -1)
@@ -892,6 +892,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         self.search_lineEdit = QtWidgets.QLineEdit(self.serch_frame)
         self.search_lineEdit.setMinimumSize(QtCore.QSize(0, 30))
+        self.search_lineEdit.setClearButtonEnabled(True)
         self.search_lineEdit.setObjectName("search_lineEdit")
         self.horizontalLayout_4.addWidget(self.search_lineEdit)
         self.search_button = QtWidgets.QPushButton(self.serch_frame)
@@ -958,7 +959,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.drop_stackedWidget.setCurrentIndex(2)
+        self.drop_stackedWidget.setCurrentIndex(3)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -1000,7 +1001,7 @@ class Ui_MainWindow(object):
         self.erase_basket_button.setText(_translate("MainWindow", "Cancel"))
         self.export_to_lib_button.setText(_translate("MainWindow", "To library"))
         self.export_basket_button.setText(_translate("MainWindow", "Export assets"))
-        self.search_lineEdit.setPlaceholderText(_translate("MainWindow", "Type tag or tags here"))
+        self.search_lineEdit.setPlaceholderText(_translate("MainWindow", "Type tag or tags here (use +, & or the word \"and\" to form search parameters)"))
         self.status_label.setText(_translate("MainWindow", "In the database were found 0 items "))
 import resurses_rc
 

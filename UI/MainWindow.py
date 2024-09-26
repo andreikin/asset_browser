@@ -210,11 +210,16 @@ class MainWindow(QMainWindow, Ui_MainWindow, UiFunction, CustomTitleBar, ThreadQ
             if resolution_factor != self.resolution_factor:
                 logger.info(f'\n\n_______________ The screen resolution and element sizes have changed {resolution_factor}.________________')
                 self.resolution_factor = resolution_factor
-
                 self.gallery.set_size()
 
                 if self.drop_menu.width():
                     self.drop_menu.setFixedWidth(DROP_MENU_WIDTH * self.resolution_factor)
+
+                for i in range(self.Controller.ui.gallery_VLayout.count()):
+                    widget = self.Controller.ui.gallery_VLayout.itemAt(i).widget()
+                    if type(widget) == QPushButton:
+                        size = widget.default_size
+                        widget.setFixedSize(size[0] * self.resolution_factor, size[1] * self.resolution_factor)
 
                 # vertical elements
                 for elem in (self.left_panel,):

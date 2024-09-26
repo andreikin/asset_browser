@@ -224,17 +224,28 @@ class AssetWidget(QWidget):
                 image_preview_btn = QPushButton()
                 image_preview_btn.clicked.connect(lambda y, x=image_path: self.open_image(x))
                 pix = QPixmap(icon_path)
-                pix = pix.scaledToWidth(DROP_MENU_WIDTH - 45, mode=Qt.SmoothTransformation)
+                image_preview_btn.default_size = pix.width(), pix.height()
+
+                image_width = DROP_MENU_WIDTH * self.Controller.ui.resolution_factor - 45
+
+                pix = pix.scaledToWidth(image_width, mode=Qt.SmoothTransformation)
                 image_preview_btn.setFixedSize(pix.width(), pix.height())
+
+
                 self.Controller.ui.gallery_VLayout.insertWidget(1, image_preview_btn)
                 image_preview_btn.setStyleSheet("border-radius: 6px;"
                                                 "background-color: #2c313c;"
                                                 "border-image: url(" + icon_path + ") 0 0 0 0;}")
 
+
+
             logger.debug(self.db_asset.name + "\n")
             self.Controller.ui.status_message("")
         except Exception as message:
             logger.error(message)
+
+    def resize_gallery(self):
+        pass
 
     def open_image(self, path):
         """

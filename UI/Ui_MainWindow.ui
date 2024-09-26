@@ -696,7 +696,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
              <item>
               <widget class="QStackedWidget" name="drop_stackedWidget">
                <property name="currentIndex">
-                <number>2</number>
+                <number>3</number>
                </property>
                <widget class="QWidget" name="page_1">
                 <layout class="QVBoxLayout" name="verticalLayout_17">
@@ -2196,8 +2196,8 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>100</width>
-                      <height>84</height>
+                      <width>323</width>
+                      <height>664</height>
                      </rect>
                     </property>
                     <layout class="QVBoxLayout" name="gallery_VLayout">
@@ -2511,7 +2511,10 @@ p, li { white-space: pre-wrap; }
                 </size>
                </property>
                <property name="placeholderText">
-                <string>Type tag or tags here</string>
+                <string>Type tag or tags here (use +, &amp; or the word &quot;and&quot; to form search parameters)</string>
+               </property>
+               <property name="clearButtonEnabled">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
